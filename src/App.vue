@@ -43,6 +43,64 @@
   </v-app>
 </template>
 
+
+<style lang="scss">
+
+.big-title{
+  font-size: 2.25em;
+  font-weight: 800;
+}
+
+p {
+  font-size: 1.15em;
+  font-weight: 400;
+}
+
+.border15{
+  border-radius: 15px;
+}
+
+.border10{
+  border-radius: 10px;
+}
+
+.border10-left{
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.border10-right{
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.border5{
+  border-radius: 5px;
+}
+
+
+.bgblue {
+  background: #3494E6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #EC6EAD, #3494E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #EC6EAD, #3494E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+ * {
+  font-family: "Work Sans";
+  font-weight: 400;
+ }
+
+ .glass{
+   background: rgba(255, 255, 255, 0.116);
+   box-shadow: 0 8px 32px 0 rgba(44, 45, 53, 0.37);
+   backdrop-filter: blur( 4px );
+   -webkit-backdrop-filter: blur( 4px );
+  //  border: 2px solid rgba( 255, 255, 255, 0.18 );
+ }
+
+ 
+
+</style>
+
 <script>
 
 export default {
