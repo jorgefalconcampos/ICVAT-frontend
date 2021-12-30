@@ -5,47 +5,46 @@
                 <div class="border10 glass">
                     <v-row no-gutters>
                         <v-col align-self="center" class="px-8" cols="6">
-                            <p class="big-title">¡Hola!</p>
-                            <p class="pb-5">Crea tu cuenta</p>
-                            <!-- <v-text-field solo rounded color="white" label="Preddpend" prepend-icon="mdi-map-marker"></v-text-field> -->
-                            <!-- <v-text-field solo rounded color="blue" label="Prepend inner" prepend-inner-icon="mdi-map-marker"></v-text-field> -->
+                            <p class="big-title pb-6">Crea tu cuenta</p>
 
                             <v-text-field 
-                                name="input_username"
-                                label="username" 
-                                v-model="username" 
+                                name="input_email"
+                                label="email" 
+                                v-model="email" 
                                 :rules="[rules.required, rules.email]" 
-                                hint="el nombre de usuario es un email" 
-                                clearable filled rounded color="white" 
-                                prepend-inner-icon="mdi-account-circle">
+                                filled rounded color="white" 
+                                prepend-inner-icon="mdi-email">
                             </v-text-field>
 
                             <v-text-field 
                                 name="input_password"
-                                label="password" 
-                                v-model="password"
+                                label="contraseña" 
+                                v-model="password1"
                                 :rules="[rules.required, rules.min]"
-                                :type="show_pass ? 'text' : 'password'"
-                                :append-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
+                                :type="show_pass_1 ? 'text' : 'password'"
+                                :append-icon="show_pass_1 ? 'mdi-eye' : 'mdi-eye-off'"
                                 clearable filled rounded color="white" 
                                 prepend-inner-icon="mdi-lock"
-                                @click:append="show_pass = !show_pass">
+                                @click:append="show_pass_1 = !show_pass_1">
                             </v-text-field>
 
                              <v-text-field 
                                 name="input_password_repeat"
-                                label="password (confirmar)" 
-                                v-model="password"
+                                label="contraseña (confirmar)" 
+                                v-model="password2"
                                 :rules="[rules.required, rules.min]"
-                                :type="show_pass ? 'text' : 'password'"
-                                :append-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
+                                :type="show_pass_2 ? 'text' : 'password'"
+                                :append-icon="show_pass_2 ? 'mdi-eye' : 'mdi-eye-off'"
                                 clearable filled rounded color="white" 
                                 prepend-inner-icon="mdi-lock"
-                                @click:append="show_pass = !show_pass">
+                                @click:append="show_pass_2 = !show_pass_2">
                             </v-text-field>
 
                             
-                            <v-btn class="mt-3" color="accent" elevation="3" x-large dense block rounded>registrarme</v-btn>
+                            <v-btn color="accent" elevation="3" class="mb-4" x-large dense block rounded>registrarme</v-btn>
+                            <p class="small-txt">¿Ya tienes una cuenta? <a href="">Inicia sesión</a></p>
+                      
+                            
                         </v-col>
                          <v-col cols="6">
                             <v-img
@@ -66,9 +65,11 @@
 export default {
     data() {
         return {
-            username: "",
-            password: "",
-            show_pass: false,
+            email: "",
+            password1: "",
+            password2: "",
+            show_pass_1: false,
+            show_pass_2: false,
             
             rules: {
                 required: value => !!value || 'requerido',

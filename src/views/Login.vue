@@ -1,46 +1,48 @@
 <template>
-    <v-container class="mt-12 bgblue border15">
+    <v-container class="mt-4 bgblue border15">
         <v-row justify="space-around" class="text-center pa-8">
             <v-col cols="9">
                 <div class="border10 glass">
                     <v-row no-gutters>
                         <v-col  align-self="center" cols="6" class="px-8">
                             <v-img 
-                                max-height="205px"
+                                max-height="305px"
                                 lazy-src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
                                 src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80">
                             </v-img> 
                         </v-col>
                         <v-col align-self="center" class="pa-11" cols="6">
-                            <p class="big-title">¡Hola!</p>
-                            <p class="pb-5">Inicia sesión en tu cuenta</p>
+                            <p class="big-title pb-6">Inicia sesión</p>
+                            <!-- <p class="pb-5">Inicia sesión en tu cuenta</p> -->
                             <!-- <v-text-field solo rounded color="white" label="Preddpend" prepend-icon="mdi-map-marker"></v-text-field> -->
                             <!-- <v-text-field solo rounded color="blue" label="Prepend inner" prepend-inner-icon="mdi-map-marker"></v-text-field> -->
 
-                            <v-text-field 
-                                name="input_username"
-                                label="username" 
-                                v-model="username" 
+                            <v-text-field
+                                name="input_email"
+                                label="email" 
+                                v-model="email" 
                                 :rules="[rules.required, rules.email]" 
-                                hint="el email con el que te registraste a ICVAT" 
-                                clearable filled rounded color="white" 
-                                prepend-inner-icon="mdi-account-circle">
+                                filled rounded color="white" 
+                                prepend-inner-icon="mdi-email">
                             </v-text-field>
 
                             <v-text-field 
-                                class="py-1" 
                                 name="input_password"
-                                label="password" 
+                                label="contraseña" 
                                 v-model="password"
                                 :rules="[rules.required, rules.min]"
                                 :type="show_pass ? 'text' : 'password'"
-                                :append-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
-                                clearable filled rounded color="white" 
+                                :append-icon="
+                                password.length > 0 ? show_pass ? 'mdi-eye' : 'mdi-eye-off' : ''"
+                                append-outer-icon="mdi-lock-question" 
+                                filled rounded color="white" 
                                 prepend-inner-icon="mdi-lock"
-                                @click:append="show_pass = !show_pass">
+                                @click:append="show_pass = !show_pass"
+                                @click:append-outer="redirectForgotPass">
                             </v-text-field>
                             
-                            <v-btn color="accent" elevation="3" x-large dense block rounded>iniciar sesión</v-btn>
+                            <v-btn color="accent" elevation="3" class="mb-4" x-large dense block rounded>iniciar sesión</v-btn>
+                            <p class="small-txt">¿No tienes una cuenta? <a href="">Crea tu cuenta</a></p>
                         </v-col>
                     </v-row>
                  </div>
@@ -54,9 +56,10 @@
 export default {
     data() {
         return {
-            username: "",
+            email: "",
             password: "",
             show_pass: false,
+
             
             rules: {
                 required: value => !!value || 'requerido',
@@ -65,6 +68,11 @@ export default {
                     return pattern.test(value) || 'e-mail inválido'
                 },
             }
+        }
+    },
+    methods: {
+        redirectForgotPass(){
+            alert("redireccionar")
         }
     }
 }
