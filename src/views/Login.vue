@@ -4,15 +4,14 @@
             <v-col cols="9">
                 <div class="border10 glass">
                     <v-row no-gutters>
-                        <v-col cols="6">
-                            <v-img
-                                class="border10-left"
-                                max-height="450px"
+                        <v-col  align-self="center" cols="6" class="px-8">
+                            <v-img 
+                                max-height="205px"
                                 lazy-src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
                                 src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80">
-                            </v-img>
+                            </v-img> 
                         </v-col>
-                        <v-col align-self="center" class="px-8" cols="6">
+                        <v-col align-self="center" class="pa-11" cols="6">
                             <p class="big-title">¡Hola!</p>
                             <p class="pb-5">Inicia sesión en tu cuenta</p>
                             <!-- <v-text-field solo rounded color="white" label="Preddpend" prepend-icon="mdi-map-marker"></v-text-field> -->
