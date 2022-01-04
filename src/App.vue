@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
+     <!-- <v-app-bar
       app
       color="primary"
       dark
@@ -35,10 +35,14 @@
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
-    </v-app-bar>
+    </v-app-bar>  -->
 
+    <NavBar/>
+    
     <v-main>
-      <router-view/>
+      <transition name="fade" mode="out-in">
+        <router-view/>
+      </transition>
     </v-main>
   </v-app>
 </template>
@@ -108,8 +112,13 @@ p {
 
 <script>
 
+import NavBar from '@/components/NavBar.vue'
+
 export default {
   name: 'App',
+  components : {
+    NavBar
+  },
 
   data: () => ({
     //
