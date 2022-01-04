@@ -14,7 +14,7 @@ import "@fontsource/work-sans/200.css"
 
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = process.env.DEV_URL_ROOT_API // http://localhost:8000/api/
+axios.defaults.baseURL = "http://localhost:8000/api/" // http://localhost:8000/api/
 
 axios.interceptors.response.use(undefined, function(error) {
   if (error) {
@@ -26,6 +26,7 @@ axios.interceptors.response.use(undefined, function(error) {
     }
   }
 });
+
 
 Vue.config.productionTip = false
 

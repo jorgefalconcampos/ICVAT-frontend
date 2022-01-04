@@ -44,6 +44,7 @@
         <router-view/>
       </transition>
     </v-main>
+    <SnackBar ref="snackBar"/>
   </v-app>
 </template>
 
@@ -113,11 +114,18 @@ p {
 <script>
 
 import NavBar from '@/components/NavBar.vue'
+import SnackBar from '@/components/partials/SnackBar.vue'
 
 export default {
   name: 'App',
+
+  mounted(){
+    this.$root.snackBar = this.$refs.snackBar
+  },
+
   components : {
-    NavBar
+    NavBar,
+    SnackBar
   },
 
   data: () => ({

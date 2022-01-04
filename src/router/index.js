@@ -28,8 +28,8 @@ const routes = [
     meta: { guest: true }    
   },
   {   
-    path: '/docs',
-    name: 'Docs',
+    path: '/documents',
+    name: 'Documents',
     component: Documents,
     meta: { requiresAuth: true }
   },

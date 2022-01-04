@@ -22,7 +22,7 @@
                                     name="input_password"
                                     label="contraseña" 
                                     v-model="form.password1"
-                                    :rules="[rules.required, rules.min]"
+                                    :rules="[rules.required, rules.password]"
                                     :type="form.show_pass_1 ? 'text' : 'password'"
                                     :append-icon="form.show_pass_1 ? 'mdi-eye' : 'mdi-eye-off'"
                                     clearable filled rounded color="white" 
@@ -34,7 +34,7 @@
                                     name="input_password_repeat"
                                     label="contraseña (confirmar)" 
                                     v-model="form.password2"
-                                    :rules="[rules.required, rules.min]"
+                                    :rules="[rules.required, rules.password]"
                                     :type="form.show_pass_2 ? 'text' : 'password'"
                                     :append-icon="form.show_pass_2 ? 'mdi-eye' : 'mdi-eye-off'"
                                     clearable filled rounded color="white" 
@@ -87,6 +87,10 @@ export default {
                     const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     return pattern.test(value) || 'e-mail inválido'
                 },
+                password: value => {
+                    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula y un dígito";
+                }
             },
         }
     },

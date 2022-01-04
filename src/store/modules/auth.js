@@ -19,10 +19,11 @@ const actions = {
         UserForm.append('password', form.password)
         await dispatch('LogIn', UserForm)
       },
+
     
-      async LogIn({commit}, user) {
-        await axios.post("login/", user);
-        await commit("setUser", user.get("username"));
+      async LogIn({commit}, loginData) {
+        await axios.post("user/login/", loginData);
+        await commit("setUser", loginData.get("email"));
       },
     
       async CreatePost({ dispatch }, post) {
@@ -43,8 +44,8 @@ const actions = {
 };
 
 const mutations = {
-    setUser(state, username){
-        state.user = username
+    setUser(state, email){
+        state.user = email
     },
     setPosts(state, posts){
         state.posts = posts

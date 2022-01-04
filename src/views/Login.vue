@@ -32,7 +32,7 @@
                                     name="input_password"
                                     label="contraseña" 
                                     v-model="form.password"
-                                    :rules="[rules.required, rules.min]"
+                                    :rules="[rules.required]"
                                     :type="form.show_pass ? 'text' : 'password'"
                                     :append-icon="form.password.length > 0 ? form.show_pass ? 'mdi-eye' : 'mdi-eye-off' : ''"
                                     append-outer-icon="mdi-lock-question" 
@@ -57,6 +57,8 @@
             </v-col>
         </v-row>
 
+
+
     </v-container>
 </template>
 
@@ -66,14 +68,20 @@ import { mapActions } from 'vuex';
 
 export default {
 
+    components: {
+    },
+
     data() {
         return {
             form: {
-                valid: true,
+                valid: false,
                 email: "",
                 password: "",
                 show_pass: false,
             },
+
+        
+
 
 
             rules: {
@@ -89,25 +97,45 @@ export default {
         ...mapActions(["LogIn"]),
 
         redirectForgotPass(){
-            alert("redireccionar")
+            alert("olvidé contraseña (redirect)")
         },
 
-        // validate () {
-        //     this.$refs.form.validate ();
-        // },
+        validate () {
+            this.$refs.form.validate()
+        },
 
         async submit() {
-            const User = new FormData();
-            User.append("email", this.form.email);
-            User.append("username", this.form.password);
+            const loginData = new FormData();
+            loginData.append("email", this.form.email);
+            loginData.append("password", this.form.password);
 
-            try {
-                await this.LogIn(User);
-                alert("logged in!!");
+            if(this.$refs.form.validate()) {
+                try {
+                    await this.LogIn(loginData);
+                    this.$router.push("/documents");
+                    // alert("logged in!!");
+                }
+                catch (err) {
+                    console.log(`\nError iniciando sesión.\n\n${err}`);
+                }
             }
-            catch (err) {
-                alert("error!")
+            else{
+                this.showSnackbar();
             }
+        },
+
+        showSnackbar () {
+            const snackOptions = {
+                color: "red",
+                right: true,
+                show_icon: true,
+                icon: "mdi-alert-circle",
+                message: "Completa el formulario",
+                closeSnackBtnColor: "black",
+                closeSnackBtnTxt: "ok",
+                
+            }
+            this.$root.snackBar.show(snackOptions)
         }
     }
 }
