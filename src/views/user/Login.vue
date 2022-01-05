@@ -25,7 +25,8 @@
                                     v-model="form.email" 
                                     :rules="[rules.required, rules.email]" 
                                     filled rounded color="white" 
-                                    prepend-inner-icon="mdi-email">
+                                    prepend-inner-icon="mdi-email"
+                                    @keydown.enter="submit">
                                 </v-text-field>
 
                                 <v-text-field 
@@ -39,7 +40,8 @@
                                     filled rounded color="white" 
                                     prepend-inner-icon="mdi-lock"
                                     @click:append="form.show_pass = !form.show_pass"
-                                    @click:append-outer="redirectForgotPass">
+                                    @click:append-outer="redirectForgotPass"
+                                    @keydown.enter="submit">
                                 </v-text-field>
                             
                                 <v-btn @click="submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>iniciar sesión</v-btn>
@@ -56,9 +58,6 @@
                  </div>
             </v-col>
         </v-row>
-
-
-
     </v-container>
 </template>
 
@@ -91,9 +90,7 @@ export default {
     methods: {
         ...mapActions(["LogIn"]),
 
-        redirectForgotPass(){
-            alert("olvidé contraseña (redirect)")
-        },
+        redirectForgotPass(){ this.$router.push("/reset-password"); },
 
         validate () {
             this.$refs.form.validate()
@@ -106,29 +103,23 @@ export default {
 
             if(this.$refs.form.validate()) {
                 try {
-                    await this.LogIn(loginData);
-                    this.$router.push("/documents");
-                    // alert("logged in!!");
+                    await this.LogIn(loginData); this.$router.push("/documents");
                 }
-                catch (err) {
-                    console.log(`\nError iniciando sesión.\n\n${err}`);
-                }
+                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo iniciar sesión", "black", "ok" ); }
             }
-            else{
-                this.showSnackbar();
-            }
+            else 
+            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
         },
 
-        showSnackbar () {
+        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
-                color: "red",
-                right: true,
-                show_icon: true,
-                icon: "mdi-alert-circle",
-                message: "Completa el formulario",
-                closeSnackBtnColor: "black",
-                closeSnackBtnTxt: "ok",
-                
+                color: color,
+                right: isRight,
+                show_icon: showIcon,
+                icon: icon,
+                message: msg,
+                closeSnackBtnColor: closeBtnColor,
+                closeSnackBtnTxt: closeBtnTxt, 
             }
             this.$root.snackBar.show(snackOptions)
         }

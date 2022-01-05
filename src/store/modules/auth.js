@@ -45,15 +45,18 @@ const actions = {
       },
     
       async LogOut({commit}) {
-        await axios.post("user/logout/", {});
 
         let username = null;
         let email = null;
+
+        await axios.post("user/logout/", {});
 
         commit("doLogout", {
           username: username,
           email: email,
         });
+
+
       },
 };
 

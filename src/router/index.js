@@ -2,8 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import store from '../store'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
+import Login from '../views/user/Login.vue'
+import Register from '../views/user/Register.vue'
+import ResetPass from '../views/user/ResetPass.vue'
 import Documents from '../views/Documents.vue'
 import store from '../store'
 
@@ -25,6 +26,12 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: { guest: true }    
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPass',
+    component: ResetPass,
     meta: { guest: true }    
   },
   {   
