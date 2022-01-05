@@ -123,7 +123,7 @@ export default {
     this.$root.snackBar = this.$refs.snackBar
   },
 
-  components : {
+  components: {
     NavBar,
     SnackBar
   },

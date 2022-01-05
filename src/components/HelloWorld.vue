@@ -6,7 +6,7 @@
           :src="require('../assets/logo.svg')"
           class="my-3"
           contain
-          height="200"
+          height="100"
         />
       </v-col>
 
@@ -15,44 +15,22 @@
           Welcome to Vuetify
         </h1>
 
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a
-            href="https://community.vuetifyjs.com"
-            target="_blank"
-          >Discord Community</a>
-        </p>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          What's next?
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
+        <v-row class="d-flex justify-center">
+          <v-col>
+            <h2>This Django image is coming right from the backend! 👇😎</h2>
+            <v-img
+              src="http://localhost:8000/static/categories/img/django.png"
+              class="my-3" contain height="100"
+            />
+          </v-col>
         </v-row>
+      
       </v-col>
 
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          Important Links
-        </h2>
+
+
+      <v-col class="mb-5" cols="12">
+        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
 
         <v-row justify="center">
           <a
@@ -132,20 +110,7 @@
           href: 'https://medium.com/vuetify',
         },
       ],
-      whatsNext: [
-        {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer',
-        },
-        {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/getting-started/pre-made-layouts',
-        },
-        {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-        },
-      ],
+    
     }),
   }
 </script>

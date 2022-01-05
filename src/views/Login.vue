@@ -79,11 +79,6 @@ export default {
                 password: "",
                 show_pass: false,
             },
-
-        
-
-
-
             rules: {
                 required: value => !!value || 'requerido',
                 email: value => {

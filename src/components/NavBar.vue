@@ -25,6 +25,7 @@ export default {
     },
 }
 </script>
+
 <style>
 #nav {
   padding: 30px;

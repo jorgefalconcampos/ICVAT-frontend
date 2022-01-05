@@ -1,14 +1,15 @@
 import axios from "axios";
 
 const state = {
-    user: null,
-    posts: null
+    username: null,
+    email: null,
+    // posts: null
 };
 
 const getters = {
-    isAuthenticated: state => !!state.user,    
+    isAuthenticated: state => !!state.email,    
     StatePosts: state => state.posts,
-    StateUser: state => state.user,
+    StateUser: state => state.email,
 };
 
 const actions = {
@@ -22,8 +23,15 @@ const actions = {
 
     
       async LogIn({commit}, loginData) {
-        await axios.post("user/login/", loginData);
-        await commit("setUser", loginData.get("email"));
+        let response = await axios.post("user/login/", loginData);
+
+        let username = response.data.username;
+        let email = response.data.email;
+
+        await commit("setUser", {
+          username: username,
+          email: email,
+        });
       },
     
       async CreatePost({ dispatch }, post) {
@@ -36,23 +44,30 @@ const actions = {
         commit("setPosts", response.data);
       },
     
-      async LogOut({ commit }) {
-        let user = null;
-        await axios.post("user/logout/", user);
-        commit("logout", user);
+      async LogOut({commit}) {
+        await axios.post("user/logout/", {});
+
+        let username = null;
+        let email = null;
+
+        commit("doLogout", {
+          username: username,
+          email: email,
+        });
       },
 };
 
 const mutations = {
-    setUser(state, email){
-        state.user = email
+    setUser(state, payload){
+        state.username = payload.username
+        state.email = payload.email
     },
     setPosts(state, posts){
         state.posts = posts
     },
-    LogOut(state){
-        state.user = null
-        state.posts = null
+    doLogout(state){
+      state.email = null;
+      state.username = null;
     },
 };
 
