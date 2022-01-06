@@ -20,7 +20,6 @@ const actions = {
         UserForm.append('password', form.password)
         await dispatch('LogIn', UserForm)
       },
-
     
       async LogIn({commit}, loginData) {
         let response = await axios.post("user/login/", loginData);
