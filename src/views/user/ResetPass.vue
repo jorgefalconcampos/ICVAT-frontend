@@ -164,6 +164,7 @@ export default {
                 password2: "",
                 show_pass_1: false,
                 show_pass_2: false,
+                token: null
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -184,10 +185,10 @@ export default {
             const searchParams = window.location.search;
             if (searchParams) {
                 const urlParams = new URLSearchParams(searchParams);
-                if (urlParams.has("s")) {
-                    const step = parseInt(urlParams.get("s"));
-                    if (step < 4) { this.stepper = step; }
-                    // if (step == 2) { this.startTimeout(); }
+                if (urlParams.has("t")) {
+                    const token = urlParams.get("t");
+                    this.token = token;
+                    this.stepper = 3;
                 }
             }
         },
