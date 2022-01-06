@@ -1,120 +1,126 @@
 <template>
-    <v-container class="mt-4 bgblue border15">
-        <v-row justify="space-around" class="text-center pa-8">
-            <v-col cols="9">
-                <div class="border10 glass">
-                    <v-row no-gutters class="d-flex justify-center">
-                        <v-col  align-self="center" cols="12" class="px-8">
-                            <v-img 
-                                max-height="305px"
-                                lazy-src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
-                                src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80">
-                            </v-img> 
-                        </v-col>
-                        <v-col align-self="center" cols="8" class="pa-11" >
-                            <p class="big-title pb-6">Son cosas que pasan...</p>
-                            <!-- <p class="pb-5">Inicia sesión en tu cuenta</p> -->
-                            <!-- <v-text-field solo rounded color="white" label="Preddpend" prepend-icon="mdi-map-marker"></v-text-field> -->
-                            <!-- <v-text-field solo rounded color="blue" label="Prepend inner" prepend-inner-icon="mdi-map-marker"></v-text-field> -->
+    <v-container class="mt-4 bgblue border15 pa-10 mb-10">
+        <v-row justify="space-around" class="text-center">
+            <v-col cols="12">
+                <v-stepper v-model="stepper" class=" glass-white-border">
+                    <v-stepper-header class="glass border10-top">
+                        <v-stepper-step :color="this.stepper>1?'green':'black'" :complete="stepper > 1" step="1">Ingresa tu email</v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :color="this.stepper>2?'green':'black'" :complete="stepper>2" step="2">Recibe un mail de confirmación</v-stepper-step>
+                        <v-divider></v-divider>
+                        <v-stepper-step :color="this.passReseted?'green':'black'" :complete="this.passReseted" step="3">Ingresa tu nueva contraseña</v-stepper-step>    
+                    </v-stepper-header>
+                    
+                    <v-stepper-items>
+                        <v-stepper-content step="1">
+                            <v-row no-gutters class="d-flex justify-center">
+                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                    <p class="big-title pb-2">Recupera tu contraseña</p>
+                                    <p class="pb-6">Si perdiste u olvidaste tu contraseña, escribe el email con el que te registraste y sigue las instrucciones</p>
 
-                            <v-form ref="form" v-model="form.valid" lazy-validation @submit.prevent="submit">
+                                    <div class="px-16 mx-10">
+                                        <v-form ref="s1_form" v-model="step1.valid" lazy-validation @submit.prevent="s1_submit">
+                                            <v-text-field
+                                                name="input_email"
+                                                label="email" 
+                                                v-model="step1.email" 
+                                                :rules="[rules.required, rules.email]" 
+                                                filled rounded color="white" 
+                                                prepend-inner-icon="mdi-email"
+                                                @keydown.enter="s1_submit">
+                                            </v-text-field>                                            
+                                            <v-btn @click="s1_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>continuar</v-btn>
+                                        </v-form>
+                                    </div>
+                                    <p class="mt-7 small-txt">O bien, <router-link to="/login/">inicia sesión</router-link></p>
 
-                                <v-text-field
-                                    name="input_email"
-                                    label="email" 
-                                    v-model="form.email" 
-                                    :rules="[rules.required, rules.email]" 
-                                    filled rounded color="white" 
-                                    prepend-inner-icon="mdi-email"
-                                    @keydown.enter="submit">
-                                </v-text-field>
+                                </v-col>
+                            </v-row>
 
-                                <v-text-field 
-                                    name="input_password"
-                                    label="contraseña" 
-                                    v-model="form.password"
-                                    :rules="[rules.required]"
-                                    :type="form.show_pass ? 'text' : 'password'"
-                                    :append-icon="form.password.length > 0 ? form.show_pass ? 'mdi-eye' : 'mdi-eye-off' : ''"
-                                    append-outer-icon="mdi-lock-question" 
-                                    filled rounded color="white" 
-                                    prepend-inner-icon="mdi-lock"
-                                    @click:append="form.show_pass = !form.show_pass"
-                                    @keydown.enter="submit">
-                                </v-text-field>
-                            
-                                <v-btn @click="submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>restablecer contraseña</v-btn>
-                                
-                            </v-form>
+                            <!-- <v-row class="ma-3 d-flex justify-end">
+                                <v-btn text>Cancelar</v-btn>
+                                <v-btn color="primary" @click="stepper = 2">Continuar</v-btn>
+                            </v-row> -->
+                        </v-stepper-content>
+                        
+                        <v-stepper-content step="2">
+                            <v-row no-gutters class="d-flex justify-center">
+                                <v-col align-self="center" cols="8" class="pt-6 px-11">
+                                    <p class="big-title pb-2">Email enviado <span>👌</span></p>
+                                    <p>Enviamos un email a <span class="font-weight-bold">mail@here.com</span> con las instrucciones para restablecer tu contraseña
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-icon aria-hidden="false" v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
+                                            </template>
+                                            <span>Revisa tu carpeta de SPAM en caso de no encontrar el mensaje</span>
+                                        </v-tooltip>
+                                    </p>
+
+                                    <div class="px-16 mx-10">
+                                        <p class="pt-7 small-txt">Si no lo recibes en 5 minutos, puedes enviarlo de nuevo</p>
+                                        <h2 id="countdown" class="display-3 py-3">5:00</h2>
+                                        <v-btn @click="s2_submit(true)" color="accent" elevation="3" class="my-8" :disabled="step2.btnResendDisabled"  x-large dense block rounded>enviar de nuevo</v-btn>
+                                    </div>
+
+                                </v-col>
+                            </v-row>
+                             <!-- <v-row class="ma-3 d-flex justify-end">
+                                <v-btn text>Cancelar</v-btn>
+                                <v-btn color="primary" @click="stepper = 3">Continuar</v-btn>
+                            </v-row> -->
+                        </v-stepper-content>
+
+                        <v-stepper-content step="3">
+                            <v-row no-gutters class="d-flex justify-center">
+                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                    <p class="big-title pb-2">Escribe tu nueva contraseña</p>
+                                    <p class="pb-6">¡Esta vez recuérdala bien!</p>
+
+                                    <div class="px-16 mx-10">
+                                        <v-form ref="form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
+
+                                            <v-text-field 
+                                                name="input_password"
+                                                label="contraseña" 
+                                                v-model="step3.password1"
+                                                :rules="[rules.required, rules.password]"
+                                                :type="step3.show_pass_1 ? 'text' : 'password'"
+                                                :append-icon="step3.password1.length > 0 ? step3.show_pass_1 ? 'mdi-eye' : 'mdi-eye-off' : ''"
+                                                filled rounded color="white" 
+                                                prepend-inner-icon="mdi-lock"
+                                                @click:append="step3.show_pass_1 = !step3.show_pass_1"
+                                                @keydown.enter="s3_submit">
+                                            </v-text-field>
+
+                                            <v-text-field 
+                                                name="input_password_repeat"
+                                                label="contraseña (confirmación)" 
+                                                v-model="step3.password2"
+                                                :rules="[rules.required, rules.password]"
+                                                :type="step3.show_pass_2 ? 'text' : 'password'"
+                                                :append-icon="step3.password2.length > 0 ? step3.show_pass_2 ? 'mdi-eye' : 'mdi-eye-off' : ''"
+                                                filled rounded color="white" 
+                                                prepend-inner-icon="mdi-lock"
+                                                @click:append="step3.show_pass_2 = !step3.show_pass_2"
+                                                @keydown.enter="s3_submit">
+                                            </v-text-field>
+                                            <v-btn @click="s3_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>restablecer contraseña</v-btn>  
+                                        </v-form>
+                                    </div>
+                                </v-col>
+                            </v-row>
+
+                            <!-- <v-row class="ma-3 d-flex justify-end">
+                                <v-btn text>Cancelar</v-btn>
+                                 <v-btn color="primary" @click="stepper = 1">Continue</v-btn>
+                            </v-row>                            -->
+                        </v-stepper-content>
 
 
-
-                            
-
-                            <p class="small-txt">O bien, <router-link to="/register/">inicia sesión</router-link></p>
-                        </v-col>
-                    </v-row>
-                 </div>
+                    </v-stepper-items>
+                </v-stepper>
             </v-col>
         </v-row>
-        <div class="px-8">
-            <v-stepper v-model="e1" elevation="12" outlined>
-                <v-stepper-header>
-                    <v-stepper-step color="purple"  :complete="e1 > 1" step="1">Ingresa tu email</v-stepper-step>
-                    <v-divider></v-divider>
-                    <v-stepper-step :complete="e1 > 2" step="2">Recibe un mail de confirmación</v-stepper-step>
-                    <v-divider></v-divider>
-                    <v-stepper-step step="3">Ingresa tu nueva contraseña</v-stepper-step>    
-                </v-stepper-header>
-
-                <v-stepper-items>
-                    <v-stepper-content step="1">
-                        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-                        <v-btn color="primary" @click="e1 = 2">Continuar</v-btn>
-                        <v-btn text>Cancelar</v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="2">
-                        <v-card
-                        class="mb-12"
-                        color="grey lighten-1"
-                        height="200px"
-                        ></v-card>
-
-                        <v-btn
-                        color="primary"
-                        @click="e1 = 3"
-                        >
-                        Continue
-                        </v-btn>
-
-                        <v-btn text>
-                        Cancel
-                        </v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="3">
-                        <v-card
-                        class="mb-12"
-                        color="grey lighten-1"
-                        height="200px"
-                        ></v-card>
-
-                        <v-btn
-                        color="primary"
-                        @click="e1 = 1"
-                        >
-                        Continue
-                        </v-btn>
-
-                        <v-btn text>
-                        Cancel
-                        </v-btn>
-                    </v-stepper-content>
-                </v-stepper-items>
-            </v-stepper>
-
-        </div>
     </v-container>
 </template>
 
@@ -123,44 +129,120 @@
 
 export default {
 
+    mounted() {
+        // this.baseURL = `${process.env.BASE_URL}/reset-password`;
+        this.getAndShowStep()
+    },
+
+ 
+
     components: {
     },
 
     data() {
         return {
-            e1:1,
-            form: {
+            stepper: 1,
+
+
+            passReseted: false,
+
+
+            step1: {
                 valid: false,
                 email: "",
-                password: "",
-                show_pass: false,
+            },
+            step2: {
+                btnResendDisabled: true
+            },
+            step3: {
+                password1: "",
+                password2: "",
+                show_pass_1: false,
+                show_pass_2: false,
             },
             rules: {
                 required: value => !!value || 'requerido',
-               
+                email: value => {
+                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    return pattern.test(value) || 'e-mail inválido'
+                },
+                password: value => {
+                    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula y un dígito";
+                }
             }
         }
     },
     methods: {
+
+        getAndShowStep(){
+            const searchParams = window.location.search;
+            if (searchParams) {
+                const urlParams = new URLSearchParams(searchParams);
+                if (urlParams.has("s")) {
+                    const step = parseInt(urlParams.get("s"));
+                    if (step < 4) { this.stepper = step; }
+                    // if (step == 2) { this.startTimeout(); }
+                }
+            }
+        },
        
-        validate () {
-            this.$refs.form.validate()
+        validate (step) {
+            this.$refs[step].validate()
         },
 
-        async submit() {
-            const loginData = new FormData();
-            loginData.append("email", this.form.email);
-            loginData.append("password", this.form.password);
-
-            if(this.$refs.form.validate()) {
-                try {
-                    await this.LogIn(loginData); this.$router.push("/documents");
+        startTimeout() {
+            let time = 0.05*60; // 5 minutes
+            const elem = document.getElementById('countdown');
+            var timerCount = window.setInterval(updateCountdown, 1000);
+            var _this = this;
+            
+            function updateCountdown() {
+                if(time == -1) {
+                    clearTimeout(timerCount);
+                    _this.step2.btnResendDisabled = false;
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo iniciar sesión", "black", "ok" ); }
+                else {
+                    const minutes = Math.floor(time/60);
+                    let seconds = time % 60;
+                    seconds = seconds < 10 ? '0' + seconds : seconds;
+                    elem.innerHTML = `${minutes}:${seconds}`;
+                    time--;
+                }
+            }
+        },
+
+        async s1_submit() {
+            if(this.$refs.s1_form.validate("s1_form")) {
+                try {
+                    localStorage.setItem('resetPwdEmail', this.step1.email);
+                    this.s2_submit(false); // call s2_submit here
+                    this.stepper = 2;
+                }
+                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se enviar el email", "black", "ok" ); }
             }
             else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario para el paso 1", "black", "ok"); }
         },
+
+        async s2_submit(is_resend) {
+            
+            const loginData = new FormData();
+            let email = localStorage.getItem("resetPwdEmail");
+            loginData.append("email", email);
+
+            alert("Send mail to: " + email)
+
+            this.startTimeout();
+            this.step2.btnResendDisabled = true;
+            is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
+        },
+
+        async s3_submit() {
+
+        },
+
+        
 
         showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
@@ -174,6 +256,6 @@ export default {
             }
             this.$root.snackBar.show(snackOptions)
         }
-    }
+    },    
 }
 </script>

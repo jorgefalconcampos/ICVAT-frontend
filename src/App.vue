@@ -74,6 +74,11 @@ p {
   border-radius: 10px;
 }
 
+.border10-top{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
 .border10-left{
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -100,11 +105,22 @@ p {
  }
 
  .glass{
-   background: rgba(255, 255, 255, 0.116);
-   box-shadow: 0 8px 32px 0 rgba(44, 45, 53, 0.37);
-   backdrop-filter: blur( 4px );
-   -webkit-backdrop-filter: blur( 4px );
+   z-index: 99;
+   background: rgba(255, 255, 255, 0.116) !important;
+   box-shadow: 0 8px 32px 0 rgba(44, 45, 53, 0.37) !important;
+   backdrop-filter: blur( 20px ) !important;
+  //  backdrop-filter: blur( 4px ) !important;
+   -webkit-backdrop-filter: blur( 4px ) !important; 
   //  border: 2px solid rgba( 255, 255, 255, 0.18 );
+ }
+
+ .glass-white-border{
+   background: rgba(255, 255, 255, 0.116) !important;
+   box-shadow: 0 8px 32px 0 rgba(44, 45, 53, 0.37) !important;
+   backdrop-filter: blur( 4px ) !important;
+   border: 2px solid white;
+   border-radius: 13px !important;
+   -webkit-backdrop-filter: blur( 4px ) !important; 
  }
 
  
