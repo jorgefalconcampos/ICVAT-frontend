@@ -47,7 +47,7 @@
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="8" class="pt-6 px-11">
                                     <p class="big-title pb-2">Email enviado <span>👌</span></p>
-                                    <p>Enviamos un email a <span class="font-weight-bold">mail@here.com</span> con las instrucciones para restablecer tu contraseña
+                                    <p>Enviamos un email a <span class="font-weight-bold">{{r_email}}</span> con las instrucciones para restablecer tu contraseña
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-icon aria-hidden="false" v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
@@ -126,8 +126,11 @@
 
 <script>
 
+import axios from 'axios';
 
 export default {
+
+
 
     mounted() {
         // this.baseURL = `${process.env.BASE_URL}/reset-password`;
@@ -145,6 +148,8 @@ export default {
 
 
             passReseted: false,
+
+            r_email: null,
 
 
             step1: {
@@ -215,9 +220,9 @@ export default {
         async s1_submit() {
             if(this.$refs.s1_form.validate("s1_form")) {
                 try {
-                    localStorage.setItem('resetPwdEmail', this.step1.email);
+                    this.r_email = this.step1.email;
+                    // localStorage.setItem('resetPwdEmail', this.step1.email);
                     this.s2_submit(false); // call s2_submit here
-                    this.stepper = 2;
                 }
                 catch { this.showSnackbar("red", true, true, "mdi-alert", "No se enviar el email", "black", "ok" ); }
             }
@@ -226,16 +231,23 @@ export default {
         },
 
         async s2_submit(is_resend) {
-            
-            const loginData = new FormData();
-            let email = localStorage.getItem("resetPwdEmail");
-            loginData.append("email", email);
+            const data = new FormData();
+            // let email = localStorage.getItem("resetPwdEmail");
+            let email = this.r_email;
+            data.append("email", email);
+            try {
+                const response = await axios.post("user/password-reset/", data, {});
+                if ((response.status === 200) && (response.data.status==="OK")) {
+                    // alert("Send mail to: " + email)
+                    // alert("todo ok")
+                    this.startTimeout()
+                    this.step2.btnResendDisabled = true;
+                    is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
+                    this.stepper = 2;
+                }
+            }
+            catch { this.showSnackbar("red", true, true, "mdi-alert", `No se pudo enviar el email a ${email}`, "black", "ok" ); }
 
-            alert("Send mail to: " + email)
-
-            this.startTimeout();
-            this.step2.btnResendDisabled = true;
-            is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
         },
 
         async s3_submit() {
