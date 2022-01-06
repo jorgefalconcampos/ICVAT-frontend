@@ -2,11 +2,11 @@
     <v-container class="mt-4 bgblue border15 pa-10 mb-10">
         <v-row justify="space-around" class="text-center">
             <v-col cols="12">
-                <v-stepper v-model="pwd_stepper" class=" glass-white-border">
+                <v-stepper v-model="stepper" class=" glass-white-border">
                     <v-stepper-header class="glass border10-top">
-                        <v-stepper-step :color="this.pwd_stepper>1?'green':'black'" :complete="pwd_stepper > 1" step="1">Ingresa tu email</v-stepper-step>
+                        <v-stepper-step :color="this.stepper>1?'green':'black'" :complete="stepper > 1" step="1">Ingresa tu email</v-stepper-step>
                         <v-divider></v-divider>
-                        <v-stepper-step :color="this.pwd_stepper>2?'green':'black'" :complete="pwd_stepper>2" step="2">Recibe un mail de confirmación</v-stepper-step>
+                        <v-stepper-step :color="this.stepper>2?'green':'black'" :complete="stepper>2" step="2">Recibe un mail de confirmación</v-stepper-step>
                         <v-divider></v-divider>
                         <v-stepper-step :color="this.passReseted?'green':'black'" :complete="this.passReseted" step="3">Ingresa tu nueva contraseña</v-stepper-step>    
                     </v-stepper-header>
@@ -39,7 +39,7 @@
 
                             <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
-                                <v-btn color="primary" @click="pwd_stepper = 2">Continuar</v-btn>
+                                <v-btn color="primary" @click="stepper = 2">Continuar</v-btn>
                             </v-row> -->
                         </v-stepper-content>
                         
@@ -66,7 +66,7 @@
                             </v-row>
                              <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
-                                <v-btn color="primary" @click="pwd_stepper = 3">Continuar</v-btn>
+                                <v-btn color="primary" @click="stepper = 3">Continuar</v-btn>
                             </v-row> -->
                         </v-stepper-content>
 
@@ -112,7 +112,7 @@
 
                             <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
-                                 <v-btn color="primary" @click="pwd_stepper = 1">Continue</v-btn>
+                                 <v-btn color="primary" @click="stepper = 1">Continue</v-btn>
                             </v-row>                            -->
                         </v-stepper-content>
 
@@ -141,7 +141,7 @@ export default {
 
     data() {
         return {
-            pwd_stepper: 1,
+            stepper: 1,
 
 
             passReseted: false,
@@ -181,18 +181,18 @@ export default {
                 const urlParams = new URLSearchParams(searchParams);
                 if (urlParams.has("s")) {
                     const step = parseInt(urlParams.get("s"));
-                    if (step < 4) { this.pwd_stepper = step; }
+                    if (step < 4) { this.stepper = step; }
                     // if (step == 2) { this.startTimeout(); }
                 }
             }
         },
        
-        validate (step) {            
+        validate (step) {
             this.$refs[step].validate()
         },
 
         startTimeout() {
-            let time = 0.3*60; // 5 minutes
+            let time = 0.05*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
@@ -213,17 +213,11 @@ export default {
         },
 
         async s1_submit() {
-            const loginData = new FormData();
-            loginData.append("email", this.step1.email);
-
-            // var user = this.step1.email;
-            // alert(user);
-
             if(this.$refs.s1_form.validate("s1_form")) {
                 try {
-                    this.s2_submit(); // call s2_submit here
-                    this.startTimeout();
-                    this.pwd_stepper = 2;
+                    localStorage.setItem('resetPwdEmail', this.step1.email);
+                    this.s2_submit(false); // call s2_submit here
+                    this.stepper = 2;
                 }
                 catch { this.showSnackbar("red", true, true, "mdi-alert", "No se enviar el email", "black", "ok" ); }
             }
@@ -232,18 +226,16 @@ export default {
         },
 
         async s2_submit(is_resend) {
-            if (this.step2.btnResendDisabled == false){
-                this.sendMail(); // send email here
-                this.startTimeout();
-                this.step2.btnResendDisabled = true;
-                is_resend ? this.showSnackbar("green", true, true, "mdi-check", "Email reenviado", "black", "ok" ) : ''
-            }
-            // else { this.showSnackbar("red", true, true, "mdi-alert", "¡Espera a que acabe el tiempo!", "black", "ok" ); }
+            
+            const loginData = new FormData();
+            let email = localStorage.getItem("resetPwdEmail");
+            loginData.append("email", email);
 
-        },
+            alert("Send mail to: " + email)
 
-        async sendMail() {
-            alert("Send mail to")
+            this.startTimeout();
+            this.step2.btnResendDisabled = true;
+            is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
         },
 
         async s3_submit() {
