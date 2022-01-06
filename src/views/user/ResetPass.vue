@@ -19,7 +19,7 @@
                                     <p class="pb-6">Si perdiste u olvidaste tu contraseña, escribe el email con el que te registraste y sigue las instrucciones</p>
 
                                     <div class="px-16 mx-10">
-                                        <v-form ref="form" v-model="step1.valid" lazy-validation @submit.prevent="submit">
+                                        <v-form ref="s1_form" v-model="step1.valid" lazy-validation @submit.prevent="s1_submit">
                                             <v-text-field
                                                 name="input_email"
                                                 label="email" 
@@ -27,9 +27,9 @@
                                                 :rules="[rules.required, rules.email]" 
                                                 filled rounded color="white" 
                                                 prepend-inner-icon="mdi-email"
-                                                @keydown.enter="submit">
+                                                @keydown.enter="s1_submit">
                                             </v-text-field>                                            
-                                            <v-btn @click="submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>continuar</v-btn>
+                                            <v-btn @click="s1_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>continuar</v-btn>
                                         </v-form>
                                     </div>
                                     <p class="mt-7 small-txt">O bien, <router-link to="/login/">inicia sesión</router-link></p>
@@ -37,10 +37,10 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row class="ma-3 d-flex justify-end">
+                            <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
                                 <v-btn color="primary" @click="pwd_stepper = 2">Continuar</v-btn>
-                            </v-row>
+                            </v-row> -->
                         </v-stepper-content>
                         
                         <v-stepper-content step="2">
@@ -59,15 +59,15 @@
                                     <div class="px-16 mx-10">
                                         <p class="pt-7 small-txt">Si no lo recibes en 5 minutos, puedes enviarlo de nuevo</p>
                                         <h2 id="countdown" class="display-3 py-3">5:00</h2>
-                                        <v-btn @click="sendMail" color="accent" elevation="3" class="my-8" :disabled="step2.btnResendDisabled"  x-large dense block rounded>enviar de nuevo</v-btn>
+                                        <v-btn @click="s2_submit(true)" color="accent" elevation="3" class="my-8" :disabled="step2.btnResendDisabled"  x-large dense block rounded>enviar de nuevo</v-btn>
                                     </div>
 
                                 </v-col>
                             </v-row>
-                             <v-row class="ma-3 d-flex justify-end">
+                             <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
                                 <v-btn color="primary" @click="pwd_stepper = 3">Continuar</v-btn>
-                            </v-row>
+                            </v-row> -->
                         </v-stepper-content>
 
                         <v-stepper-content step="3">
@@ -77,7 +77,7 @@
                                     <p class="pb-6">¡Esta vez recuérdala bien!</p>
 
                                     <div class="px-16 mx-10">
-                                        <v-form ref="form" v-model="step3.valid" lazy-validation @submit.prevent="submit">
+                                        <v-form ref="form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
 
                                             <v-text-field 
                                                 name="input_password"
@@ -89,7 +89,7 @@
                                                 filled rounded color="white" 
                                                 prepend-inner-icon="mdi-lock"
                                                 @click:append="step3.show_pass_1 = !step3.show_pass_1"
-                                                @keydown.enter="submit">
+                                                @keydown.enter="s3_submit">
                                             </v-text-field>
 
                                             <v-text-field 
@@ -102,18 +102,18 @@
                                                 filled rounded color="white" 
                                                 prepend-inner-icon="mdi-lock"
                                                 @click:append="step3.show_pass_2 = !step3.show_pass_2"
-                                                @keydown.enter="submit">
+                                                @keydown.enter="s3_submit">
                                             </v-text-field>
-                                            <v-btn @click="submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>restablecer contraseña</v-btn>  
+                                            <v-btn @click="s3_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>restablecer contraseña</v-btn>  
                                         </v-form>
                                     </div>
                                 </v-col>
                             </v-row>
 
-                            <v-row class="ma-3 d-flex justify-end">
+                            <!-- <v-row class="ma-3 d-flex justify-end">
                                 <v-btn text>Cancelar</v-btn>
                                  <v-btn color="primary" @click="pwd_stepper = 1">Continue</v-btn>
-                            </v-row>                           
+                            </v-row>                            -->
                         </v-stepper-content>
 
 
@@ -182,19 +182,17 @@ export default {
                 if (urlParams.has("s")) {
                     const step = parseInt(urlParams.get("s"));
                     if (step < 4) { this.pwd_stepper = step; }
-                    if (step == 2) { 
-                        this.startTimeout(); 
-                        }
+                    // if (step == 2) { this.startTimeout(); }
                 }
             }
         },
        
-        validate () {
-            this.$refs.step1.validate()
+        validate (step) {            
+            this.$refs[step].validate()
         },
 
         startTimeout() {
-            let time = 5*60; // 5 minutes
+            let time = 0.3*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
@@ -214,29 +212,45 @@ export default {
             }
         },
 
-        async submit() {
+        async s1_submit() {
             const loginData = new FormData();
-            loginData.append("email", this.form.email);
-            loginData.append("password", this.form.password);
+            loginData.append("email", this.step1.email);
 
-            if(this.$refs.form.validate()) {
+            // var user = this.step1.email;
+            // alert(user);
+
+            if(this.$refs.s1_form.validate("s1_form")) {
                 try {
-                    await this.LogIn(loginData); this.$router.push("/documents");
+                    this.s2_submit(); // call s2_submit here
+                    this.startTimeout();
+                    this.pwd_stepper = 2;
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo iniciar sesión", "black", "ok" ); }
+                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se enviar el email", "black", "ok" ); }
             }
             else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario para el paso 1", "black", "ok"); }
         },
 
-        sendMail() {
+        async s2_submit(is_resend) {
             if (this.step2.btnResendDisabled == false){
-                alert("Send mail to")                
+                this.sendMail(); // send email here
+                this.startTimeout();
+                this.step2.btnResendDisabled = true;
+                is_resend ? this.showSnackbar("green", true, true, "mdi-check", "Email reenviado", "black", "ok" ) : ''
             }
-            else {
-                this.showSnackbar("red", true, true, "mdi-alert", "¡Espera a que acabe el tiempo!", "black", "ok" );
-            }
+            // else { this.showSnackbar("red", true, true, "mdi-alert", "¡Espera a que acabe el tiempo!", "black", "ok" ); }
+
         },
+
+        async sendMail() {
+            alert("Send mail to")
+        },
+
+        async s3_submit() {
+
+        },
+
+        
 
         showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
