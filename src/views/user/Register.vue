@@ -77,7 +77,6 @@ export default {
                 username: "",
                 password1: "",
                 show_pass_1: false,
-                show_pass_2: false,
             },
             rules: {
                 required: value => !!value || 'requerido',
