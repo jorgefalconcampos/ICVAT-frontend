@@ -80,8 +80,8 @@ p {
 }
 
 .border10-left{
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 13px;
+  border-bottom-left-radius: 13px;
 }
 
 .border10-right{

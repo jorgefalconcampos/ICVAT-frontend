@@ -2,7 +2,7 @@
     <v-container class="mt-12 bgblue border15">
         <v-row justify="space-around" class="text-center pa-8">
             <v-col cols="9">
-                <div class="border10 glass">
+                <div class="border10 glass-white-border">
                     <v-row no-gutters>
                         <v-col align-self="center" class="px-8" cols="6">
                             <p class="big-title pb-6">Crea tu cuenta</p>
