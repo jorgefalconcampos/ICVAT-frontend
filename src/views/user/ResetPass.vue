@@ -2,7 +2,7 @@
     <v-container class="mt-4 bgblue border15 pa-10 mb-10">
         <v-row justify="space-around" class="text-center">
             <v-col cols="12">
-                <v-stepper v-model="stepper" class=" glass-white-border">
+                <v-stepper v-model="stepper" class="glass-white-border">
                     <v-stepper-header class="glass border10-top">
                         <v-stepper-step :color="this.stepper>1?'green':'black'" :complete="stepper > 1" step="1">Ingresa tu email</v-stepper-step>
                         <v-divider></v-divider>

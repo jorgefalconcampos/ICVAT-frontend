@@ -2,7 +2,7 @@
     <v-container class="mt-12 bgblue border15">
         <v-row justify="space-around" class="text-center pa-8">
             <v-col cols="9">
-                <div class="border10 glass">
+                <div class="border10 glass-white-border">
                     <v-row no-gutters>
                         <v-col align-self="center" class="px-8" cols="6">
                             <p class="big-title pb-6">Crea tu cuenta</p>
@@ -17,6 +17,15 @@
                                     filled rounded color="white" 
                                     prepend-inner-icon="mdi-email">
                                 </v-text-field>
+                                
+                                <v-text-field
+                                    name="input_username"
+                                    label="nombre de usuario" 
+                                    v-model="form.username" 
+                                    :rules="[rules.required]" 
+                                    filled rounded color="white" 
+                                    prepend-inner-icon="mdi-account">
+                                </v-text-field>
 
                                 <v-text-field 
                                     name="input_password"
@@ -25,22 +34,11 @@
                                     :rules="[rules.required, rules.password]"
                                     :type="form.show_pass_1 ? 'text' : 'password'"
                                     :append-icon="form.show_pass_1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    clearable filled rounded color="white" 
+                                    filled rounded color="white" 
                                     prepend-inner-icon="mdi-lock"
                                     @click:append="form.show_pass_1 = !form.show_pass_1">
                                 </v-text-field>
 
-                                <v-text-field 
-                                    name="input_password_repeat"
-                                    label="contraseña (confirmar)" 
-                                    v-model="form.password2"
-                                    :rules="[rules.required, rules.password]"
-                                    :type="form.show_pass_2 ? 'text' : 'password'"
-                                    :append-icon="form.show_pass_2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    clearable filled rounded color="white" 
-                                    prepend-inner-icon="mdi-lock"
-                                    @click:append="form.show_pass_2 = !form.show_pass_2">
-                                </v-text-field>
 
                                 <v-btn color="accent" elevation="3" class="mb-4" x-large dense block rounded>registrarme</v-btn>
 
@@ -76,10 +74,9 @@ export default {
         return {
             form: {
                 email: "",
+                username: "",
                 password1: "",
-                password2: "",
                 show_pass_1: false,
-                show_pass_2: false,
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -88,8 +85,8 @@ export default {
                     return pattern.test(value) || 'e-mail inválido'
                 },
                 password: value => {
-                    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula y un dígito";
+                    const pattern = /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/
+                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial";
                 }
             },
         }
