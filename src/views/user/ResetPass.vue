@@ -13,6 +13,7 @@
                     
                     <v-stepper-items>
                         <v-stepper-content step="1">
+                            <!-- Step 1 -->
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="8" class="pt-6 px-11" >
                                     <p class="big-title pb-2">Recupera tu contraseña</p>
@@ -44,6 +45,7 @@
                         </v-stepper-content>
                         
                         <v-stepper-content step="2">
+                            <!-- Step 2 -->
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="8" class="pt-6 px-11">
                                     <p class="big-title pb-2">Email enviado <span>👌</span></p>
@@ -71,13 +73,14 @@
                         </v-stepper-content>
 
                         <v-stepper-content step="3">
+                            <!-- Step 3 -->
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="8" class="pt-6 px-11" >
                                     <p class="big-title pb-2">Escribe tu nueva contraseña</p>
                                     <p class="pb-6">¡Esta vez recuérdala bien!</p>
 
                                     <div class="px-16 mx-10">
-                                        <v-form ref="form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
+                                        <v-form ref="s3_form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
 
                                             <v-text-field 
                                                 name="input_password"
@@ -104,7 +107,7 @@
                                                 @click:append="step3.show_pass_2 = !step3.show_pass_2"
                                                 @keydown.enter="s3_submit">
                                             </v-text-field>
-                                            <v-btn @click="s3_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>restablecer contraseña</v-btn>  
+                                            <v-btn @click="s3_submit" color="accent" elevation="3" class="mb-8" x-large dense block rounded>restablecer contraseña</v-btn>  
                                         </v-form>
                                     </div>
                                 </v-col>
@@ -160,6 +163,7 @@ export default {
                 btnResendDisabled: true
             },
             step3: {
+                valid: false,
                 password1: "",
                 password2: "",
                 show_pass_1: false,
@@ -173,8 +177,8 @@ export default {
                     return pattern.test(value) || 'e-mail inválido'
                 },
                 password: value => {
-                    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula y un dígito";
+                    const pattern = /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/
+                    return pattern.test(value) || "Min. 8 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial";
                 }
             }
         }
@@ -187,7 +191,7 @@ export default {
                 const urlParams = new URLSearchParams(searchParams);
                 if (urlParams.has("t")) {
                     const token = urlParams.get("t");
-                    this.token = token;
+                    this.step3.token = token
                     this.stepper = 3;
                 }
             }
@@ -225,7 +229,7 @@ export default {
                     // localStorage.setItem('resetPwdEmail', this.step1.email);
                     this.s2_submit(false); // call s2_submit here
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se enviar el email", "black", "ok" ); }
+                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo enviar el email", "black", "ok" ); }
             }
             else 
             { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario para el paso 1", "black", "ok"); }
@@ -252,7 +256,26 @@ export default {
         },
 
         async s3_submit() {
-
+            if(this.$refs.s3_form.validate("s3_form")) {
+                alert(this.step3.password1)
+                alert(this.step3.token)
+                if (this.step3.password1 === this.step3.password2) {
+                    try {
+                        const pwdResetData = new FormData();
+                        pwdResetData.append("password", this.step3.password1);
+                        pwdResetData.append("token", this.step3.token);
+                        const response = await axios.post("user/password-reset/confirm/", pwdResetData, {});
+                        if ((response.status === 200) && (response.data.status==="OK")) {
+                            this.step3.password1 = null; this.step3.password2 = null; this.step3.token = null;
+                            this.showSnackbar("green", true, true, "mdi-check", "Contraseña actualizada... redireccionando al inicio de sesión", "black", "ok" ) 
+                            setTimeout(() => { this.$router.push('/login') }, 3000);
+                        }
+                    }
+                    catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo restablecer la contraseña", "black", "ok" ); }
+                }
+                else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Las contraseñas no coinciden", "black", "ok"); }
+            }
+            else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
         },
 
         
