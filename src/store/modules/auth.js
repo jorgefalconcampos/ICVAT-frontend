@@ -13,20 +13,23 @@ const getters = {
 };
 
 const actions = {
-    async Register({dispatch}, form) {
-        await axios.post('register', form)
-        let UserForm = new FormData()
-        UserForm.append('email', form.username)
-        UserForm.append('password', form.password)
-        await dispatch('LogIn', UserForm)
+    async Register({dispatch}, registerData) {
+        let response = await axios.post('user/signup/', registerData)
+        console.log(`\n auuuuth: ${JSON.stringify(response.data)}`);
+
+        
+        // let username = registerData.username;
+        // let email = registerData.email;
+
+        await dispatch("LogIn", registerData)
+
       },
     
       async LogIn({commit}, loginData) {
         let response = await axios.post("user/login/", loginData);
-
+        // console.log(response);
         let username = response.data.username;
         let email = response.data.email;
-
         await commit("setUser", {
           username: username,
           email: email,
