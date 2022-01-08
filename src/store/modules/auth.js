@@ -1,32 +1,41 @@
 import axios from "axios";
 
 const state = {
-    username: null,
-    email: null,
+    // username: null,
+    // email: null,
+
+    userData: {
+      user: null,
+      email: null
+    }
     // posts: null
 };
 
 const getters = {
-    isAuthenticated: state => !!state.email,    
+    isAuthenticated: state => !!state.userData.email,    
+    userInfo: state => state.userData,    
     StatePosts: state => state.posts,
-    StateUser: state => state.email,
+    StateUser: state => state.userData.email,
 };
 
 const actions = {
-    async Register({dispatch}, form) {
-        await axios.post('register', form)
-        let UserForm = new FormData()
-        UserForm.append('email', form.username)
-        UserForm.append('password', form.password)
-        await dispatch('LogIn', UserForm)
+    async Register({dispatch}, registerData) {
+        let response = await axios.post('user/signup/', registerData)
+        console.log(`\n auuuuth: ${JSON.stringify(response.data)}`);
+
+        
+        // let username = registerData.username;
+        // let email = registerData.email;
+
+        await dispatch("LogIn", registerData)
+
       },
     
       async LogIn({commit}, loginData) {
         let response = await axios.post("user/login/", loginData);
-
+        // console.log(response);
         let username = response.data.username;
         let email = response.data.email;
-
         await commit("setUser", {
           username: username,
           email: email,
@@ -61,15 +70,20 @@ const actions = {
 
 const mutations = {
     setUser(state, payload){
-        state.username = payload.username
-        state.email = payload.email
+        // state.username = payload.username
+        // state.email = payload.email
+        state.userData.user = payload.username
+        state.userData.email = payload.email
+
     },
     setPosts(state, posts){
         state.posts = posts
     },
     doLogout(state){
-      state.email = null;
-      state.username = null;
+      // state.email = null;
+      // state.username = null;
+      state.userData.email = null;
+      state.userData.user = null;
     },
 };
 

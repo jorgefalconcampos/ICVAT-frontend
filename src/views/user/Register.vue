@@ -15,7 +15,8 @@
                                     v-model="form.email" 
                                     :rules="[rules.required, rules.email]" 
                                     filled rounded color="white" 
-                                    prepend-inner-icon="mdi-email">
+                                    prepend-inner-icon="mdi-email"
+                                    @keydown.enter="submit">
                                 </v-text-field>
                                 
                                 <v-text-field
@@ -24,23 +25,24 @@
                                     v-model="form.username" 
                                     :rules="[rules.required]" 
                                     filled rounded color="white" 
-                                    prepend-inner-icon="mdi-account">
+                                    prepend-inner-icon="mdi-account"
+                                    @keydown.enter="submit">
                                 </v-text-field>
 
                                 <v-text-field 
                                     name="input_password"
                                     label="contraseña" 
-                                    v-model="form.password1"
+                                    v-model="form.password"
                                     :rules="[rules.required, rules.password]"
-                                    :type="form.show_pass_1 ? 'text' : 'password'"
-                                    :append-icon="form.show_pass_1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                    :type="form.show_pass ? 'text' : 'password'"
+                                    :append-icon="form.show_pass ? 'mdi-eye' : 'mdi-eye-off'"
                                     filled rounded color="white" 
                                     prepend-inner-icon="mdi-lock"
-                                    @click:append="form.show_pass_1 = !form.show_pass_1">
+                                    @click:append="form.show_pass = !form.show_pass"
+                                    @keydown.enter="submit">
                                 </v-text-field>
 
-
-                                <v-btn color="accent" elevation="3" class="mb-4" x-large dense block rounded>registrarme</v-btn>
+                                <v-btn @click="submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>registrarme</v-btn>
 
                             </v-form>
 
@@ -68,15 +70,18 @@
 <script>
 
 import { mapActions } from 'vuex';
+// import axios from "axios";
+
 
 export default {
     data() {
         return {
             form: {
+                valid: false,
                 email: "",
                 username: "",
-                password1: "",
-                show_pass_1: false,
+                password: "",
+                show_pass: false,
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -94,17 +99,41 @@ export default {
 
     methods: {
         ...mapActions(["Register"]),
+        
+        validate () {
+            this.$refs.form.validate()
+        },
     
         async submit() {
-            try {
-                alert("submit")
-                await this.Register(this.form);
-                // this.$router.push("/posts");
-            }
-            catch (err) {
-                alert("error");
-            }
+            const registerData = new FormData();
+            registerData.append("email", this.form.email);
+            registerData.append("username", this.form.username);
+            registerData.append("password", this.form.password);
 
+            if(this.$refs.form.validate()) {
+                try {
+                     this.Register(registerData);
+                     this.showSnackbar("green", true, true, "mdi-check", "Registro exitoso... redireccionando", "black", "ok" ) 
+                     setTimeout(() => { this.$router.push('/documents') }, 1500);
+                }
+                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo completar el registro", "black", "ok" ); }
+            }
+            else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+
+
+        },
+        
+        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
+            const snackOptions = {
+                color: color,
+                right: isRight,
+                show_icon: showIcon,
+                icon: icon,
+                message: msg,
+                closeSnackBtnColor: closeBtnColor,
+                closeSnackBtnTxt: closeBtnTxt, 
+            }
+            this.$root.snackBar.show(snackOptions)
         }
     }
 }

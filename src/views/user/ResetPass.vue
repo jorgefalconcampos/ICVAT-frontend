@@ -14,6 +14,14 @@
                     <v-stepper-items>
                         <v-stepper-content step="1">
                             <!-- Step 1 -->
+                            <v-progress-linear
+                                v-if="step1.loading"
+                                height="2"
+                                indeterminate
+                                absolute top
+                                color="white">
+                            </v-progress-linear>
+
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="8" class="pt-6 px-11" >
                                     <p class="big-title pb-2">Recupera tu contraseña</p>
@@ -30,7 +38,15 @@
                                                 prepend-inner-icon="mdi-email"
                                                 @keydown.enter="s1_submit">
                                             </v-text-field>                                            
-                                            <v-btn @click="s1_submit" color="accent" elevation="3" class="mb-4" x-large dense block rounded>continuar</v-btn>
+                                            <v-btn 
+                                                @click="s1_submit" 
+                                                color="accent" 
+                                                elevation="3" 
+                                                class="mb-4" 
+                                                x-large dense block rounded>
+                                                continuar
+                                            </v-btn>
+                                            
                                         </v-form>
                                     </div>
                                     <p class="mt-7 small-txt">O bien, <router-link to="/login/">inicia sesión</router-link></p>
@@ -158,6 +174,7 @@ export default {
             step1: {
                 valid: false,
                 email: "",
+                loading: false,
             },
             step2: {
                 btnResendDisabled: true
@@ -202,7 +219,7 @@ export default {
         },
 
         startTimeout() {
-            let time = 0.05*60; // 5 minutes
+            let time = 5*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
@@ -232,19 +249,17 @@ export default {
                 catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo enviar el email", "black", "ok" ); }
             }
             else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario para el paso 1", "black", "ok"); }
+            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
         },
 
         async s2_submit(is_resend) {
+            this.step1.loading = true;
             const data = new FormData();
-            // let email = localStorage.getItem("resetPwdEmail");
             let email = this.r_email;
             data.append("email", email);
             try {
                 const response = await axios.post("user/password-reset/", data, {});
                 if ((response.status === 200) && (response.data.status==="OK")) {
-                    // alert("Send mail to: " + email)
-                    // alert("todo ok")
                     this.startTimeout()
                     this.step2.btnResendDisabled = true;
                     is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
@@ -252,6 +267,7 @@ export default {
                 }
             }
             catch { this.showSnackbar("red", true, true, "mdi-alert", `No se pudo enviar el email a ${email}`, "black", "ok" ); }
+            finally { this.step1.loading = false; }
 
         },
 
