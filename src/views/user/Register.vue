@@ -114,7 +114,7 @@ export default {
                 try {
                      this.Register(registerData);
                      this.showSnackbar("green", true, true, "mdi-check", "Registro exitoso... redireccionando", "black", "ok" ) 
-                     setTimeout(() => { this.$router.push('/documents') }, 3000);
+                     setTimeout(() => { this.$router.push('/documents') }, 1500);
                 }
                 catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo completar el registro", "black", "ok" ); }
             }

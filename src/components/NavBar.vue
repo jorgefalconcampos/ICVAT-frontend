@@ -9,13 +9,17 @@
       <router-link to="/register">Register</router-link> |
       <router-link to="/login">Login</router-link>
     </span>
+    <p v-if="isLoggedIn">
+      {{userData.email}} | {{userData.user}}
+    </p>
   </div>
 </template>
 <script>
 export default {
   name: 'NavBar',
   computed : {
-      isLoggedIn : function(){ return this.$store.getters.isAuthenticated}
+      isLoggedIn: function() { return this.$store.getters.isAuthenticated },
+      userData: function() { return this.$store.getters.userInfo }
     },
     methods: {
       async logout (){

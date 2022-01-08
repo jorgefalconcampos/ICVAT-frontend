@@ -1,15 +1,21 @@
 import axios from "axios";
 
 const state = {
-    username: null,
-    email: null,
+    // username: null,
+    // email: null,
+
+    userData: {
+      user: null,
+      email: null
+    }
     // posts: null
 };
 
 const getters = {
-    isAuthenticated: state => !!state.email,    
+    isAuthenticated: state => !!state.userData.email,    
+    userInfo: state => state.userData,    
     StatePosts: state => state.posts,
-    StateUser: state => state.email,
+    StateUser: state => state.userData.email,
 };
 
 const actions = {
@@ -64,15 +70,20 @@ const actions = {
 
 const mutations = {
     setUser(state, payload){
-        state.username = payload.username
-        state.email = payload.email
+        // state.username = payload.username
+        // state.email = payload.email
+        state.userData.user = payload.username
+        state.userData.email = payload.email
+
     },
     setPosts(state, posts){
         state.posts = posts
     },
     doLogout(state){
-      state.email = null;
-      state.username = null;
+      // state.email = null;
+      // state.username = null;
+      state.userData.email = null;
+      state.userData.user = null;
     },
 };
 
