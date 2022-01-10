@@ -36,9 +36,11 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>  -->
+    
+
+    
 
     <div style="background-color: #fecc00">
-      This is only displayed in Home
       <NavBar />
     </div>
     
