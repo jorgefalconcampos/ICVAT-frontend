@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="materialpro" :class="`${!$vuetify.breakpoint.smAndDown ? 'full-sidebar' : 'mini-sidebar'}`">
      <!-- <v-app-bar
       app
       color="primary"
@@ -37,7 +37,10 @@
       </v-btn>
     </v-app-bar>  -->
 
-    <NavBar/>
+    <div style="background-color: #fecc00">
+      This is only displayed in Home
+      <NavBar />
+    </div>
     
     <v-main>
       <transition name="fade" mode="out-in">
@@ -129,7 +132,7 @@ p {
 
 <script>
 
-import NavBar from '@/components/NavBar.vue'
+import NavBar from '@/layouts/navbar/NavBar.vue'
 import SnackBar from '@/components/partials/SnackBar.vue'
 
 export default {
