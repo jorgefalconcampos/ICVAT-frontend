@@ -1,4 +1,13 @@
+
 <template>
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/documents">Documents</router-link> |
@@ -13,9 +22,30 @@
       {{userData.email}} | {{userData.user}}
     </p>
   </div>
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->
+<!-- to be deprecated -->  
 </template>
 <script>
 export default {
+
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+  // to be deprecated
+
   name: 'NavBar',
   computed : {
       isLoggedIn: function() { return this.$store.getters.isAuthenticated },

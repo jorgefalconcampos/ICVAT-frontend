@@ -1,59 +1,43 @@
 <template>
     <v-navigation-drawer
-    v-model="Sidebar_drawer"
-    :dark="SidebarColor !== 'white'"
-    :color="SidebarColor"
-    mobile-breakpoint="960"
-    clipped
-    :right="$vuetify.rtl"
-    mini-variant-width="10"
-    :expand-on-hover="expandOnHover"
-    app
-    id="main-sidebar"
-  >
-    <v-list dense nav>
-      <!---USer Area -->
-      <v-list-item two-line class="px-0">
-        <v-list-item-avatar>
-        
-          <img src="https://randomuser.me/api/portraits/men/81.jpg" />
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>{{userData.user}}</v-list-item-title>
-          <v-list-item-subtitle class="caption">{{userData.email}}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <div v-if="isLoggedIn">
-
-         <v-list-item
-            v-for="item in items"
-            :key="item.title"
-            :to="item.to"
-            @click="menuAction(item.action)"
-            :active-class="`primary white--text`"
-            link
-        >
-
-   
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
-
-
-        <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      </div>
-
-
-
-
-      <!---Sidebar Items -->
-    </v-list>
-  </v-navigation-drawer>
+        v-model="Sidebar_drawer"
+        :dark="SidebarColor !== 'white'"
+        :color="SidebarColor"
+        mobile-breakpoint="960"
+        clipped
+        :right="$vuetify.rtl"
+        mini-variant-width="10"
+        :expand-on-hover="expandOnHover"
+        app
+        id="main-sidebar">
+        <v-list nav>
+            <v-list-item>
+                <v-list-item-avatar size="55">
+                    <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                    <v-list-item-title>{{userData.user}}</v-list-item-title>
+                    <v-list-item-subtitle class="caption">{{userData.email}}</v-list-item-subtitle>
+                </v-list-item-content>
+            </v-list-item>
+            <div v-if="isLoggedIn">
+                <v-list-item
+                    v-for="item in items"
+                    :key="item.title"
+                    :to="item.to"
+                    @click="menuAction(item.action)"
+                    :active-class="`primary white--text`"
+                    link>
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                </v-list-item>
+            </div>
+        </v-list>
+    </v-navigation-drawer>
 </template>
 
 <script>
