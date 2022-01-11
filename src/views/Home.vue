@@ -1,11 +1,11 @@
 <template>
     <div>
-        <navigation :color="color" :flat="flat" />
-
+        <navigation color="dark" :flat="flat"/>
         <home-section/>
         <about-section/>
         <advantages-section/>
-        <charts-section/>
+        <how-it-works-section/>
+        <footer-section/>
         <v-scale-transition>
             <v-btn
                 fab
@@ -25,7 +25,8 @@ import Navigation from "@/components/landing/Navigation.vue"
 import HomeSection from "@/components/landing/HomeSection.vue"
 import AboutSection from "@/components/landing/AboutSection.vue"
 import AdvantagesSection from "@/components/landing/AdvantagesSection.vue"
-import ChartsSection from "@/components/landing/ChartsSection.vue"
+import HowItWorksSection from "@/components/landing/HowItWorksSection.vue"
+import FooterSection from "@/components/landing/FooterSection.vue"
 
 export default {
     name: 'Home',
@@ -33,13 +34,13 @@ export default {
         Navigation,
         HomeSection,
         AboutSection,
-        AdvantagesSection,
-        ChartsSection,
+        "advantages-section": AdvantagesSection,
+        "how-it-works-section": HowItWorksSection,
+        FooterSection,
     },
     data: () => ({
         fab: null,
-        color: "",
-        flat: null
+        flat: true
     }),
     methods: {
         onScroll(e) {

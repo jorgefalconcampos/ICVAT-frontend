@@ -11,7 +11,7 @@
                             class="mt-6"
                             rounded outlined
                             large dark
-                            @click="$vuetify.goTo('#features')">
+                            @click="$vuetify.goTo('#benefits')">
                             Saber más
                             <v-icon class="ml-2">mdi-arrow-down</v-icon>
                             </v-btn>
@@ -24,7 +24,7 @@
                 <v-img src="@/assets/img/borderWaves.svg" />
             </div>
         </v-parallax>
-        <v-container fluid id="about">
+        <v-container fluid id="benefits">
             <v-row align="center" justify="center">
                 <v-col cols="10">
                     <v-row align="center" justify="space-around" class="my-15">
@@ -36,7 +36,7 @@
                             :key="i">
                             <v-hover v-slot:default="{ hover }">
                                 <v-card
-                                    class="card py-5"
+                                    class="card py-5 px-3"
                                     shaped
                                     :elevation="hover ? 10 : 4"
                                     :class="{ up: hover }">
@@ -47,7 +47,7 @@
                                         :class="{ 'zoom-efect': hover }">
                                     </v-img>
                                     <h1 class="font-weight-bold">{{ feature.title }}</h1>
-                                    <h4 class="font-weight-regular mx-2">{{ feature.text }}</h4>
+                                    <h4 class="font-weight-regular mx-4">{{ feature.text }}</h4>
                                 </v-card>
                             </v-hover>
                         </v-col>
@@ -70,17 +70,17 @@ export default {
                 {
                     img: require("@/assets/img/icon2.png"),
                     title: "Aprende hablando",
-                    text: "Hablando en voz alta, tu cerebro aprende mejor y retiene por más tiempo la información a comparación de una forma escrita.",
+                    text: "Está comprobado que hablando en voz alta, tu cerebro aprende mejor y retiene por más tiempo la información a comparación de una forma escrita.",
                 },
                 {
                     img: require("@/assets/img/icon3.png"),
                     title: "Creatividad a flote",
-                    text: "Solemos tener más creatividad con las palabras que con el texto. Solo déjate llevar por las palabras y aprende mientras lo dictas.",
+                    text: "Solemos tener más creatividad con las palabras que con el texto. Solo déjate llevar por las palabras y aprende más y mejor mientras lo dictas.",
                 },
                 {
                     img: require("@/assets/img/icon1.png"),
                     title: "Datos seguros",
-                    text: "Tu voz se envía a través de APIs robustas a un servicio en la nube y es procesada en tiempo real. No se almacenan copias de tu voz.",
+                    text: "Tu voz se envía a través de API's robustas a un servicio en la nube y es procesada en tiempo real. Nunca se almacenan copias de tu voz.",
                 },
             ],
         };

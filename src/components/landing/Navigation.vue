@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="abs">
         <v-navigation-drawer
             v-model="drawer"
             app temporary dark
@@ -54,35 +54,36 @@
                     <span class="mr-2">Home</span>
                 </v-btn>
                 
-                <v-btn text @click="$vuetify.goTo('#about')">
+                <v-btn text @click="$vuetify.goTo('#benefits')">
                     <span class="mr-2">Sobre</span>
                 </v-btn>
 
-                <v-btn text @click="$vuetify.goTo('#download')">
+                <v-btn text @click="$vuetify.goTo('#about')">
                     <span class="mr-2">Download</span>
-                </v-btn>
+                </v-btn>                
                 
-                <v-btn text @click="$vuetify.goTo('#pricing')">
-                    <span class="mr-2">Preços</span>
-                </v-btn>
-                
-                <router-link to="/documents/">
+                <router-link to="/documents/" class="red">
                     <v-btn rounded outlined text>Documents</v-btn>
                 </router-link>   
                 
-                <router-link to="/register/">
+                <router-link to="/register/" class="red">
                     <v-btn rounded outlined text>Registrar</v-btn>
+                </router-link> 
+
+                <router-link to="/login/" class="mainNav">
+                    <v-btn class="" rounded outlined text large>Iniciar</v-btn>
                 </router-link>   
 
-                <router-link to="/login/">
-                    <v-btn rounded outlined text>Iniciar2</v-btn>
-                </router-link>   
             </div>
         </v-app-bar>
     </div>
 </template>
 
 <style scoped>
+
+.mainNav {
+    text-decoration: none !important;
+}
 
 .v-toolbar {
   transition: 0.6s;
