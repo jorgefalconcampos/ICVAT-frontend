@@ -43,7 +43,7 @@
                                     filled rounded color="white" 
                                     prepend-inner-icon="mdi-lock"
                                     @click:append="form.show_pass = !form.show_pass"
-                                    @click:append-outer="this.$router.push('/reset-password')"
+                                    @click:append-outer="$router.push('/reset-password')"
                                     @keydown.enter="submit">
                                 </v-text-field>
                             

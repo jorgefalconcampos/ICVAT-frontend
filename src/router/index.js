@@ -1,11 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import store from '../store'
 import Home from '../views/Home.vue'
 import Login from '../views/user/Login.vue'
 import Register from '../views/user/Register.vue'
 import ResetPass from '../views/user/ResetPass.vue'
-import Documents from '../views/Documents.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -36,9 +34,26 @@ const routes = [
   },
   {   
     path: '/documents',
-    name: 'Documents',
-    component: Documents,
-    meta: { requiresAuth: true }
+    component: () => import('@/layouts/Layout'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        name: 'Profile',
+        path: '/profile',
+        component: () => import('@/views/pages/Profile'),
+      },
+      {
+        name: 'Settings',
+        path: '/settings',
+        component: () => import('@/views/pages/Settings'),
+      },
+      {
+        name: 'Documents',
+        path: '/documents',
+        component: () => import('@/views/dashboard/Documents'),
+      },
+    ],
+    // component: Documents,
   },
   {
     path: '/about',
