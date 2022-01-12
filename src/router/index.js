@@ -9,89 +9,90 @@ import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: { guest: true }
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
-    meta: { guest: true }    
-  },
-  {
-    path: '/reset-password',
-    name: 'ResetPass',
-    component: ResetPass,
-    meta: { guest: true }    
-  },
-  {   
-    path: '/documents',
-    component: () => import('@/layouts/Layout'),
-    meta: { requiresAuth: true },
-    children: [
-      {
-        name: 'Profile',
-        path: '/profile',
-        component: () => import('@/views/pages/Profile'),
-      },
-      {
-        name: 'Settings',
-        path: '/settings',
-        component: () => import('@/views/pages/Settings'),
-      },
-      {
-        name: 'Documents',
+    {
+        path: '/',
+        name: 'Home',
+        component: Home
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
+        meta: { guest: true }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register,
+        meta: { guest: true }    
+    },
+    {
+        path: '/reset-password',
+        name: 'ResetPass',
+        component: ResetPass,
+        meta: { guest: true }    
+    },
+    {   
         path: '/documents',
-        component: () => import('@/views/dashboard/Documents'),
-      },
-    ],
-    // component: Documents,
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+        component: () => import('@/layouts/Layout'),
+        meta: { requiresAuth: true },
+        children: [
+        {
+            name: 'Profile',
+            path: '/profile',
+            component: () => import('@/views/pages/Profile'),
+        },
+        {
+            name: 'Settings',
+            path: '/settings',
+            component: () => import('@/views/pages/Settings'),
+        },
+        {
+            name: 'Documents',
+            path: '/documents',
+            component: () => import('@/views/dashboard/Documents'),
+        },
+        {
+            name: 'Categories',
+            path: '/categories',
+            component: () => import('@/views/dashboard/Categories'),
+        },
+        ],
+        // component: Documents,
+    },
+    {
+        path: '/about',
+        name: 'About',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  routes
+    mode: 'history',
+    routes
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isAuthenticated) {
-      next();
-      return;
-    }
-    next('/login')
-  } else {
-    next();
-  }
+    if(to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.getters.isAuthenticated) {
+            next();
+            return;
+        }
+        next('/login')
+    } else { next(); }
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.guest)) {
-    if (store.getters.isAuthenticated) {
-      next("/documents");
-      return;
-    }
-    next();
-  } else {
-    next();
-  }
+    if (to.matched.some((record) => record.meta.guest)) {
+        if (store.getters.isAuthenticated) {
+            next("/documents");
+            return;
+        }
+        next();
+    } else { next(); }
 });
 
 

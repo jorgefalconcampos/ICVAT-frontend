@@ -60,11 +60,16 @@ export default {
       },
       {
         title: "Documentos",
-        icon: "mdi-view-dashboard",
+        icon: "mdi-file-document",
         to: "/documents",
         action: ""
       },
-
+      {
+        title: "Categorías",
+        icon: "mdi-shape",
+        to: "/categories",
+        action: ""
+      },
       {
         title: "Perfil",
         icon: "mdi-account-circle",
