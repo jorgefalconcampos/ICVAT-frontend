@@ -10,8 +10,7 @@
                         <img src="@/assets/img/logo.png" alt="Logo" />
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title class="title">Calango</v-list-item-title>
-                        <v-list-item-subtitle>WEB</v-list-item-subtitle>
+                        <v-list-item-title class="title">ICVAT</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -20,13 +19,19 @@
                 <v-list-item
                     v-for="([icon, text, link], i) in items" :key="i" 
                     link @click="$vuetify.goTo(link)">
-                    
                     <v-list-item-icon class="justify-center">
                         <v-icon>{{ icon }}</v-icon>
                     </v-list-item-icon>
-                    
                     <v-list-item-content>
                         <v-list-item-title class="subtitile-1">{{text}}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                 <v-list-item @click="$router.push('/login/')">
+                    <v-list-item-icon class="justify-center">
+                        <v-icon>mdi-login</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title class="subtitile-1">Iniciar app</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -109,7 +114,6 @@ export default {
             ["mdi-information-outline", "Acerca de", "#benefits"],
             ["mdi-scale-unbalanced", "Comparación", "#comp"],
             ["mdi-cog", "Cómo funciona", "#howitworks"],
-            ["mdi-login", "Iniciar app", "/login/"],
         ],
     }),
     props: {
