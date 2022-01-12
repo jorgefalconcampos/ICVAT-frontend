@@ -55,7 +55,7 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Home",
+        title: "Inicio",
         icon: "mdi-home",
         to: "/",
         action: ""
@@ -65,7 +65,6 @@ export default {
         icon: "mdi-view-dashboard",
         to: "/documents",
         action: ""
-
       },
 
       {
@@ -75,7 +74,7 @@ export default {
         action: ""
       },
       {
-        title: "Settings",
+        title: "Ajustes",
         icon: "mdi-cog",
         to: "/settings",
         action: "",

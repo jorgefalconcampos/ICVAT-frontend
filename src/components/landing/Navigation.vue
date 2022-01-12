@@ -10,8 +10,7 @@
                         <img src="@/assets/img/logo.png" alt="Logo" />
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title class="title">Calango</v-list-item-title>
-                        <v-list-item-subtitle>WEB</v-list-item-subtitle>
+                        <v-list-item-title class="title">ICVAT</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -20,13 +19,19 @@
                 <v-list-item
                     v-for="([icon, text, link], i) in items" :key="i" 
                     link @click="$vuetify.goTo(link)">
-                    
                     <v-list-item-icon class="justify-center">
                         <v-icon>{{ icon }}</v-icon>
                     </v-list-item-icon>
-                    
                     <v-list-item-content>
                         <v-list-item-title class="subtitile-1">{{text}}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                 <v-list-item @click="$router.push('/login/')">
+                    <v-list-item-icon class="justify-center">
+                        <v-icon>mdi-login</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title class="subtitile-1">Iniciar app</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -35,7 +40,7 @@
         <v-app-bar
             app :color="color"
             :flat="flat"
-            dark class="px-15"
+            dark class="px-15 grey darken-4"
             :class="{ expand: flat }">
             
             <v-toolbar-title>
@@ -51,16 +56,20 @@
             
             <div v-else>
                 <v-btn text @click="$vuetify.goTo('#hero')">
-                    <span class="mr-2">Home</span>
+                    <span class="mr-2">Inicio</span>
                 </v-btn>
                 
                 <v-btn text @click="$vuetify.goTo('#benefits')">
-                    <span class="mr-2">Sobre</span>
+                    <span class="mr-2">Acerca de</span>
                 </v-btn>
 
-                <v-btn text @click="$vuetify.goTo('#about')">
-                    <span class="mr-2">Download</span>
-                </v-btn>                
+                <v-btn text @click="$vuetify.goTo('#comp')">
+                    <span class="mr-2">Comparación</span>
+                </v-btn>
+
+                <v-btn text @click="$vuetify.goTo('#howitworks')">
+                    <span class="mr-2">Cómo funciona</span>
+                </v-btn>                 
                 
                 <router-link to="/documents/" class="red">
                     <v-btn rounded outlined text>Documents</v-btn>
@@ -71,7 +80,7 @@
                 </router-link> 
 
                 <router-link to="/login/" class="mainNav">
-                    <v-btn class="" rounded outlined text large>Iniciar</v-btn>
+                    <v-btn class="blue darken-1" rounded outlined text large>Iniciar</v-btn>
                 </router-link>   
 
             </div>
@@ -101,11 +110,10 @@ export default {
         drawer: null,
         isXs: false,
         items: [
-            ["mdi-home-outline", "Home", "#hero"],
-            ["mdi-information-outline", "Sobre", "#features"],
-            ["mdi-download-box-outline", "Download", "#download"],
-            ["mdi-currency-usd", "Preços", "#pricing"],
-            ["mdi-email-outline", "Contatos", "#contact"],
+            ["mdi-home-outline", "Inicio", "#hero"],
+            ["mdi-information-outline", "Acerca de", "#benefits"],
+            ["mdi-scale-unbalanced", "Comparación", "#comp"],
+            ["mdi-cog", "Cómo funciona", "#howitworks"],
         ],
     }),
     props: {

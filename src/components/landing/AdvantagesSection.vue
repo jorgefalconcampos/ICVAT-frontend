@@ -1,38 +1,85 @@
 <template>
-    <div id="contact" class="">
+    <div>
         <div class="clear-bg">
             <svg
                 class="mb-n2"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 1440 250"
+                viewBox="0 0 1440 190"
                 preserveAspectRatio="none"
                 fill="white">
                 <path d="M0,64L80,90.7C160,117,320,171,480,181.3C640,192,800,160,960,138.7C1120,117,1280,107,1360,101.3L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
             </svg>
         </div>
         
-        <v-container fluid class="white">
+        <v-container fluid class="white" id="comp">
             <v-row align="center" justify="center">
                 <v-col cols="10">
                     <v-row justify="center">
-                        <v-col cols="12" sm="5">
-                            <h1 class="font-weight-light display-1">Contate-nos</h1>
-                            <h3 class="font-weight-light mt-3">lore ad enim providentveniam perferendis voluptate, perspiciatis.</h3>
-                            <h3 class="font-weight-light mt-3">
-                                Lorem ipsum dolor sit amet consectetur adipisicing.
-                            </h3>
-                            <h3 class="font-weight-light mt-3">
-                                Telefone: +xx (xx) xxxxx-xxxx
-                            </h3>
-                            <h3 class="font-weight-light">
-                                Email: email@email.com
-                            </h3>
+                        <v-col cols="12"  >
+                            <h1 class="font-weight-bold display-2 pt-5 my-5">Comparación rápida</h1>
+                            <h2 class="font-weight-light display-1">Estudiando sin VAT vs estudiando con VAT</h2>
+                            
+                            <v-row justify="center mt-8">
+                                <v-col cols="6" >
+                                    <v-card
+                                        class="mx text-center"
+                                        color="red lighten-"
+                                        dark
+                                        max-width="1000">
+                                        <v-card-text>
+                                        <v-sheet color="rgba(0, 0, 0, .12)">
+                                            <p class="pt-2 overline">{{this.without.values}}</p>
+                                            <v-sparkline
+                                                :labels="this.without.labels"
+                                                :value="this.without.values"
+                                                color="rgba(255, 255, 255, .7)"
+                                                height="100"
+                                                padding="15"
+                                                stroke-linecap="round"
+                                                smooth>
+                                                <h1>
+                                                    Holi
+                                                </h1>
+                                            </v-sparkline>
+                                        </v-sheet>
+                                        </v-card-text>
+
+                                        <v-card-text><div class="text-h4 font-weight-thin">Estudiando sin VAT</div></v-card-text>
+                                        <v-divider></v-divider>
+                                    </v-card>
+                                </v-col>
+                                <v-col cols="6" >
+                                    <v-card
+                                        class="mx-auto text-center"
+                                        color="green"
+                                        dark
+                                        max-width="1000">
+                                        <v-card-text>
+                                        <v-sheet color="rgba(0, 0, 0, .12)">
+                                            <p class="pt-2 overline">{{this.with.values}}</p>
+                                            <v-sparkline
+                                                :labels="this.with.labels"
+                                                :value="this.with.values"
+                                                color="rgba(255, 255, 255, .7)"
+                                                height="100"
+                                                padding="20"
+                                                stroke-linecap="round"
+                                                smooth>
+                                            </v-sparkline>
+                                        </v-sheet>
+                                        </v-card-text>
+
+                                        <v-card-text><div class="text-h4 font-weight-thin">Estudiando con VAT</div></v-card-text>
+                                        <v-divider></v-divider>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+
+
+ 
+
                         </v-col>
-                        <v-col cols="12" sm="7">
-                            <h1>
-                                Lol1
-                            </h1>
-                        </v-col>
+                       
                     </v-row>
                 </v-col>
             </v-row>
@@ -56,8 +103,54 @@
 </style>
 
 <script>
+
 export default {
-  data: () => ({
-  }),
-};
+    data: () => ({
+        with: {
+            labels: [
+                "1ero", 
+                "2do",
+                "3ro",
+                "4to",
+                "5to",
+                "6to",
+                "7to",
+                "8vo",
+            ],
+            values: [
+                8.50,
+                9.30,
+                9.20,
+                9.40,
+                9.70,  
+                9.20,  
+                9.60,
+                9.30, 
+            ],
+        },
+
+        without: {
+            labels: [
+                "1ero", 
+                "2do",
+                "3ro",
+                "4to",
+                "5to",
+                "6to",
+                "7to",
+                "8vo",
+            ],
+            values: [
+                7.00,
+                7.30,
+                7.00,
+                6.60,
+                6.80,  
+                6.10,  
+                6.60,
+                6.30, 
+            ],
+        },
+    }),
+  }
 </script>
