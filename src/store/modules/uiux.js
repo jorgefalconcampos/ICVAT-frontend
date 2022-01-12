@@ -1,6 +1,6 @@
 
 
-const state = () => ({
+const state = ()=> ({
     content: '',
     color: ''
 })

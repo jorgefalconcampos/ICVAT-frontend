@@ -12,10 +12,8 @@
 </template>
 
 <script>
-// import NavBar from "./navbar/NavBar.vue";
 import Sidebar from "./sidebar/SideBar.vue";
 
-import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Layout",
@@ -30,14 +28,8 @@ export default {
   data: () => ({
     expandOnHover: false
   }),
-  computed: {
-    ...mapState(["Customizer_drawer"])
-  },
 
   methods: {
-    ...mapMutations({
-      setCustomizerDrawer: "SET_CUSTOMIZER_DRAWER"
-    })
   }
 };
 </script>
