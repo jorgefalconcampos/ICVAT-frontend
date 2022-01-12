@@ -1,11 +1,9 @@
 <template>
     <v-app id="materialpro" :class="`${!$vuetify.breakpoint.smAndDown ? 'full-sidebar' : 'mini-sidebar'}`">
-        <v-main>
-            <transition name="fade" mode="out-in">
-                <router-view/>
-            </transition>
-        </v-main>
-        <SnackBar ref="snackBar"/>
+      <transition name="fade" mode="out-in">
+        <router-view/>
+      </transition>
+      <SnackBar ref="snackBar"/>
     </v-app>
 </template>
 

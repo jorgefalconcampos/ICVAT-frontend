@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row align="center" justify="center" class="mt-2">
         <v-col cols="10">
-          <v-row align="center" justify="center">
+          <v-row align="center" >
             <v-col cols="12" md="7">
               <h1 class="font-weight-bold display-2 my-5">VAT te ayuda a estudiar</h1>
               <h2 class="font-weight-light display-1">Aprende cómo</h2>

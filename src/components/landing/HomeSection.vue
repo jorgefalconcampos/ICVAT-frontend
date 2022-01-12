@@ -31,7 +31,7 @@
                         <v-col
                             cols="12"
                             sm="12"
-                            md="4"
+                            md=""
                             lg="4"
                             class="text-center"
                             v-for="(feature, i) in features"

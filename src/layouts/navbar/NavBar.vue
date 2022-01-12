@@ -1,61 +1,32 @@
 
 <template>
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/documents">Documents</router-link> |
-    <span v-if="isLoggedIn">
-      <a @click="logout">Logout</a>
-    </span>
-    <span v-else>
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/login">Login</router-link>
-    </span>
-    <p v-if="isLoggedIn">
-      {{userData.email}} | {{userData.user}}
-    </p>
-  </div>
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->
-<!-- to be deprecated -->  
+    <div id="nav">
+        <router-link to="/">Home</router-link> |
+        <router-link to="/documents">Documents</router-link> |
+        <span v-if="isLoggedIn">
+        <a @click="logout">Logout</a>
+        </span>
+        <span v-else>
+        <router-link to="/register">Register</router-link> |
+        <router-link to="/login">Login</router-link>
+        </span>
+        <p v-if="isLoggedIn">
+        {{userData.email}} | {{userData.user}}
+        </p>
+    </div>
 </template>
 <script>
 export default {
-
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-  // to be deprecated
-
-  name: 'NavBar',
-  computed : {
-      isLoggedIn: function() { return this.$store.getters.isAuthenticated },
-      userData: function() { return this.$store.getters.userInfo }
+    name: 'NavBar',
+    computed : {
+        isLoggedIn: function() { return this.$store.getters.isAuthenticated },
+        userData: function() { return this.$store.getters.userInfo }
     },
     methods: {
-      async logout (){
-        await this.$store.dispatch('LogOut')
-        this.$router.push('/login')
-      }
+        async logout (){
+            await this.$store.dispatch('LogOut')
+            this.$router.push('/login')
+        }
     },
 }
 </script>
