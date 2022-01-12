@@ -21,7 +21,6 @@
 .big-title{
   font-size: 2.25em;
   font-weight: 800;
-  color: rgba(250, 250, 250, 0.068);
 }
 
 p {

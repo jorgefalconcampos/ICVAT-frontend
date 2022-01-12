@@ -1,14 +1,14 @@
 <template>
     <section id="hero">
         <v-parallax dark src="@/assets/img/bgHero.jpg" height="750">
-            <v-row align="center" justify="center">
+            <v-row align="center" justify="center" id="hero">
                 <v-col cols="10">
                     <v-row align="center" justify="center">
                         <v-col cols="12" md="6" xl="8">
                             <h1 class="display-2 font-weight-bold mb-8">VAT, un asistente virtual que te ayuda a estudiar</h1>
-                            <h1 class="font-weight-light">El equipo de ICVAT trae para ti el primer asistente virtual que te ayuda a estudiar y retener más información en tu cabeza</h1>
+                            <h1 class="font-weight-light">VAT es el primer asistente virtual que te ayuda a estudiar y retener más información en tu cabeza</h1>
                             <v-btn 
-                            class="mt-6"
+                            class="mt-6 pink"
                             rounded outlined
                             large dark
                             @click="$vuetify.goTo('#benefits')">
@@ -27,10 +27,12 @@
         <v-container fluid id="benefits">
             <v-row align="center" justify="center">
                 <v-col cols="10">
-                    <v-row align="center" justify="space-around" class="my-15">
+                    <v-row align="center" justify="space-around" class="my-10">
                         <v-col
                             cols="12"
-                            sm="4"
+                            sm="12"
+                            md="4"
+                            lg="4"
                             class="text-center"
                             v-for="(feature, i) in features"
                             :key="i">

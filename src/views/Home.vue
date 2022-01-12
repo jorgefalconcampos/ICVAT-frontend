@@ -12,7 +12,7 @@
                 v-show="fab"
                 v-scroll="onScroll"
                 dark fixed bottom
-                right color="primary"
+                right color="blue darken-2"
                 @click="toTop">
             <v-icon>mdi-arrow-up</v-icon>
             </v-btn>
