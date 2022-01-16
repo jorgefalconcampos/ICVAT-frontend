@@ -1,25 +1,14 @@
 <template>
-    <v-container class="mt-4 bgblue border15">
-        <v-row justify="space-around" class="text-center pa-8">
+    <v-container fluid fill-height>
+        <v-row justify="center" align="center" class="text-center ma-12 pa-8 bgblue border15">
             <v-col cols="9">
                 <div class="border10 glass-white-border">
                     <v-row no-gutters>
-                        <v-col  align-self="center" cols="6" class="px-8">
-                             <!-- max-height="805px" -->
-                                <!-- width="1200px" -->
-                            <v-img
-                                class="border10-left"
-                               max-height="240px"
-                                lazy-src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
-                                src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80">
-                            </v-img> 
+                        <v-col align-self="center" cols="6">
+                            <v-img src="@/assets/img/login.png" max-width="440px"/>
                         </v-col>
-                        <v-col align-self="center" cols="6" class="pa-11" >
+                        <v-col cols="6" class="pa-12" >
                             <p class="big-title pb-6">Inicia sesión</p>
-                            <!-- <p class="pb-5">Inicia sesión en tu cuenta</p> -->
-                            <!-- <v-text-field solo rounded color="white" label="Preddpend" prepend-icon="mdi-map-marker"></v-text-field> -->
-                            <!-- <v-text-field solo rounded color="blue" label="Prepend inner" prepend-inner-icon="mdi-map-marker"></v-text-field> -->
-
                             <v-form ref="form" v-model="form.valid" lazy-validation @submit.prevent="submit">
 
                                 <v-text-field

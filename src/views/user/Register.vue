@@ -1,10 +1,10 @@
 <template>
-    <v-container class="mt-12 bgblue border15">
-        <v-row justify="space-around" class="text-center pa-8">
+    <v-container fluid fill-height>
+        <v-row justify="center" align="center" class="text-center mx-12 py-8 bgblue border15">
             <v-col cols="9">
                 <div class="border10 glass-white-border">
                     <v-row no-gutters>
-                        <v-col align-self="center" class="px-8" cols="6">
+                        <v-col cols="6" class="pa-12">
                             <p class="big-title pb-6">Crea tu cuenta</p>
 
                             <v-form ref="form" v-model="form.valid" lazy-validation @submit.prevent="submit">
@@ -52,12 +52,8 @@
                                 </router-link>   
                             </p>
                         </v-col>
-                         <v-col cols="6">
-                            <v-img
-                                class="border10-right"
-                                lazy-src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" 
-                                src="https://images.unsplash.com/photo-1566228015668-4c45dbc4e2f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80">
-                            </v-img>
+                        <v-col align-self="center"  cols="6">
+                            <v-img src="@/assets/img/register.png" max-width="460px"/>
                         </v-col>
                     </v-row>
                  </div>

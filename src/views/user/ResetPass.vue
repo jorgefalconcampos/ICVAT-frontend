@@ -1,6 +1,6 @@
 <template>
-    <v-container class="mt-4 bgblue border15 pa-10 mb-10">
-        <v-row justify="space-around" class="text-center">
+    <v-container fluid fill-height class="px-16">
+        <v-row justify="space-around" class="text-center pa-9 bgblue border15">
             <v-col cols="12">
                 <v-stepper v-model="stepper" class="glass-white-border">
                     <v-stepper-header class="glass border10-top">

@@ -1,8 +1,7 @@
 <template>
     <v-navigation-drawer
-        v-model="Sidebar_drawer"
-        :dark="SidebarColor !== 'white'"
-        :color="SidebarColor"
+        dark
+        color="dark"
         mobile-breakpoint="960"
         clipped
         :right="$vuetify.rtl"
@@ -41,7 +40,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 
 export default {
   name: "Sidebar",
@@ -62,11 +60,16 @@ export default {
       },
       {
         title: "Documentos",
-        icon: "mdi-view-dashboard",
+        icon: "mdi-file-document",
         to: "/documents",
         action: ""
       },
-
+      {
+        title: "Categorías",
+        icon: "mdi-shape",
+        to: "/categories",
+        action: ""
+      },
       {
         title: "Perfil",
         icon: "mdi-account-circle",
@@ -93,16 +96,6 @@ export default {
   computed: {
     isLoggedIn: function() { return this.$store.getters.isAuthenticated },
     userData: function() { return this.$store.getters.userInfo },
-
-    ...mapState(["SidebarColor", "SidebarBg"]),
-    Sidebar_drawer: {
-      get() {
-        return this.$store.state.Sidebar_drawer;
-      },
-      set(val) {
-        this.$store.commit("SET_SIDEBAR_DRAWER", val);
-      }
-    }
   },
   watch: {
     "$vuetify.breakpoint.smAndDown"(val) {
