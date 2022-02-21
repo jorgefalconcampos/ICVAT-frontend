@@ -5,6 +5,7 @@ import Login from '../views/user/Login.vue'
 import Register from '../views/user/Register.vue'
 import ResetPass from '../views/user/ResetPass.vue'
 import ActivateAccount from '../views/user/ActivateAccount.vue';
+import PageNotFound from '../views/other/PageNotFound.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -67,7 +68,10 @@ const routes = [
         ],
         // component: Documents,
     },
-
+    {
+        path: '*',
+        component: PageNotFound,
+    },
     {
         path: '/about',
         name: 'About',
