@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/user/Login.vue'
 import Register from '../views/user/Register.vue'
 import ResetPass from '../views/user/ResetPass.vue'
+import ActivateAccount from '../views/user/ActivateAccount.vue';
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -30,6 +31,12 @@ const routes = [
         path: '/reset-password',
         name: 'ResetPass',
         component: ResetPass,
+        meta: { guest: true }    
+    },
+    {
+        path: '/users/activate/:token',
+        name: 'ActivateAccount',
+        component: ActivateAccount,
         meta: { guest: true }    
     },
     {   
@@ -60,6 +67,7 @@ const routes = [
         ],
         // component: Documents,
     },
+
     {
         path: '/about',
         name: 'About',
