@@ -63,7 +63,7 @@ export default {
             const pathname = window.location.pathname.split('/');
             this.uid = pathname[pathname.length-2];
             this.token = pathname[pathname.length-1];
-            console.log(`${this.uid} --- ${this.token}`)
+            // console.log(`${this.uid} --- ${this.token}`)
             this.activateAccount()
         },
         activateAccount(){
@@ -80,27 +80,30 @@ export default {
                 body: urlencoded,
                 redirect: 'follow'
             };
-            
+
             fetch(`${apiHost}/auth/users/activation/`, requestOptions)
-            .then(response => {
-                if (response.status == 204) {   
+            .then(r =>  r.text().then(data => ({status: r.status, body: data})))
+            .then(data => {
+                if (data.status == 204) {   
                     this.title = "¡Listo! Ahora puedes iniciar sesión 👏";
                     this.showSnackbar("green", true, true, "mdi-check", "Verificación exitosa... redireccionando", "black", "ok" );
                     setTimeout(() => { this.$router.push('/login') }, 3500);
                 }
                 else{
-                    if (response.status == 403) {
+                    if (data.status == 403) {
                         this.title = "Parece que la cuenta ya fue activada ¡Genial! 😀"; this.alreadyActive = true;
                     }
                     else {
                         this.title = "Esta cuenta no pudo ser activada :("; this.failed = true;
+                        // console.log(JSON.parse(data.body))
                         this.showSnackbar("red", true, true, "mdi-alert", "No se pudo completar la activación de la cuenta", "black", "ok" );
                     }
                 }
                 this.loading = false
-            })                
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error.status));
+            })
+            .catch(err => {
+                console.error(err)
+            })
         },
 
 
