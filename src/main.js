@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios';
-// import VueAxios from 'vue-axios';
+import VueAxios from 'vue-axios';
+import qs from 'qs';
 import vuetify from './plugins/vuetify'
 import "@fontsource/work-sans/index.css"
 import "@fontsource/work-sans/800.css"
@@ -14,7 +15,8 @@ import "@fontsource/work-sans/200.css"
 
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = "http://localhost:8000/api/" // http://localhost:8000/api/
+// axios.defaults.baseURL = "http://localhost:8000/api/" // http://localhost:8000/api/
+// axios.defaults.baseURL = "http://127.0.0.1:8000/api/" // http://localhost:8000/api/
 
 axios.interceptors.response.use(undefined, function(error) {
   if (error) {
@@ -29,6 +31,10 @@ axios.interceptors.response.use(undefined, function(error) {
 
 
 Vue.config.productionTip = false
+
+Vue.use(VueAxios, axios)
+
+Vue.prototype.$qs = qs;
 
 new Vue({
   store,

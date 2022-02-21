@@ -35,7 +35,7 @@ const routes = [
         meta: { guest: true }    
     },
     {
-        path: '/users/activate/:token',
+        path: '/activate/:uid/:token',
         name: 'ActivateAccount',
         component: ActivateAccount,
         meta: { guest: true }    
