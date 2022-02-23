@@ -6,7 +6,7 @@
                     <p class="big-title">Crea tu cuenta</p>
                     <v-row>
                         <v-col cols="8" class="px-6">
-                            <v-form ref="form" v-model="isValid" @submit.prevent="submit">
+                            <v-form v-model="isValid" ref="form" @submit.prevent="submit">
                                 <v-stepper v-model="stepper" vertical class="glass pb-5">
                                     <v-progress-linear
                                         v-if="loading"
@@ -189,6 +189,7 @@ export default {
         ...mapActions(["Register"]),
         
         submit() {
+            // validation ??? https://tinyurl.com/29ksuvdx
             if(this.$refs.form.validate()) { this.loading = true; this.registerUser(); }
             else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
         },
@@ -203,17 +204,17 @@ export default {
                 .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
 
                 if ((response.status == 201) && (response.ok)){
-                    this.loading = false;
                     this.$refs.form.reset();
                     this.showSnackbar(["¡Usuario creado con éxito! Revisa tu email y activa tu cuenta"], "green", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
                 else {
-                   const items_snackbar = [];
+                    const items_snackbar = [];
                     Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
                     this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
             }
             catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }       
+            finally { this.loading = false; }
         },
         
         showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
