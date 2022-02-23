@@ -4,42 +4,63 @@ class ApiClient extends HttpClient {
   constructor(baseURL, options) {
     super({
       baseURL,
-      options
+      options,
     });
   }
-  
+
   // getter
   get users() {
     return {
-        // HTTP GET
-        get: (body) => {
-            this.get("/auth/users", body)
-        },
+      // HTTP GET
+      get: (body) => {
+        this.get("/auth/users", body);
+      },
 
-        // HTTP POST
-        create: (headers, body) => {
-            var urlencoded = new URLSearchParams();
-            Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value)} );
-            
-            var requestOptions = {
-                method: 'POST',
-                headers: headers,
-                body: urlencoded,
-                redirect: 'follow'
-            };
+      // HTTP POST
+      create: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
 
-            return this.post("/auth/users/", requestOptions )
-        },
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
 
-        // HTTP UPDATE
-        update: (user) => { 
-            this.put(`/users/${user.id}`, user)
-        },
+        return this.post("/auth/users/", requestOptions);
+      },
 
-        // DELETE
-        delete: (id) => { 
-            this.delete(`/users/${id}`)
-        }
+      // HTTP UPDATE
+      update: (user) => {
+        this.put(`/users/${user.id}`, user);
+      },
+
+      // HTTP DELETE
+      delete: (id) => {
+        this.delete(`/users/${id}`);
+      },
+
+      // HTTP POST
+      activate: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+  
+        return this.post("/auth/users/activation/", requestOptions);
+      },
+
+      
+
+
     };
   }
 }

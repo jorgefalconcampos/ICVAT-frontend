@@ -38,6 +38,7 @@
 <script>
 
 import { apiHost } from '../../config';
+import apiClient from "../../middleware/requests/api-client";
 // import axios from 'axios';
 
 export default {
@@ -66,55 +67,47 @@ export default {
             // console.log(`${this.uid} --- ${this.token}`)
             this.activateAccount()
         },
-        activateAccount(){
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-            
-            var urlencoded = new URLSearchParams();
-            urlencoded.append("uid", this.uid);
-            urlencoded.append("token", this.token);
-            
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: urlencoded,
-                redirect: 'follow'
-            };
+        async activateAccount(){
+            try {
+                const client = new apiClient(apiHost);
+                
+                const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 
-            fetch(`${apiHost}/auth/users/activation/`, requestOptions)
-            .then(r =>  r.text().then(data => ({status: r.status, body: data})))
-            .then(data => {
-                if (data.status == 204) {   
+                const body = { "uid": this.uid, "token": this.token }
+
+                const response = await client.users.activate(myHeaders, body)
+                .then(r => r.text().then(data => ({status: r.status, body: data})))
+
+                console.log(response)
+                
+                if (response.status == 204) {
                     this.title = "¡Listo! Ahora puedes iniciar sesión 👏";
-                    this.showSnackbar("green", true, true, "mdi-check", "Verificación exitosa... redireccionando", "black", "ok" );
-                    setTimeout(() => { this.$router.push('/login') }, 3500);
+                    this.showSnackbar(["¡Tu cuenta fue activada! Redireccionando al inicio de sesión..."], "green", true, true, "mdi-alert-circle", "black", "ok"); 
+                    setTimeout(() => { this.$router.push('/login') }, 5500);
                 }
-                else{
-                    if (data.status == 403) {
+                else {
+                    if (response.status == 403) {
                         this.title = "Parece que la cuenta ya fue activada ¡Genial! 😀"; this.alreadyActive = true;
                     }
                     else {
                         this.title = "Esta cuenta no pudo ser activada :("; this.failed = true;
-                        // console.log(JSON.parse(data.body))
-                        this.showSnackbar("red", true, true, "mdi-alert", "No se pudo completar la activación de la cuenta", "black", "ok" );
+                        this.showSnackbar(["No se pudo completar la activación de la cuenta"], "red", true, true, "mdi-alert-circle", "black", "ok"); 
                     }
                 }
-                this.loading = false
-            })
-            .catch(err => {
-                console.error(err)
-            })
+                this.loading = false;
+            }
+            catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }       
         },
-
-
-
-        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
+        
+        showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
+                items: items_snackbar,
+                
                 color: color,
                 right: isRight,
                 show_icon: showIcon,
                 icon: icon,
-                message: msg,
+                // message: msg,
                 closeSnackBtnColor: closeBtnColor,
                 closeSnackBtnTxt: closeBtnTxt, 
             }

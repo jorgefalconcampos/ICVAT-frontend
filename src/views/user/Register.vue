@@ -8,6 +8,14 @@
                         <v-col cols="8" class="px-6">
                             <v-form ref="form" v-model="isValid" @submit.prevent="submit">
                                 <v-stepper v-model="stepper" vertical class="glass pb-5">
+                                    <v-progress-linear
+                                        v-if="loading"
+                                        height="2"
+                                        indeterminate
+                                        absolute bottom
+                                        color="white">
+                                    </v-progress-linear>
+
                                     <v-stepper-step :color="this.stepper>1?'green':'black'" :complete="stepper>1" step="1" 
                                         class="py-4" :class="this.stepper==1?'grey lighten-4':''">Ingresa tu información
                                     </v-stepper-step>
@@ -54,6 +62,7 @@
                                             <v-btn small elevation="0" color="blue" class="font-weight-bold" @click="stepper = 2">paso siguiente</v-btn>
                                         </div>
                                     </v-stepper-content>
+                                    
 
                                     <v-stepper-step :color="this.stepper>2?'green':'black'" :complete="stepper>2" step="2" 
                                         class="py-4" :class="this.stepper==2?'grey lighten-4':''"> Ingresa tu email y contraseña
@@ -107,6 +116,7 @@
                                             <v-btn small elevation="0" color="blue" class="font-weight-bold" @click="stepper=1">paso anterior</v-btn>
                                         </div>
                                     </v-stepper-content>
+
                                 </v-stepper>
                             </v-form>
                         </v-col>
@@ -140,6 +150,7 @@ export default {
     data: () => ({
         stepper: 1,
         isValid: false,
+        loading: false,
         form: {
             first_name: "",
             last_name: "",
@@ -178,7 +189,7 @@ export default {
         ...mapActions(["Register"]),
         
         submit() {
-            if(this.$refs.form.validate()) { this.registerUser();}
+            if(this.$refs.form.validate()) { this.loading = true; this.registerUser(); }
             else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
         },
 
@@ -186,25 +197,23 @@ export default {
             try {
                 const client = new apiClient(apiHost);
 
-                var myHeaders = new Headers(); myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+                const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 
-                const create = await client.users.create(myHeaders, this.form)
+                const response = await client.users.create(myHeaders, this.form)
                 .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
 
-                if ((create.status == 201) && (create.ok)){
+                if ((response.status == 201) && (response.ok)){
+                    this.loading = false;
                     this.$refs.form.reset();
                     this.showSnackbar(["¡Usuario creado con éxito! Revisa tu email y activa tu cuenta"], "green", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
                 else {
                    const items_snackbar = [];
-                    Object.entries(JSON.parse(create.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
+                    Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
                     this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
             }
-            catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }
-
-            
-       
+            catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }       
         },
         
         showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
