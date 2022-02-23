@@ -143,7 +143,6 @@
 <script>
 
 import { mapActions } from 'vuex';
-import { apiHost } from '../../config';
 import apiClient from "../../middleware/requests/api-client";
 
 export default {
@@ -196,7 +195,7 @@ export default {
 
         async registerUser() {
             try {
-                const client = new apiClient(apiHost);
+                const client = new apiClient(apiClient.urlBase);
 
                 const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 

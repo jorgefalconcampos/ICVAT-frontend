@@ -1,6 +1,10 @@
 import HttpClient from "./http-client";
+import { apiHost } from "../../config";
 
 class ApiClient extends HttpClient {
+
+  static urlBase = apiHost;
+
   constructor(baseURL, options) {
     super({
       baseURL,
@@ -65,4 +69,4 @@ class ApiClient extends HttpClient {
   }
 }
 
-export default ApiClient;
+export default ApiClient  ;
