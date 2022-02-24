@@ -22,6 +22,7 @@ const state = {
 
 const getters = {
     isAuthenticated: state => !!state.userData.email,    
+    getToken: state => state.userToken.token,
     userInfo: state => state.userData,    
     StatePosts: state => state.posts,
     StateUser: state => state.userData.email,
@@ -47,11 +48,8 @@ const actions = {
         .then(r => r.text().then(data => ({status: r.status, body: data})))
 
         if (response.status == 200) {
-          console.log("Logueado exitosamente, mensaje desde vuex")
           const token = (JSON.parse([response.body]).auth_token)
-
           await dispatch("setAuthToken", token)
-
           await dispatch("getUserData", token)
 
           // await commit("setUser", {
@@ -69,11 +67,10 @@ const actions = {
       },
 
       async setAuthToken({ commit }, token) {
-        commit("setToken", token)
+        commit("setOrRemoveToken", token)
       },
 
       async getUserData({ commit }, token) {
-        console.log("llego aki")
         const client = new apiClient(apiClient.urlBase);
         const myHeaders = new Headers({"Authorization": `Bearer ${token}`});
         const response = await client.users.getUserDetails(myHeaders)
@@ -81,7 +78,7 @@ const actions = {
 
         if (response.status == 200) {
           var payload = JSON.parse([response.body])
-          commit("setUserData", payload)
+          commit("setOrRemoveUserData", payload)
         }
       },
     
@@ -95,17 +92,38 @@ const actions = {
         commit("setPosts", response.data);
       },
     
-      async LogOut({commit}) {
+      async LogOut({getters, commit}) {
 
-        let username = null;
-        let email = null;
+        let token = getters.getToken;
 
-        await axios.post("user/logout/", {});
+        const client = new apiClient(apiClient.urlBase);
+        const myHeaders = new Headers({"Authorization": `Bearer ${token}`});
+        const response = await client.users.logout(myHeaders)
+        .then(r => r.text().then(data => ({status: r.status, body: data})))
 
-        commit("doLogout", {
-          username: username,
-          email: email,
-        });
+        if (response.status == 204) {    
+          token = null;
+
+          await commit("setOrRemoveUserData", {
+            id: null,
+            email: null, 
+            username: null,
+            first_name: null,
+            last_name: null,
+          })
+
+          await commit("setOrRemoveToken", token)
+        }
+
+        // let username = null;
+        // let email = null;
+
+        // await axios.post("user/logout/", {});
+
+        // commit("doLogout", {
+        //   username: username,
+        //   email: email,
+        // });
 
 
       },
@@ -120,7 +138,9 @@ const mutations = {
 
     // },
 
-    setUserData(state, payload) {
+
+    // mutation called when login/logout
+    setOrRemoveUserData(state, payload) {
       state.userData.id = payload.id;
       state.userData.email = payload.email;
       state.userData.username = payload.username;
@@ -128,18 +148,12 @@ const mutations = {
       state.userData.last_name = payload.last_name;
     },
 
-    setToken(state, token) {
+    setOrRemoveToken(state, token) {
       state.userToken.token = token
     },
     
     setPosts(state, posts){
         state.posts = posts
-    },
-    doLogout(state){
-      // state.email = null;
-      // state.username = null;
-      state.userData.email = null;
-      state.userData.user = null;
     },
 };
 

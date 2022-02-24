@@ -118,8 +118,30 @@ export default {
   },
 
   methods: {
-    async logout() { await this.$store.dispatch('LogOut'); this.$router.push('/login'); },
+    async logout() { 
+      await this.$store.dispatch('LogOut'); this.$router.push('/login');
+      this.showSnackbar(["Sesión finalizada"], "green", true, true, "mdi-check-bold", "black", "ok"); 
+
+    },
     menuAction(action) { action === "logout" ? this.logout() : '' },
+
+
+  showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
+            const snackOptions = {
+                items: items_snackbar,
+                
+                color: color,
+                right: isRight,
+                show_icon: showIcon,
+                icon: icon,
+                // message: msg,
+                closeSnackBtnColor: closeBtnColor,
+                closeSnackBtnTxt: closeBtnTxt, 
+            }
+            this.$root.snackBar.show(snackOptions)
+        }
+
+
   }
 };
 </script>

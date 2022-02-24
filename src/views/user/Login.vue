@@ -82,48 +82,22 @@ export default {
     methods: {
         ...mapActions(["LogIn"]),
 
-        validate () {
-            this.$refs.form.validate()
-        },
-
         submit() {
-            if(this.$refs.form.validate()) { this.loading = true; this.logUser(); }
+            if(this.$refs.form.validate()) { this.logUser(); }
             else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
         },
 
         async logUser() {
             try {
                 const response = await this.LogIn(this.form)
-                // console.log(response);
-
-                if (response.status == 200) {
-                    this.$router.push('/documents');
-                }
+                if (response.status == 200) { this.$router.push('/documents'); }
                 else {
                     const items_snackbar = [];
-
                     Object.values(JSON.parse(response.body)).forEach(([val]) =>  {items_snackbar.push(val) })
-
-                    // Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
                     this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
             }
-            catch (err) {
-                console.log("error prro")
-                console.log(err)
-            }
-            // const loginData = new FormData();
-            // loginData.append("email", this.form.email);
-            // loginData.append("password", this.form.password);
-
-            // if(this.$refs.form.validate()) {
-            //     try {
-            //         await this.LogIn(loginData); this.$router.push("/documents");
-            //     }
-            //     catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo iniciar sesión", "black", "ok" ); }
-            // }
-            // else 
-            // { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+            catch (err) { console.error(err) }
         },
         
         showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {

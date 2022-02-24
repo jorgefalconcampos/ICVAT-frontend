@@ -2,7 +2,6 @@ import HttpClient from "./http-client";
 import { apiHost } from "../../config";
 
 class ApiClient extends HttpClient {
-
   static urlBase = apiHost;
 
   constructor(baseURL, options) {
@@ -33,7 +32,6 @@ class ApiClient extends HttpClient {
           body: urlencoded,
           redirect: "follow",
         };
-
         return this.post("/auth/users/", requestOptions);
       },
 
@@ -58,7 +56,6 @@ class ApiClient extends HttpClient {
           body: urlencoded,
           redirect: "follow",
         };
-  
         return this.post("/auth/users/activation/", requestOptions);
       },
 
@@ -73,20 +70,25 @@ class ApiClient extends HttpClient {
           body: urlencoded,
           redirect: "follow",
         };
-  
         return this.post("/auth/token/login/", requestOptions);
       },
 
+      // HTTP POST
+      logout: (headers) => {
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.post("/auth/token/logout/", requestOptions);
+      },
+
       getUserDetails: (headers) => {
-
-        console.log("iwal llego aka")
-
         var requestOptions = {
           method: "GET",
           headers: headers,
           redirect: "follow",
         };
-  
         return this.get("/auth/users/me/", requestOptions);
       }
 
