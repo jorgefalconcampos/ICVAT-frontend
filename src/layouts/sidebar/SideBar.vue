@@ -11,12 +11,26 @@
         id="main-sidebar">
         <v-list nav>
             <v-list-item>
-                <v-list-item-avatar size="55">
-                    <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+                <v-list-item-avatar color="white" size="60">
+                  <v-avatar color="blue" size="55">
+                    <span class="white--text text-h5">
+                      {{userData.first_name.charAt(0)}} {{userData.last_name.charAt(0)}}
+                    </span>
+                  </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                    <v-list-item-title>{{userData.user}}</v-list-item-title>
-                    <v-list-item-subtitle class="caption">{{userData.email}}</v-list-item-subtitle>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-list-item-title v-bind="attrs" v-on="on">{{userData.first_name}} {{userData.last_name}}</v-list-item-title>
+                    </template>
+                    <span>{{userData.first_name}} {{userData.last_name}}</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-list-item-subtitle class="caption" v-bind="attrs" v-on="on">{{userData.email}}</v-list-item-subtitle>
+                    </template>
+                    <span>{{userData.email}}</span>
+                  </v-tooltip>
                 </v-list-item-content>
             </v-list-item>
             <div v-if="isLoggedIn">
