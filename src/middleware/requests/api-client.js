@@ -62,6 +62,34 @@ class ApiClient extends HttpClient {
         return this.post("/auth/users/activation/", requestOptions);
       },
 
+      // HTTP POST
+      login: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+  
+        return this.post("/auth/token/login/", requestOptions);
+      },
+
+      getUserDetails: (headers) => {
+
+        console.log("iwal llego aka")
+
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+  
+        return this.get("/auth/users/me/", requestOptions);
+      }
+
       
 
 
