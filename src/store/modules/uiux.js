@@ -10,7 +10,7 @@ const state = {
 };
 
 const getters = {
-    sbar: state => state.Sidebar_drawer,
+    sidebar: state => state.Sidebar_drawer,
 }
 
 const mutations = {
