@@ -69,11 +69,11 @@ export default {
   }),
 
   computed: {
-    ...mapState(["Sidebar_drawer"])
+    ...mapState("uiux", ["Sidebar_drawer"])
   },
 
   methods: {
-    ...mapMutations({
+    ...mapMutations("uiux", {
     setSidebarDrawer: "SET_SIDEBAR_DRAWER"
     })
   },

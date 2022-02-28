@@ -63,7 +63,12 @@ const routes = [
         {
             name: 'Categories',
             path: '/categories',
-            component: () => import('@/views/dashboard/Categories'),
+            component: () => import('@/views/dashboard/Categories/Categories'),
+        },
+        {
+            name: 'CategoriesDetail',
+            path: '/categories/:slug',
+            component: () => import('@/views/dashboard/Categories/CategoriesDetail.vue'),
         },
         ],
         // component: Documents,
@@ -89,7 +94,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAuth)) {
-        if (store.getters.isAuthenticated) {
+        if (store.getters["auth/isAuthenticated"]) {
             next();
             return;
         }
@@ -99,7 +104,7 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.guest)) {
-        if (store.getters.isAuthenticated) {
+        if (store.getters["auth/isAuthenticated"]) {
             next("/documents");
             return;
         }

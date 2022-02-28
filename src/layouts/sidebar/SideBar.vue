@@ -1,8 +1,7 @@
 <template>
     <v-navigation-drawer
       v-model="Sidebar_drawer"
-      :dark="SidebarColor !== 'white'"
-      :color="SidebarColor"
+      dark
       mobile-breakpoint="960"
       clipped
       :right="$vuetify.rtl"
@@ -56,7 +55,7 @@
 
 <script>
 
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 
 export default {
   name: "Sidebar",
@@ -111,15 +110,19 @@ export default {
     ]
   }),
   computed: {
-    isLoggedIn: function() { return this.$store.getters.isAuthenticated },
-    userData: function() { return this.$store.getters.userInfo },    
-    ...mapState(["SidebarColor", "SidebarBg"]),
+    isLoggedIn: function() { return this.$store.getters["auth/isAuthenticated"] },
+    userData: function() { return this.$store.getters["auth/userInfo"] },
+
+    
+
+    // ...mapState("uiux", ["SidebarColor", "SidebarBg"]),
+
     Sidebar_drawer: {
       get() {
-        return this.$store.getters.sidebar;
+        return this.$store.getters["uiux/sidebar"];
       },
       set(value) {
-        this.$store.commit("SET_SIDEBAR_DRAWER", value);
+        this.$store.commit("uiux/SET_SIDEBAR_DRAWER", value);
       }
     }
 
@@ -132,8 +135,9 @@ export default {
   },
 
   methods: {
+    
     async logout() { 
-      await this.$store.dispatch('LogOut'); this.$router.push('/login');
+      await this.$store.dispatch["auth/LogOut"]; this.$router.push('/login');
       this.showSnackbar(["Sesión finalizada"], "green", true, true, "mdi-check-bold", "black", "ok"); 
 
     },

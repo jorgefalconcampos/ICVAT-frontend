@@ -32,11 +32,11 @@ export default {
   }),
   
   computed: {
-    ...mapState(["Customizer_drawer"])
+    ...mapState("uiux", ["Customizer_drawer"])
   },
 
   methods: {
-    ...mapMutations({
+    ...mapMutations("uiux", {
       setCustomizerDrawer: "SET_CUSTOMIZER_DRAWER"
     })
   }

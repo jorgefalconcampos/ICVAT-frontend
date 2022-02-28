@@ -158,9 +158,12 @@ const mutations = {
 };
 
 
-export default {
+const auth = {
+  namespaced: true,
   state,
   getters,
   actions,
   mutations
 };
+
+export default auth

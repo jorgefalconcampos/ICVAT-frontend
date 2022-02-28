@@ -80,7 +80,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["LogIn"]),
+        ...mapActions("auth", ["LogIn"]),
 
         submit() {
             if(this.$refs.form.validate()) { this.logUser(); }

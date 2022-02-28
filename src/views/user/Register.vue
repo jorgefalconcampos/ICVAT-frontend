@@ -185,7 +185,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(["Register"]),
+        ...mapActions("auth", ["Register"]),
         
         submit() {
             // validation ??? https://tinyurl.com/29ksuvdx

@@ -2,8 +2,8 @@
 const state = {
     Sidebar_drawer: null,
     Customizer_drawer: false,
-    SidebarColor: 'white',
-    SidebarBg: '',
+    SidebarColor: 'dark',
+    SidebarBg: 'dark',
 
     content: '',
     color: ''
@@ -30,9 +30,11 @@ const mutations = {
     // }
 }
 
-
-export default {
+const uiux = {
+    namespaced: true,
     state,
     getters,
     mutations
-}
+};
+
+export default uiux

@@ -83,6 +83,7 @@ class ApiClient extends HttpClient {
         return this.post("/auth/token/logout/", requestOptions);
       },
 
+      // HTTP GET
       getUserDetails: (headers) => {
         var requestOptions = {
           method: "GET",
@@ -92,10 +93,24 @@ class ApiClient extends HttpClient {
         return this.get("/auth/users/me/", requestOptions);
       }
 
-      
-
-
     };
+  }
+
+  get documents() {
+    return {
+
+         // HTTP GET
+         getAllDocuments: (headers) => {
+          var requestOptions = {
+            method: "GET",
+            headers: headers,
+            redirect: "follow",
+          };
+          return this.get("/api/categories/", requestOptions);
+        }
+
+    }
+
   }
 }
 
