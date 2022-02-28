@@ -1,9 +1,9 @@
 <template>
-  <v-app id="inspire">
-    <!-- <NavBar v-model="expandOnHover"></NavBar> -->
+  <v-app id="">
+    <Header v-model="expandOnHover"></Header>
     <Sidebar :expand-on-hover.sync="expandOnHover"></Sidebar>
     <v-main>
-      <v-container class="">
+      <v-container class="" fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -12,13 +12,15 @@
 </template>
 
 <script>
-import Sidebar from "./sidebar/SideBar.vue";
 
+import Sidebar from "./sidebar/SideBar.vue";
+import Header from "./header/Header.vue"
+import { mapState, mapMutations } from "vuex" ;
 
 export default {
   name: "Layout",
   components: {
-    // NavBar,
+    Header,
     Sidebar,
   },
 
@@ -28,8 +30,17 @@ export default {
   data: () => ({
     expandOnHover: false
   }),
+  
+  computed: {
+    ...mapState("uiux", ["Customizer_drawer"])
+  },
 
   methods: {
+    ...mapMutations("uiux", {
+      setCustomizerDrawer: "SET_CUSTOMIZER_DRAWER"
+    })
   }
+
+  
 };
 </script>

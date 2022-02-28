@@ -1,18 +1,28 @@
 import axios from "axios";
+import apiClient from "../../middleware/requests/api-client";
+
 
 const state = {
     // username: null,
     // email: null,
 
+    userToken: {
+      token: null
+    },
+
     userData: {
-      user: null,
-      email: null
+      id: null,
+      email: null,
+      username: null,
+      first_name: null,
+      last_name: null,
     }
     // posts: null
 };
 
 const getters = {
     isAuthenticated: state => !!state.userData.email,    
+    getToken: state => state.userToken.token,
     userInfo: state => state.userData,    
     StatePosts: state => state.posts,
     StateUser: state => state.userData.email,
@@ -31,15 +41,45 @@ const actions = {
 
       },
     
-      async LogIn({commit}, loginData) {
-        let response = await axios.post("user/login/", loginData);
-        // console.log(response);
-        let username = response.data.username;
-        let email = response.data.email;
-        await commit("setUser", {
-          username: username,
-          email: email,
-        });
+      async LogIn({ dispatch }, loginData) {
+        const client = new apiClient(apiClient.urlBase);
+        const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+        const response = await client.users.login(myHeaders, loginData)
+        .then(r => r.text().then(data => ({status: r.status, body: data})))
+
+        if (response.status == 200) {
+          const token = (JSON.parse([response.body]).auth_token)
+          await dispatch("setAuthToken", token)
+          await dispatch("getUserData", token)
+
+          // await commit("setUser", {
+          //   // username: username,
+          //   email: loginData.email,
+          // });
+        }
+        return response;
+        // console.log(response)
+
+        // let response = await axios.post("user/login/", loginData);
+        // // console.log(response);
+        // let username = response.data.username;
+        // let email = response.data.email;
+      },
+
+      async setAuthToken({ commit }, token) {
+        commit("setOrRemoveToken", token)
+      },
+
+      async getUserData({ commit }, token) {
+        const client = new apiClient(apiClient.urlBase);
+        const myHeaders = new Headers({"Authorization": `Bearer ${token}`});
+        const response = await client.users.getUserDetails(myHeaders)
+        .then(r => r.text().then(data => ({status: r.status, body: data})))
+
+        if (response.status == 200) {
+          var payload = JSON.parse([response.body])
+          commit("setOrRemoveUserData", payload)
+        }
       },
     
       async CreatePost({ dispatch }, post) {
@@ -52,45 +92,78 @@ const actions = {
         commit("setPosts", response.data);
       },
     
-      async LogOut({commit}) {
+      async LogOut({getters, commit}) {
 
-        let username = null;
-        let email = null;
+        let token = getters.getToken;
 
-        await axios.post("user/logout/", {});
+        const client = new apiClient(apiClient.urlBase);
+        const myHeaders = new Headers({"Authorization": `Bearer ${token}`});
+        const response = await client.users.logout(myHeaders)
+        .then(r => r.text().then(data => ({status: r.status, body: data})))
 
-        commit("doLogout", {
-          username: username,
-          email: email,
-        });
+        if (response.status == 204) {    
+          token = null;
+
+          await commit("setOrRemoveUserData", {
+            id: null,
+            email: null, 
+            username: null,
+            first_name: null,
+            last_name: null,
+          })
+
+          await commit("setOrRemoveToken", token)
+        }
+
+        // let username = null;
+        // let email = null;
+
+        // await axios.post("user/logout/", {});
+
+        // commit("doLogout", {
+        //   username: username,
+        //   email: email,
+        // });
 
 
       },
 };
 
 const mutations = {
-    setUser(state, payload){
-        // state.username = payload.username
-        // state.email = payload.email
-        state.userData.user = payload.username
-        state.userData.email = payload.email
+    // setUser(state, payload){
+    //     // state.username = payload.username
+    //     // state.email = payload.email
+    //     state.userData.user = payload.username
+    //     state.userData.email = payload.email
 
+    // },
+
+
+    // mutation called when login/logout
+    setOrRemoveUserData(state, payload) {
+      state.userData.id = payload.id;
+      state.userData.email = payload.email;
+      state.userData.username = payload.username;
+      state.userData.first_name = payload.first_name;
+      state.userData.last_name = payload.last_name;
     },
+
+    setOrRemoveToken(state, token) {
+      state.userToken.token = token
+    },
+    
     setPosts(state, posts){
         state.posts = posts
-    },
-    doLogout(state){
-      // state.email = null;
-      // state.username = null;
-      state.userData.email = null;
-      state.userData.user = null;
     },
 };
 
 
-export default {
+const auth = {
+  namespaced: true,
   state,
   getters,
   actions,
   mutations
 };
+
+export default auth

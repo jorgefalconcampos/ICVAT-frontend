@@ -1,6 +1,9 @@
 import HttpClient from "./http-client";
+import { apiHost } from "../../config";
 
 class ApiClient extends HttpClient {
+  static urlBase = apiHost;
+
   constructor(baseURL, options) {
     super({
       baseURL,
@@ -29,7 +32,6 @@ class ApiClient extends HttpClient {
           body: urlencoded,
           redirect: "follow",
         };
-
         return this.post("/auth/users/", requestOptions);
       },
 
@@ -54,15 +56,62 @@ class ApiClient extends HttpClient {
           body: urlencoded,
           redirect: "follow",
         };
-  
         return this.post("/auth/users/activation/", requestOptions);
       },
 
-      
+      // HTTP POST
+      login: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
 
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post("/auth/token/login/", requestOptions);
+      },
+
+      // HTTP POST
+      logout: (headers) => {
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.post("/auth/token/logout/", requestOptions);
+      },
+
+      // HTTP GET
+      getUserDetails: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/auth/users/me/", requestOptions);
+      }
 
     };
   }
+
+  get documents() {
+    return {
+
+         // HTTP GET
+         getAllDocuments: (headers) => {
+          var requestOptions = {
+            method: "GET",
+            headers: headers,
+            redirect: "follow",
+          };
+          return this.get("/api/categories/", requestOptions);
+        }
+
+    }
+
+  }
 }
 
-export default ApiClient;
+export default ApiClient  ;

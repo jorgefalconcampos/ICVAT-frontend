@@ -9,7 +9,7 @@
                         </v-col>
                         <v-col cols="6" class="pa-12" >
                             <p class="big-title pb-6">Inicia sesión</p>
-                            <v-form ref="form" v-model="form.valid" lazy-validation @submit.prevent="submit">
+                            <v-form ref="form" v-model="isValid" lazy-validation @submit.prevent="submit">
 
                                 <v-text-field
                                     name="input_email"
@@ -26,12 +26,12 @@
                                     label="contraseña" 
                                     v-model="form.password"
                                     :rules="[rules.required]"
-                                    :type="form.show_pass ? 'text' : 'password'"
-                                    :append-icon="form.password.length > 0 ? form.show_pass ? 'mdi-eye' : 'mdi-eye-off' : ''"
+                                    :type="show_pass ? 'text' : 'password'"
+                                    :append-icon="form.password.length > 0 ? show_pass ? 'mdi-eye' : 'mdi-eye-off' : ''"
                                     append-outer-icon="mdi-lock-question" 
                                     filled rounded color="white" 
                                     prepend-inner-icon="mdi-lock"
-                                    @click:append="form.show_pass = !form.show_pass"
+                                    @click:append="show_pass = !show_pass"
                                     @click:append-outer="$router.push('/reset-password')"
                                     @keydown.enter="submit">
                                 </v-text-field>
@@ -64,11 +64,11 @@ export default {
 
     data() {
         return {
+            isValid: false,
+            show_pass: false,
             form: {
-                valid: false,
                 email: "",
                 password: "",
-                show_pass: false,
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -80,34 +80,35 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["LogIn"]),
+        ...mapActions("auth", ["LogIn"]),
 
-        validate () {
-            this.$refs.form.validate()
+        submit() {
+            if(this.$refs.form.validate()) { this.logUser(); }
+            else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
         },
 
-        async submit() {
-            const loginData = new FormData();
-            loginData.append("email", this.form.email);
-            loginData.append("password", this.form.password);
-
-            if(this.$refs.form.validate()) {
-                try {
-                    await this.LogIn(loginData); this.$router.push("/documents");
+        async logUser() {
+            try {
+                const response = await this.LogIn(this.form)
+                if (response.status == 200) { this.$router.push('/documents'); }
+                else {
+                    const items_snackbar = [];
+                    Object.values(JSON.parse(response.body)).forEach(([val]) =>  {items_snackbar.push(val) })
+                    this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo iniciar sesión", "black", "ok" ); }
             }
-            else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+            catch (err) { console.error(err) }
         },
-
-        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
+        
+        showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
+                items: items_snackbar,
+                
                 color: color,
                 right: isRight,
                 show_icon: showIcon,
                 icon: icon,
-                message: msg,
+                // message: msg,
                 closeSnackBtnColor: closeBtnColor,
                 closeSnackBtnTxt: closeBtnTxt, 
             }

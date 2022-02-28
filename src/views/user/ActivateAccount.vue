@@ -37,9 +37,7 @@
 
 <script>
 
-import { apiHost } from '../../config';
 import apiClient from "../../middleware/requests/api-client";
-// import axios from 'axios';
 
 export default {
     created() {
@@ -55,8 +53,8 @@ export default {
             title: "Activando tu cuenta...",
             failed: false,
             alreadyActive: false,
-            uid: true,
-            token: true,
+            uid: null,
+            token: null,
         }
     },
     methods: {
@@ -69,7 +67,7 @@ export default {
         },
         async activateAccount(){
             try {
-                const client = new apiClient(apiHost);
+                const client = new apiClient(apiClient.urlBase);
                 
                 const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
 
@@ -86,13 +84,11 @@ export default {
                     setTimeout(() => { this.$router.push('/login') }, 5500);
                 }
                 else {
-                    if (response.status == 403) {
-                        this.title = "Parece que la cuenta ya fue activada ¡Genial! 😀"; this.alreadyActive = true;
-                    }
-                    else {
-                        this.title = "Esta cuenta no pudo ser activada :("; this.failed = true;
-                        this.showSnackbar(["No se pudo completar la activación de la cuenta"], "red", true, true, "mdi-alert-circle", "black", "ok"); 
-                    }
+                    const items_snackbar = [];
+                    Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
+                    this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
+                    if (response.status == 403) { this.title = "Parece que la cuenta ya fue activada ¡Genial! 😀"; this.alreadyActive = true; }
+                    else { this.title = "Esta cuenta no pudo ser activada :("; this.failed = true; }
                 }
                 this.loading = false;
             }
