@@ -1,14 +1,15 @@
 <template>
     <v-navigation-drawer
-        dark
-        color="dark"
-        mobile-breakpoint="960"
-        clipped
-        :right="$vuetify.rtl"
-        mini-variant-width="10"
-        :expand-on-hover="expandOnHover"
-        app
-        id="main-sidebar">
+      v-model="Sidebar_drawer"
+      :dark="SidebarColor !== 'white'"
+      :color="SidebarColor"
+      mobile-breakpoint="960"
+      clipped
+      :right="$vuetify.rtl"
+      mini-variant-width="70"
+      :expand-on-hover="expandOnHover"
+      app
+      id="main-sidebar">
         <v-list nav>
             <v-list-item>
                 <v-list-item-avatar color="white" size="60">
@@ -54,6 +55,8 @@
 </template>
 
 <script>
+
+import { mapState } from "vuex";
 
 export default {
   name: "Sidebar",
@@ -109,11 +112,22 @@ export default {
   }),
   computed: {
     isLoggedIn: function() { return this.$store.getters.isAuthenticated },
-    userData: function() { return this.$store.getters.userInfo },
+    userData: function() { return this.$store.getters.userInfo },    
+    ...mapState(["SidebarColor", "SidebarBg"]),
+    Sidebar_drawer: {
+      get() {
+        return this.$store.getters.sidebar;
+      },
+      set(value) {
+        this.$store.commit("SET_SIDEBAR_DRAWER", value);
+      }
+    }
+
+
   },
   watch: {
-    "$vuetify.breakpoint.smAndDown"(val) {
-      this.$emit("update:expandOnHover", !val);
+    "$vuetify.breakpoint.smAndDown"(value) {
+      this.$emit("update:expandOnHover", !value);
     }
   },
 
@@ -145,6 +159,8 @@ export default {
   }
 };
 </script>
+
+
 <style lang="scss">
 #main-sidebar{
   box-shadow:1px 0 20px rgba(0,0,0,.08);
