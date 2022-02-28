@@ -96,19 +96,16 @@ class ApiClient extends HttpClient {
     };
   }
 
-  get documents() {
+  get categories() {
     return {
-
-         // HTTP GET
-         getAllDocuments: (headers) => {
-          var requestOptions = {
-            method: "GET",
-            headers: headers,
-            redirect: "follow",
-          };
-          return this.get("/api/categories/", requestOptions);
-        }
-
+      getAllCategories: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/categories/", requestOptions);
+      }
     }
 
   }
