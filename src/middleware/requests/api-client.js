@@ -98,6 +98,8 @@ class ApiClient extends HttpClient {
 
   get categories() {
     return {
+
+      // HTTP GET
       getAllCategories: (headers) => {
         var requestOptions = {
           method: "GET",
@@ -107,6 +109,7 @@ class ApiClient extends HttpClient {
         return this.get("/categories/", requestOptions);
       },
 
+      // HTTP GET
       getSingleCategory: (headers, id) => {
         var requestOptions = {
           method: "GET",
@@ -116,6 +119,23 @@ class ApiClient extends HttpClient {
         return this.get(`/categories/${id}`, requestOptions);
       },
 
+      // HTTP PATCH
+      updateCategory: (headers, id, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "PATCH",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.patch(`/categories/${id}/`, requestOptions);
+      },
+
+      // HTTP DELETE
       deleteCategory: (headers, id) => {
         var requestOptions = {
           method: "DELETE",

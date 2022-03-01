@@ -34,7 +34,7 @@
             <v-row justify="center" align="center" class="mx-1 pt-5">
 
               <v-col cols="4" v-for="(category, i) in categories_listing" :key="i">
-                <v-card elevation="4" class="text-left pa-1">
+                <v-card elevation="4" class="text-left pa-1 overflow-hidden">
                   <v-container>
                     <v-row>
                       <v-col cols="11" class="">

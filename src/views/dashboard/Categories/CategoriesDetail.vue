@@ -20,7 +20,9 @@
                     name="category_name"
                     label="Nombre de la categoría"
                     v-model="form.name"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.max30]"
+                    min="2"
+                    max="30"
                     filled rounded color="white"
                     prepend-inner-icon="mdi-shape"
                     @keydown.enter="submit"
@@ -32,7 +34,7 @@
                     name="category_description"
                     label="Descripción de la categoría"
                     v-model="form.description"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.max150]"
                     filled rounded color="white"
                     prepend-inner-icon="mdi-text-box"
                     @keydown.enter="submit">
@@ -67,7 +69,7 @@
                   </v-btn>
                 </template>
                 <!-- <v-btn fab dark small color="indigo"><v-icon>mdi-plus</v-icon></v-btn> -->
-                <v-btn @click="switchEditMode()"  fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
+                <v-btn @click="switchEditMode()" fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
                 <div class="text-center">
                   <v-dialog v-model="dialog" width="500">
                     <template v-slot:activator="{ on, attrs }">
@@ -151,10 +153,8 @@ export default {
       },
       rules: {
         required: value => !!value || 'requerido',
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return pattern.test(value) || 'e-mail inválido'
-        },
+        max30: value => (value && value.length <= 30) || 'máximo 30 caracteres',
+        max150: value => (value && value.length <= 150) || 'máximo 150 caracteres',
       },
 
 
@@ -172,9 +172,28 @@ export default {
   },
 
   methods: {
+    submit() {
+      if(this.$refs.form.validate()) { this.loading = true; this.updateCategory(this.category_info.id); }
+      else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario", "black", "ok"); }
+    },
+
+    async updateCategory(id) {
+      try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.categories.updateCategory(myHeaders, id, this.form)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        console.log(response)
+        if (response.status == 200) {
+          this.switchEditMode(); this.getCategory(); 
+          this.showSnackbar(["Categoría actualizada con éxito"], "green", true, true, "mdi-check-bold", "black", "ok"); }
+      } catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+    },
+
 
     switchEditMode() {
-      this.editMode = !this.editMode;
+      this.fab = false; this.editMode = !this.editMode;
       this.form.name = this.category_info.name;
       this.form.description = this.category_info.description;
     },
