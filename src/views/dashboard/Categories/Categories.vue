@@ -42,7 +42,7 @@
                     </v-row>
                   </v-container>
                   <v-card-actions>
-                    <v-btn :to="`/categories/${category.slug}`"  color="primary" outlined>{{ category.slug }}</v-btn>
+                    <v-btn @click="handleClick(category.id)" color="primary" outlined>{{ category.slug }}</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-col>
@@ -106,6 +106,11 @@ export default {
         }
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener categorías"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
       finally { this.select(this.letters[0]); this.loading = false; }
+    },
+
+    handleClick(id) {
+      let data = {id: id}; 
+      this.$router.push({ name: "CategoriesDetail", params: {data} })
     },
 
     showSnackbar(items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {

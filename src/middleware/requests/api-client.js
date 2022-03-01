@@ -105,6 +105,15 @@ class ApiClient extends HttpClient {
           redirect: "follow",
         };
         return this.get("/categories/", requestOptions);
+      },
+
+      getSingleCategory: (headers, id) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get(`/categories/${id}`, requestOptions);
       }
     }
 
