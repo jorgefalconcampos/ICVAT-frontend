@@ -59,7 +59,7 @@
                                             </v-col>
                                         </v-row>
                                         <div class="text-left">
-                                            <v-btn small elevation="0" color="blue" class="font-weight-bold" @click="stepper = 2">paso siguiente</v-btn>
+                                            <v-btn small elevation="0" color="blue lighten-1" class="white--text" @click="stepper = 2">paso siguiente</v-btn>
                                         </div>
                                     </v-stepper-content>
                                     
@@ -113,7 +113,7 @@
                                             </v-col>
                                         </v-row>
                                         <div class="text-left">
-                                            <v-btn small elevation="0" color="blue" class="font-weight-bold" @click="stepper=1">paso anterior</v-btn>
+                                            <v-btn small elevation="0" color="blue lighten-1" class="white--text" @click="stepper=1">paso anterior</v-btn>
                                         </div>
                                     </v-stepper-content>
 

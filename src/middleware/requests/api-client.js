@@ -114,7 +114,17 @@ class ApiClient extends HttpClient {
           redirect: "follow",
         };
         return this.get(`/categories/${id}`, requestOptions);
-      }
+      },
+
+      deleteCategory: (headers, id) => {
+        var requestOptions = {
+          method: "DELETE",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get(`/categories/${id}/`, requestOptions);
+      },
+
     }
 
   }

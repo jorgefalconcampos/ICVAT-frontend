@@ -22,9 +22,17 @@
 
       <v-col cols="10">
         <v-card class="py-6" elevation="7">
+
+           <div class="bgblue border15 mx-5 py-5">
+            <h1 class="glass border15 mx-10 pa-3 text-h3 font-weight-bold text text-uppercase">{{selectedLetter}}</h1>
+          </div>
+
+
           <v-container>
             <!-- cards row -->
-            <v-row justify="center" align="center" class="mx-1">
+
+            <v-row justify="center" align="center" class="mx-1 pt-5">
+
               <v-col cols="4" v-for="(category, i) in categories_listing" :key="i">
                 <v-card elevation="4" class="text-left pa-1">
                   <v-container>
@@ -70,6 +78,7 @@ export default {
   data: () => ({
     loading: true,
     selectedItem: 0,
+    selectedLetter:  null,
     categories: [], // all categories
     letters: [],
     categories_listing: [],
@@ -77,9 +86,9 @@ export default {
 
   methods: {
     select(index) {
+      this.selectedLetter = index
       this.categories_listing = [];
-      console.log(`index: ${index}`);
-      for (var i=0; i < this.categories.length; i++) {
+      for (var i=0; i<this.categories.length; i++) {
         var item = this.categories[i]; 
         var itemName = this.categories[i].slug;
         if (itemName.substring(0, 1).toLowerCase() === index) {

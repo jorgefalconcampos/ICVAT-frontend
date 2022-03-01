@@ -1,18 +1,98 @@
 <template>
   <v-container fluid fill-height>
+
+
+
+
+
+
+
     <v-row justify="center" class="text-center">
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
-
-
       <v-col cols="12">
         <v-card class="py-6" elevation="7">
           <div class="bgblue border15 mx-5 py-5">
-            <h1 class="text-h2 font-weight-bold">{{category_info.name}}</h1>
-            <h2 class="text-h4 mt-4">{{category_info.description}}</h2>
+            <div class="glass border15 mx-10 pa-5 px-15">
+
+              <div v-if="editMode">
+                <v-form ref="form" v-model="isValid" @submit.prevent="submit">
+                  <v-text-field
+                    name="category_name"
+                    label="Nombre de la categoría"
+                    v-model="form.name"
+                    :rules="[rules.required]"
+                    filled rounded color="white"
+                    prepend-inner-icon="mdi-shape"
+                    @keydown.enter="submit"
+                    value="kaka"
+                    >
+                  </v-text-field>
+
+                  <v-text-field
+                    name="category_description"
+                    label="Descripción de la categoría"
+                    v-model="form.description"
+                    :rules="[rules.required]"
+                    filled rounded color="white"
+                    prepend-inner-icon="mdi-text-box"
+                    @keydown.enter="submit">
+                  </v-text-field>
+                </v-form>
+
+                <div class="text-right px-2">
+                  <v-btn @click="switchEditMode()" color="red" class="mx-1 white--text" dense rounded>cancelar</v-btn> 
+                  <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded >guardar</v-btn> 
+
+                </div>
+                
+               
+              </div>
+
+
+              <div v-else>
+                <h1 class="text-h2 font-weight-bold">{{category_info.name}}</h1>
+                <h2 class="text-h4 my-2">{{category_info.description}}</h2>
+              </div>
+
+              <v-speed-dial
+                v-if="!editMode"
+                v-model="fab"
+                right absolute direction="top"
+                transition="scale-transition"
+              >
+                <template v-slot:activator>
+                  <v-btn v-model="fab" color="grey darken-4" dark fab>
+                    <v-icon v-if="fab">mdi-close</v-icon>
+                    <v-icon v-else>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <!-- <v-btn fab dark small color="indigo"><v-icon>mdi-plus</v-icon></v-btn> -->
+                <v-btn @click="switchEditMode()"  fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
+                <div class="text-center">
+                  <v-dialog v-model="dialog" width="500">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" fab dark small color="red"><v-icon>mdi-delete</v-icon></v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title class="text-h5 red lighten-1">¿Borrar categoría?</v-card-title>
+                      <v-card-text class="mt-4">Al continuar, se eliminará esta categoría y también todos los documentos asociados a ella. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions class="py-3">
+                        <v-spacer></v-spacer>
+                        <v-btn color="dark"  outlined @click="dialog=false">Cancelar</v-btn>
+                        <v-btn color="red lighten-1 white--text" @click="deleteCategory(category_info.id)">Sí, eliminar</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </div>
+              </v-speed-dial>
+
+            </div>
           </div>
+
           <v-container class="mt-5">
             <!-- cards row -->
-            <v-row justify="center" align="center" class="mx-1">
+            <!-- <v-row justify="center" align="center" class="mx-1">
               <v-col cols="3">
                 <v-card elevation="4" class="text-left pa-1">
                   <v-container>
@@ -36,7 +116,7 @@
                   </v-card-actions>
                 </v-card>
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-container>
         </v-card>
       </v-col>
@@ -59,11 +139,56 @@ export default {
   },
 
   data: () => ({
+      fab: false,
+
+      dialog: false,
+
+      editMode: false,
+      isValid: false,
+      form: {
+        name: "dsds",
+        description: ""
+      },
+      rules: {
+        required: value => !!value || 'requerido',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'e-mail inválido'
+        },
+      },
+
+
+
     loading: true,
-    category_info: {},
+    category_info: {
+      id: "",
+      name: "",
+      description: "",
+      slug: ""
+    },
   }),
 
+  computed: {
+  },
+
   methods: {
+
+    switchEditMode() {
+      this.editMode = !this.editMode;
+      this.form.name = this.category_info.name;
+      this.form.description = this.category_info.description;
+    },
+
+    async deleteCategory(id) {
+      try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.categories.deleteCategory(myHeaders, id)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 204) { this.$router.replace({ path: '/categories/'})}
+      } catch (err) { this.showSnackbar(["Ocurrió un error al obtener la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+    },
 
      async getCategory() {
       try {
@@ -73,7 +198,7 @@ export default {
         const id = this.$route.params.data.id
         const response = await client.categories.getSingleCategory(myHeaders, id)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
-        if (response.status == 200) { this.category_info = JSON.parse(response.body)}
+        if (response.status == 200) { this.category_info = JSON.parse(response.body); this.form.name = this.category_info.name; this.form.description = this.category_info.description; }
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
       finally { this.loading = false; }
     },
