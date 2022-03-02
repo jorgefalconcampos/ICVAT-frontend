@@ -37,10 +37,7 @@
                 <div class="text-right px-2">
                   <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>cancelar</v-btn> 
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded >guardar</v-btn> 
-
                 </div>
-                
-               
               </div>
 
               <div v-else>
@@ -145,10 +142,10 @@ export default {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
-        console.log(this.form)
+        // console.log(this.form)
         const response = await client.categories.updateCategory(myHeaders, id, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
-        console.log(response)
+        // console.log(response)
         if (response.status == 200) {
           this.switchEditMode(); this.getCategory(); 
           this.showSnackbar(["Categoría actualizada"], "green", true, true, "mdi-check-bold", "black", "ok"); }
