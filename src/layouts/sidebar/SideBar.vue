@@ -137,7 +137,7 @@ export default {
   methods: {
     
     async logout() { 
-      await this.$store.dispatch["auth/LogOut"]; this.$router.push('/login');
+      await this.$store.dispatch("auth/LogOut"); this.$router.push('/login');
       this.showSnackbar(["Sesión finalizada"], "green", true, true, "mdi-check-bold", "black", "ok"); 
 
     },

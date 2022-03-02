@@ -24,29 +24,22 @@ class HttpClient {
         return HttpClient.callEndpoint(url, requestOptions)
     }
   
-    put(endpoint, body, options = {}) {
-      return this.callEndpoint(endpoint, {
-        ...options,
-        body: body ? JSON.stringify(body) : undefined,
-        method: "PUT"
-      });
+    // put(endpoint, body, options = {}) {
+    //   return this.callEndpoint(endpoint, {
+    //     ...options,
+    //     body: body ? JSON.stringify(body) : undefined,
+    //     method: "PUT"
+    //   });
+    // }
+  
+    patch(endpoint, requestOptions) {
+      const url = this._baseURL + endpoint;
+      return HttpClient.callEndpoint(url, requestOptions)
     }
   
-    patch(endpoint, operations, options = {}) {
-      return this.callEndpoint(endpoint, {
-        parseResponse: false,
-        ...options,
-        body: JSON.stringify(operations),
-        method: "PATCH"
-      });
-    }
-  
-    delete(endpoint, options = {}) {
-      return this.callEndpoint(endpoint, {
-        parseResponse: false,
-        ...options,
-        method: "DELETE"
-      });
+    delete(endpoint, requestOptions) {
+      const url = this._baseURL + endpoint;
+      return HttpClient.callEndpoint(url, requestOptions)
     }
   }
   

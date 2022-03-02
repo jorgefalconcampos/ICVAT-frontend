@@ -96,18 +96,70 @@ class ApiClient extends HttpClient {
     };
   }
 
-  get documents() {
+  get categories() {
     return {
 
-         // HTTP GET
-         getAllDocuments: (headers) => {
-          var requestOptions = {
-            method: "GET",
-            headers: headers,
-            redirect: "follow",
-          };
-          return this.get("/api/categories/", requestOptions);
-        }
+      // HTTP GET
+      getAllCategories: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/categories/", requestOptions);
+      },
+
+      // HTTP POST
+      createCategory: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post(`/categories/`, requestOptions);
+      },
+
+      // HTTP GET
+      getSingleCategory: (headers, id) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get(`/categories/${id}`, requestOptions);
+      },
+
+      // HTTP PATCH
+      updateCategory: (headers, id, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "PATCH",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.patch(`/categories/${id}/`, requestOptions);
+      },
+
+      // HTTP DELETE
+      deleteCategory: (headers, id) => {
+        var requestOptions = {
+          method: "DELETE",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get(`/categories/${id}/`, requestOptions);
+      },
 
     }
 

@@ -67,7 +67,7 @@ const routes = [
         },
         {
             name: 'CategoriesDetail',
-            path: '/categories/:slug',
+            path: '/categories/',
             component: () => import('@/views/dashboard/Categories/CategoriesDetail.vue'),
         },
         ],

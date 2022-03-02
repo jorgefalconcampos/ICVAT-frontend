@@ -10,6 +10,12 @@
 
 <style lang="scss">
 
+a {
+  color: #ffffff !important;
+  font-weight: 500;
+  text-decoration: none;
+}
+
 
 .small-txt {
   font-size: 0.85em;
@@ -27,7 +33,7 @@ p {
 }
 
 .border15{
-  border-radius: 15px;
+  border-radius: 15px !important;
 }
 
 .border10{
@@ -54,10 +60,12 @@ p {
 }
 
 
+
+
 .bgblue {
   background: #3494E6;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #EC6EAD, #3494E6);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #EC6EAD, #3494E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: -webkit-linear-gradient(to right, #ec6ec6, #3494E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #ec6ec6, #3494E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
  * {
   font-family: "Work Sans";
@@ -82,6 +90,12 @@ p {
    border-radius: 13px !important;
    -webkit-backdrop-filter: blur( 4px ) !important; 
  }
+
+  .v-btn:hover:before {
+    opacity: 0 !important;
+  }
+
+  .v-btn:focus::before { opacity: 0 !important; }
 
  
 
