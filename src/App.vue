@@ -91,6 +91,12 @@ p {
    -webkit-backdrop-filter: blur( 4px ) !important; 
  }
 
+  .v-btn:hover:before {
+    opacity: 0 !important;
+  }
+
+  .v-btn:focus::before { opacity: 0 !important; }
+
  
 
 </style>

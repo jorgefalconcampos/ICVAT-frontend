@@ -42,7 +42,7 @@
                 </v-form>
 
                 <div class="text-right px-2">
-                  <v-btn @click="switchEditMode()" color="red" class="mx-1 white--text" dense rounded>cancelar</v-btn> 
+                  <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>cancelar</v-btn> 
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded >guardar</v-btn> 
 
                 </div>
@@ -63,7 +63,7 @@
                 transition="scale-transition"
               >
                 <template v-slot:activator>
-                  <v-btn v-model="fab" color="grey darken-4" dark fab>
+                  <v-btn v-model="fab" @click="dialog=false" color="grey darken-4" dark fab>
                     <v-icon v-if="fab">mdi-close</v-icon>
                     <v-icon v-else>mdi-dots-vertical</v-icon>
                   </v-btn>
@@ -76,13 +76,13 @@
                       <v-btn v-bind="attrs" v-on="on" fab dark small color="red"><v-icon>mdi-delete</v-icon></v-btn>
                     </template>
                     <v-card>
-                      <v-card-title class="text-h5 red lighten-1">¿Borrar categoría?</v-card-title>
+                      <v-card-title class="text-h5 red lighten-1">¿Borrar la categoría&nbsp;<span class="font-weight-bold">{{category_info.name}}</span>?</v-card-title>
                       <v-card-text class="mt-4">Al continuar, se eliminará esta categoría y también todos los documentos asociados a ella. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
                       <v-divider></v-divider>
                       <v-card-actions class="py-3">
                         <v-spacer></v-spacer>
-                        <v-btn color="dark"  outlined @click="dialog=false">Cancelar</v-btn>
-                        <v-btn color="red lighten-1 white--text" @click="deleteCategory(category_info.id)">Sí, eliminar</v-btn>
+                        <v-btn @click="dialog=false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
+                        <v-btn color="px-3 red lighten-1 white--text" dense rounded @click="deleteCategory(category_info.id)">Sí, eliminar</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -142,13 +142,13 @@ export default {
 
   data: () => ({
       fab: false,
-
       dialog: false,
 
       editMode: false,
+
       isValid: false,
       form: {
-        name: "dsds",
+        name: "",
         description: ""
       },
       rules: {
@@ -187,7 +187,7 @@ export default {
         console.log(response)
         if (response.status == 200) {
           this.switchEditMode(); this.getCategory(); 
-          this.showSnackbar(["Categoría actualizada con éxito"], "green", true, true, "mdi-check-bold", "black", "ok"); }
+          this.showSnackbar(["Categoría actualizada"], "green", true, true, "mdi-check-bold", "black", "ok"); }
       } catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
     },
 

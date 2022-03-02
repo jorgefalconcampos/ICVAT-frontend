@@ -23,6 +23,7 @@ const state = {
 const getters = {
     isAuthenticated: state => !!state.userData.email,    
     getToken: state => state.userToken.token,
+    getUserID: state => state.userData.id,
     userInfo: state => state.userData,    
     StatePosts: state => state.posts,
     StateUser: state => state.userData.email,

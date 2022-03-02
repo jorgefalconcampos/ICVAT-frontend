@@ -109,6 +109,22 @@ class ApiClient extends HttpClient {
         return this.get("/categories/", requestOptions);
       },
 
+      // HTTP POST
+      createCategory: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post(`/categories/`, requestOptions);
+      },
+
       // HTTP GET
       getSingleCategory: (headers, id) => {
         var requestOptions = {
