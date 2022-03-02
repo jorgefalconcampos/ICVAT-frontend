@@ -133,6 +133,7 @@ import apiClient from "@/middleware/requests/api-client";
 export default {
   created() {
     this.getCategory();
+    this.form.owner = this.$store.getters["auth/getUserID"];
   },
 
   mounted() {
@@ -148,6 +149,7 @@ export default {
 
       isValid: false,
       form: {
+        owner: "",
         name: "",
         description: ""
       },
@@ -182,6 +184,7 @@ export default {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        console.log(this.form)
         const response = await client.categories.updateCategory(myHeaders, id, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         console.log(response)
@@ -189,6 +192,7 @@ export default {
           this.switchEditMode(); this.getCategory(); 
           this.showSnackbar(["Categoría actualizada"], "green", true, true, "mdi-check-bold", "black", "ok"); }
       } catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
     },
 
 
@@ -207,6 +211,7 @@ export default {
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 204) { this.$router.replace({ path: '/categories/'})}
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
     },
 
      async getCategory() {
@@ -214,7 +219,7 @@ export default {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
-        const id = this.$route.params.data.id
+        const id = this.$route.params.data.id;
         const response = await client.categories.getSingleCategory(myHeaders, id)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) { this.category_info = JSON.parse(response.body); this.form.name = this.category_info.name; this.form.description = this.category_info.description; }

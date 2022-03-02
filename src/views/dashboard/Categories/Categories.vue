@@ -194,23 +194,19 @@ export default {
       try {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
-
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
-
-
         const response = await client.categories.createCategory(myHeaders, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
-        console.log(response)
-
         if (response.status == 201) { 
-          this.loadingDialog=false; 
-          this.$refs.form.reset();
-
-          this.dialog = false;
-          // this.$router.go(this.$router.currentRoute)
-          this.letters = []
-          this.getCategories(); 
-          this.showSnackbar(["Categoría creada"], "green", true, true, "mdi-check-bold", "black", "ok"); }
+          this.loadingDialog=false; this.$refs.form.reset();
+          this.dialog = false; this.letters = []; this.getCategories(); 
+          this.showSnackbar(["Categoría creada"], "green", true, true, "mdi-check-bold", "black", "ok"); 
+        }
+        else {
+          this.loadingDialog=false; const items_snackbar = [];
+          Object.values(JSON.parse(response.body)).forEach(([val]) =>  {items_snackbar.push(val) })
+          this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok");           
+        }
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener categorías"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
       finally { this.select(this.letters[0]); this.loading = false; }
    
