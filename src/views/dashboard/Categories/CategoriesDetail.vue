@@ -1,12 +1,5 @@
 <template>
   <v-container fluid fill-height>
-
-
-
-
-
-
-
     <v-row justify="center" class="text-center">
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
       <v-col cols="12">
@@ -50,7 +43,6 @@
                
               </div>
 
-
               <div v-else>
                 <h1 class="text-h2 font-weight-bold">{{category_info.name}}</h1>
                 <h2 class="text-h4 my-2">{{category_info.description}}</h2>
@@ -91,35 +83,6 @@
 
             </div>
           </div>
-
-          <v-container class="mt-5">
-            <!-- cards row -->
-            <!-- <v-row justify="center" align="center" class="mx-1">
-              <v-col cols="3">
-                <v-card elevation="4" class="text-left pa-1">
-                  <v-container>
-                    <v-row>
-                      <v-col cols="11" class="">
-                        <div class="text-overline">Creada el 12/02/1</div>
-                        <h1 class="text-h6 font-weight-bold">sddsds</h1>
-                      </v-col>
-                    </v-row>
-                    <v-divider class="my-2"></v-divider>
-                    <v-row>
-                      <v-col cols="12" class="mt-1">
-                        <span class="text-body-1">sddsds</span>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                  <v-card-actions>
-                    <v-btn @click="handleClick" color="pink" outlined
-                      >sdds</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-col>
-            </v-row> -->
-          </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -158,16 +121,14 @@ export default {
         max30: value => (value && value.length <= 30) || 'máximo 30 caracteres',
         max150: value => (value && value.length <= 150) || 'máximo 150 caracteres',
       },
-
-
-
-    loading: true,
-    category_info: {
-      id: "",
-      name: "",
-      description: "",
-      slug: ""
-    },
+      
+      loading: true,
+      category_info: {
+        id: "",
+        name: "",
+        description: "",
+        slug: ""
+      },
   }),
 
   computed: {
@@ -192,7 +153,6 @@ export default {
           this.switchEditMode(); this.getCategory(); 
           this.showSnackbar(["Categoría actualizada"], "green", true, true, "mdi-check-bold", "black", "ok"); }
       } catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
-      finally { this.loading = false; }
     },
 
 
@@ -227,15 +187,7 @@ export default {
       finally { this.loading = false; }
     },
 
-    showSnackbar(
-      items_snackbar,
-      color,
-      isRight,
-      showIcon,
-      icon,
-      closeBtnColor,
-      closeBtnTxt
-    ) {
+    showSnackbar(items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
       const snackOptions = {
         items: items_snackbar,
         color: color,

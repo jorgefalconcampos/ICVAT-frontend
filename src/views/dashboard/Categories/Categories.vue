@@ -1,7 +1,5 @@
 <template>
   <v-container fluid fill-height>
-
-
     <v-row justify="center" class="text-center">
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
       <v-col cols="2">
@@ -62,7 +60,7 @@
 
               <v-card-actions class="py-3">
                 <v-spacer></v-spacer>
-                <v-btn @click="dialog=false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
+                <v-btn @click="dialog=false;" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
                 <v-btn @click="submit" color="px-3 green lighten-1 white--text" dense rounded>Agregar</v-btn>
               </v-card-actions>
             </v-card>
@@ -72,23 +70,16 @@
 
       <v-col cols="10">
         <v-card class="py-6" elevation="7">
-
            <div class="bgblue border15 mx-5 py-5">
             <h1 class="glass border15 mx-10 pa-3 text-h3 font-weight-bold text text-uppercase">{{selectedLetter}}</h1>
           </div>
-
-
           <v-container>
-            <!-- cards row -->
-
             <v-row justify="center" align="center" class="mx-1 pt-5">
-
               <v-col cols="4" v-for="(category, i) in categories_listing" :key="i">
                 <v-card elevation="4" class="text-left pa-1 overflow-hidden">
                   <v-container>
                     <v-row>
                       <v-col cols="11" class="">
-                        <!-- <div class="text-overline">Creada el 12/02/1</div> -->
                         <h1 class="text-h6 font-weight-bold">{{ category.name }}</h1>
                       </v-col>
                     </v-row>
@@ -131,7 +122,6 @@ export default {
     loading: false,
     loadingDialog: false,
 
-    
     isValid: false,
     form: {
       owner: "",
