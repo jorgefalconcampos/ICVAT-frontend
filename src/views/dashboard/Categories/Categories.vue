@@ -144,6 +144,7 @@ export default {
 
   methods: {
     select(index) {
+      // alert(index)
       this.selectedLetter = index
       this.categories_listing = [];
       for (var i=0; i<this.categories.length; i++) {
@@ -153,9 +154,11 @@ export default {
           this.categories_listing.push(item);
         }
       }
+      
     },
 
-    async getCategories() {
+    async getCategories(newCategory) {
+      // var niu = "";
       try {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
@@ -164,7 +167,6 @@ export default {
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) {
           this.categories = JSON.parse(response.body);
-          // console.log(this.categories.length)
           for (var i=0; i<this.categories.length; i++) {
             var slug = this.categories[i].slug;
             var first_letter = slug.charAt(0);
@@ -173,7 +175,10 @@ export default {
           }
         }
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener categorías"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
-      finally { this.select(this.letters[0]); this.loading = false; }
+      finally {
+        if (newCategory) { this.select(newCategory); this.selectedItem = this.letters.indexOf(newCategory); }
+        else{ this.select(this.letters[0]) }
+        this.loading = false; }
     },
     
     submit() {
@@ -190,8 +195,9 @@ export default {
         const response = await client.categories.createCategory(myHeaders, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 201) { 
-          this.loadingDialog=false; this.$refs.form.reset();
-          this.dialog = false; this.letters = []; this.getCategories(); 
+          this.loadingDialog=false; this.dialog = false; this.letters = []; 
+          this.getCategories(this.form.name.charAt(0).toLowerCase());
+          this.$refs.form.reset();
           this.showSnackbar(["Categoría creada"], "green", true, true, "mdi-check-bold", "black", "ok"); 
         }
         else {
@@ -200,7 +206,10 @@ export default {
           this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok");           
         }
       } catch (err) { this.showSnackbar(["Ocurrió un error al obtener categorías"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
-      finally { this.select(this.letters[0]); this.loading = false; }
+      finally { 
+
+        // this.select(this.letters[0]);
+         this.loading = false; }
    
 
 

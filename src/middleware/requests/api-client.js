@@ -48,7 +48,9 @@ class ApiClient extends HttpClient {
       // HTTP POST
       activate: (headers, body) => {
         var urlencoded = new URLSearchParams();
-        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+        Object.entries(body).forEach(([key, value]) => { 
+          urlencoded.append(key, value); 
+        });
 
         var requestOptions = {
           method: "POST",
@@ -62,7 +64,9 @@ class ApiClient extends HttpClient {
       // HTTP POST
       login: (headers, body) => {
         var urlencoded = new URLSearchParams();
-        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+        Object.entries(body).forEach(([key, value]) => { 
+          urlencoded.append(key, value); 
+        });
 
         var requestOptions = {
           method: "POST",
