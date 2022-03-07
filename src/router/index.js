@@ -58,7 +58,12 @@ const routes = [
         {
             name: 'Documents',
             path: '/documents',
-            component: () => import('@/views/dashboard/Documents'),
+            component: () => import('@/views/dashboard/Documents/Documents'),
+        },
+        {
+            name: 'DocumentsDetail',
+            path: '/documents/:document_id',
+            component: () => import('@/views/dashboard/Documents/DocumentsDetail'),
         },
         {
             name: 'Categories',

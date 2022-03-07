@@ -16,6 +16,10 @@ a {
   text-decoration: none;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 
 .small-txt {
   font-size: 0.85em;
@@ -89,6 +93,16 @@ p {
    border: 2px solid white;
    border-radius: 13px !important;
    -webkit-backdrop-filter: blur( 4px ) !important; 
+ }
+
+  .glass-sm{
+   z-index: 99;
+   background: rgba(255, 255, 255, 0.116) !important;
+   box-shadow: 0 4px 16px 0 rgba(44, 45, 53, 0.37) !important;
+   backdrop-filter: blur( 20px ) !important;
+  //  backdrop-filter: blur( 4px ) !important;
+   -webkit-backdrop-filter: blur( 4px ) !important; 
+  //  border: 2px solid rgba( 255, 255, 255, 0.18 );
  }
 
   .v-btn:hover:before {
