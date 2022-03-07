@@ -4,6 +4,35 @@
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
       <v-col cols="12">
         <v-card class="py-6" elevation="7">
+
+          <v-speed-dial v-if="!editMode" v-model="fab" top right absolute direction="bottom" transition="scale-transition">
+            <template v-slot:activator>
+              <v-btn v-model="fab" @click="dialog=false" color="grey darken-4" dark fab>
+                <v-icon v-if="fab">mdi-close</v-icon>
+                <v-icon v-else>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+                <!-- <v-btn fab dark small color="indigo"><v-icon>mdi-plus</v-icon></v-btn> -->
+            <v-btn @click="switchEditMode()" fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
+            <div class="text-center">
+              <v-dialog v-model="dialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on" fab dark small color="red"><v-icon>mdi-delete</v-icon></v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="text-h5 red lighten-1">¿Borrar la categoría&nbsp;<span class="font-weight-bold">{{category_info.name}}</span>?</v-card-title>
+                  <v-card-text class="mt-4">Al continuar, se eliminará esta categoría y también todos los documentos asociados a ella. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions class="py-3">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="dialog=false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
+                    <v-btn color="px-3 red lighten-1 white--text" dense rounded @click="deleteCategory(category_info.id)">Sí, eliminar</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </div>
+          </v-speed-dial>
+
           <div class="bgblue border15 mx-5 py-5">
             <div class="glass border15 mx-10 pa-5 px-15">
 
@@ -44,39 +73,6 @@
                 <h1 class="text-h2 font-weight-bold">{{category_info.name}}</h1>
                 <h2 class="text-h4 my-2">{{category_info.description}}</h2>
               </div>
-
-              <v-speed-dial
-                v-if="!editMode"
-                v-model="fab"
-                right absolute direction="top"
-                transition="scale-transition"
-              >
-                <template v-slot:activator>
-                  <v-btn v-model="fab" @click="dialog=false" color="grey darken-4" dark fab>
-                    <v-icon v-if="fab">mdi-close</v-icon>
-                    <v-icon v-else>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <!-- <v-btn fab dark small color="indigo"><v-icon>mdi-plus</v-icon></v-btn> -->
-                <v-btn @click="switchEditMode()" fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
-                <div class="text-center">
-                  <v-dialog v-model="dialog" width="500">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" fab dark small color="red"><v-icon>mdi-delete</v-icon></v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-title class="text-h5 red lighten-1">¿Borrar la categoría&nbsp;<span class="font-weight-bold">{{category_info.name}}</span>?</v-card-title>
-                      <v-card-text class="mt-4">Al continuar, se eliminará esta categoría y también todos los documentos asociados a ella. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
-                      <v-divider></v-divider>
-                      <v-card-actions class="py-3">
-                        <v-spacer></v-spacer>
-                        <v-btn @click="dialog=false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
-                        <v-btn color="px-3 red lighten-1 white--text" dense rounded @click="deleteCategory(category_info.id)">Sí, eliminar</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </div>
-              </v-speed-dial>
 
             </div>
           </div>

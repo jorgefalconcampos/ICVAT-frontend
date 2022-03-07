@@ -4,6 +4,7 @@
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
       <v-col cols="12">
         <v-card v-if="document_data" class="py-6" elevation="7">
+          
           <v-speed-dial v-if="!editMode" v-model="fab" top right absolute direction="bottom" transition="scale-transition">
             <template v-slot:activator>
               <v-btn v-model="fab" @click="dialog = false" color="grey darken-4" dark fab>
@@ -22,8 +23,8 @@
                   </v-btn>
                 </template>
                 <v-card>
-                  <v-card-title class="text-h5 red lighten-1">¿Borrar el documento&nbsp;<span class="font-weight-bold">ssddsds</span>?</v-card-title>
-                  <v-card-text class="mt-4">Al continuar, se eliminará este documento de tus documentos guardados. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
+                  <v-card-title class="text-h5 red lighten-1">¿Borrar el documento&nbsp;<span class="font-weight-bold">{{document_data.title}}</span>?</v-card-title>
+                  <v-card-text class="mt-4">Al continuar se eliminará de tus documentos guardados. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
                   <v-divider></v-divider>
                   <v-card-actions class="py-3">
                     <v-spacer></v-spacer>
@@ -191,18 +192,6 @@ export default {
     document_data: {},
     document_categories_select: { name: "", id: "" },
     document_categories: [], // list of categories created by user
-
-
-    //  select: { state: 'Florida', abbr: 'FL' },
-    //  items: [
-    //       { state: 'Florida', abbr: 'FL' },
-    //       { state: 'Georgia', abbr: 'GA' },
-    //       { state: 'Nebraska', abbr: 'NE' },
-    //       { state: 'California', abbr: 'CA' },
-    //       { state: 'New York', abbr: 'NY' },
-    //     ],
-
-
 
     fab: false,
     dialog: false,
