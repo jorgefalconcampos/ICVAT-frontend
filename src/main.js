@@ -12,6 +12,8 @@ import "@fontsource/work-sans/600.css"
 import "@fontsource/work-sans/400.css"
 import "@fontsource/work-sans/300.css"
 import "@fontsource/work-sans/200.css"
+import VueDOMPurifyHTML from 'vue-dompurify-html'
+
 
 
 axios.defaults.withCredentials = true
@@ -33,6 +35,7 @@ axios.interceptors.response.use(undefined, function(error) {
 Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
+Vue.use(VueDOMPurifyHTML)
 
 Vue.prototype.$qs = qs;
 

@@ -11,9 +11,21 @@
 <style lang="scss">
 
 a {
-  color: #ffffff !important;
+  color: #ffff !important;
   font-weight: 500;
   text-decoration: none;
+}
+
+.a-default {
+  a {
+    color: #3494E6 !important;
+    text-decoration: underline;
+    cursor: auto;
+  }
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 
@@ -89,6 +101,16 @@ p {
    border: 2px solid white;
    border-radius: 13px !important;
    -webkit-backdrop-filter: blur( 4px ) !important; 
+ }
+
+  .glass-sm{
+   z-index: 99;
+   background: rgba(255, 255, 255, 0.116) !important;
+   box-shadow: 0 4px 16px 0 rgba(44, 45, 53, 0.37) !important;
+   backdrop-filter: blur( 20px ) !important;
+  //  backdrop-filter: blur( 4px ) !important;
+   -webkit-backdrop-filter: blur( 4px ) !important; 
+  //  border: 2px solid rgba( 255, 255, 255, 0.18 );
  }
 
   .v-btn:hover:before {

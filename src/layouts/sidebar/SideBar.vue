@@ -86,18 +86,18 @@ export default {
         to: "/categories",
         action: ""
       },
-      {
-        title: "Perfil",
-        icon: "mdi-account-circle",
-        to: "/profile",
-        action: ""
-      },
-      {
-        title: "Ajustes",
-        icon: "mdi-cog",
-        to: "/settings",
-        action: "",
-      },
+      // {
+      //   title: "Perfil",
+      //   icon: "mdi-account-circle",
+      //   to: "/profile",
+      //   action: ""
+      // },
+      // {
+      //   title: "Ajustes",
+      //   icon: "mdi-cog",
+      //   to: "/settings",
+      //   action: "",
+      // },
        {
         title: "Cerrar sesión",
         icon: "mdi-logout",

@@ -48,7 +48,9 @@ class ApiClient extends HttpClient {
       // HTTP POST
       activate: (headers, body) => {
         var urlencoded = new URLSearchParams();
-        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+        Object.entries(body).forEach(([key, value]) => { 
+          urlencoded.append(key, value); 
+        });
 
         var requestOptions = {
           method: "POST",
@@ -62,7 +64,9 @@ class ApiClient extends HttpClient {
       // HTTP POST
       login: (headers, body) => {
         var urlencoded = new URLSearchParams();
-        Object.entries(body).forEach(([key, value]) => { urlencoded.append(key, value); } );
+        Object.entries(body).forEach(([key, value]) => { 
+          urlencoded.append(key, value); 
+        });
 
         var requestOptions = {
           method: "POST",
@@ -162,7 +166,39 @@ class ApiClient extends HttpClient {
       },
 
     }
+  }
 
+  get documents() {
+    return {
+      getAllDocuments: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/documents/", requestOptions)
+      },
+
+      getSingleDocument: (headers, uuid) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get(`/documents/${uuid}`, requestOptions);
+      },
+
+      updateDocument: (headers, uuid, body) => {
+        var requestOptions = {
+          method: "PATCH",
+          headers: headers,
+          body: body,
+          redirect: "follow",
+        };
+        return this.patch(`/documents/${uuid}`, requestOptions);
+      },
+
+    }
   }
 }
 
