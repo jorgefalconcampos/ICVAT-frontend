@@ -11,9 +11,17 @@
 <style lang="scss">
 
 a {
-  color: #ffffff !important;
+  color: #ffff !important;
   font-weight: 500;
   text-decoration: none;
+}
+
+.a-default {
+  a {
+    color: #3494E6 !important;
+    text-decoration: underline;
+    cursor: auto;
+  }
 }
 
 .clickable {
