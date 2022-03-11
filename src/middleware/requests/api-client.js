@@ -200,6 +200,20 @@ class ApiClient extends HttpClient {
 
     }
   }
+
+  get tags() {
+    return {
+      getAllTags: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/tags/", requestOptions);
+      }
+    }
+
+  }
 }
 
 export default ApiClient  ;

@@ -23,7 +23,7 @@
                         <h3 class="text-overline">Creado: {{document.created_date}}</h3>
                         <div class="mt-3">
                           <v-icon left>mdi-label</v-icon>
-                          <v-chip small v-for="(tag, i) in document.tags" :key="`tag_${i}`" text-color="light-blue darken-3" class="mr-1">{{tag}}</v-chip>
+                          <v-chip small v-for="(tag, i) in document.tags" :key="`tag_${i}`" text-color="light-blue darken-3" class="mr-1 my-1">{{tag}}</v-chip>
                         </div>
                       </v-col>
                     </v-row>

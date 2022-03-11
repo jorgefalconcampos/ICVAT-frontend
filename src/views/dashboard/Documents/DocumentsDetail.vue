@@ -84,8 +84,6 @@
                     single-line
                   ></v-select> -->
 
-
-                  
                   <v-select
                     name="document_category"
                     label="Categoría"
@@ -100,11 +98,41 @@
                     @keydown.enter="submit"
                   >
                   </v-select>
+                
+                  <vue-editor class="grey lighten-5 pa-3 text-left border10 a-default" v-model="form.body"></vue-editor>
+
+                  <v-combobox class="mt-8"
+                    name="document_tags"
+                    label="Etiquetas"
+                    filled
+                    rounded
+                    color="white"
+                    prepend-inner-icon="mdi-label"
+                    v-model="form.tags"
+                    :items="document_tags_all"
+                    :search-input.sync="search"
+
+                    height="100"
+                    deletable-chips
+                    hide-selected
+                    multiple
+                    clearable
+                    persistent-hint
+                    chips
+                    hint="Agrega un máximo de 5 etiquetas"
+                  >
+                    <template v-slot:no-data class="mt-3">
+                      <v-list-item class="mt-3">
+                        <v-list-item-content class="mt-3">
+                          <v-list-item-title>
+                            No hay tags que coincidan: "<strong>{{ search }}</strong>". Presiona <kbd>enter</kbd> para crear un nuevo tag
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                  </v-combobox>
+
                 </v-form>
-
-                  <vue-editor class="grey lighten-5 pa-3 text-left border10 a-default" v-model="form.body">
-
-              </vue-editor>
 
 
                 <div class="text-right mt-7">
@@ -119,8 +147,8 @@
                     <h2 class="text-h2 font-weight-bold">{{ document_data.title }}</h2>
                   </v-col>
 
-                  <v-col cols="8" class="px-10">
-                    <h3 @click=" $router.push({name: 'CategoriesDetail', params: { data: { id: document_data.category } }, })" class="text-h4 my-3 clickable mx-12">{{ document_data.category_name }}</h3>
+                  <v-col cols="auto" class="my-5">
+                    <h3 @click=" $router.push({name: 'CategoriesDetail', params: { data: { id: document_data.category } }, })" class="text-h4 py-1 px-10 clickable mx-12 glass-white-border">{{ document_data.category_name }}</h3>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -192,6 +220,11 @@ export default {
     document_data: {},
     document_categories_select: { name: "", id: "" },
     document_categories: [], // list of categories created by user
+    
+    
+    document_tags_all: [], // list of categories created by user
+    search: null,
+    
 
     fab: false,
     dialog: false,
@@ -213,6 +246,12 @@ export default {
         (value && value.length <= 150) || "máximo 150 caracteres",
     },
   }),
+
+  watch: {
+    "form.tags": {
+      handler(val) { if (val.length > 5) { this.$nextTick(() => {  this.form.tags.pop(); } )} }, 
+    }
+  },
 
   methods: {
     submit() {
@@ -261,7 +300,7 @@ export default {
         }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al obtener el documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
-      finally { this.loading = false; this.getCategories(); }
+      finally { this.loading = false; this.getCategories(); this.getTags() }
     },
 
     async getCategories() {
@@ -277,13 +316,26 @@ export default {
             const obj = { name: data[category].name, id: data[category].id }
             this.document_categories.push(obj)
           }
-
         }
+      } 
+      catch (err) { this.showSnackbar(["Ocurrió un error al obtener información del documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
+      finally { this.loading = false; }
+    },
+
+    async getTags() {
+        try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.tags.getAllTags(myHeaders)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 200) { var data = JSON.parse(response.body); data.forEach(element => { this.document_tags_all.push(element["name"]) }); }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al obtener información documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
       finally { this.loading = false; }
 
     },
+
 
     showSnackbar(items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
       const snackOptions = {
