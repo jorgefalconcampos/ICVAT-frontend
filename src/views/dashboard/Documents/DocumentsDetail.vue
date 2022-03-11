@@ -65,25 +65,6 @@
                   >
                   </v-text-field>
 
-                  <!-- <v-select
-                    name="doc_category"
-                    label="Categoría"
-                    filled
-                    rounded
-                    color="white"
-                    prepend-inner-icon="mdi-shape"
-                    @keydown.enter="submit"
-                    v-model="select"
-                    :hint="`${select.state}, ${select.abbr}`"
-                    :items="items"
-                    item-text="state"
-                    item-value="abbr"
-
-                    persistent-hint
-                    return-object
-                    single-line
-                  ></v-select> -->
-
                   <v-select
                     name="document_category"
                     label="Categoría"
@@ -96,30 +77,27 @@
                     item-text="name"
                     item-value="id"
                     @keydown.enter="submit"
+                    v-on:change="updateCategoryID(document_categories_select)"
                   >
                   </v-select>
                 
                   <vue-editor class="grey lighten-5 pa-3 text-left border10 a-default" v-model="form.body"></vue-editor>
 
                   <v-combobox class="mt-8"
-                    name="document_tags"
-                    label="Etiquetas"
-                    filled
-                    rounded
+                    name="document_tags" label="Etiquetas"
+                    hint="Agrega un máximo de 5 etiquetas"
+                    persistent-hint
+                    filled rounded
                     color="white"
                     prepend-inner-icon="mdi-label"
                     v-model="form.tags"
                     :items="document_tags_all"
                     :search-input.sync="search"
-
                     height="100"
-                    deletable-chips
+                    chips deletable-chips
                     hide-selected
-                    multiple
-                    clearable
-                    persistent-hint
-                    chips
-                    hint="Agrega un máximo de 5 etiquetas"
+                    multiple clearable
+                    @keydown.enter="submit"
                   >
                     <template v-slot:no-data class="mt-3">
                       <v-list-item class="mt-3">
@@ -136,7 +114,7 @@
 
 
                 <div class="text-right mt-7">
-                  <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>cancelar</v-btn>
+                  <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn>
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded>guardar</v-btn>
                 </div>
               </div>
@@ -217,7 +195,16 @@ export default {
   },
 
   data: () => ({
-    document_data: {},
+    document_data: {
+      document_id: "",
+      title: "",
+      author: "",
+      category: "",
+      category_name: "",
+      body: "",
+      created_date: "",
+      tags: []
+    },
     document_categories_select: { name: "", id: "" },
     document_categories: [], // list of categories created by user
     
@@ -233,12 +220,12 @@ export default {
     loading: true,
 
     form: {
-      document_id: "", //uuid
       title: "",
       category: "",
       body: "",
       tags: [],
     },
+
     rules: {
       required: (value) => !!value || "requerido",
       max30: (value) => (value && value.length <= 30) || "máximo 30 caracteres",
@@ -255,7 +242,7 @@ export default {
 
   methods: {
     submit() {
-      if (this.$refs.form.validate()) { this.loading = true; this.updateDocument(this.form.document_id); }
+      if (this.$refs.form.validate()) { this.loading = true; this.updateDoc(this.document_data.document_id); }
       else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario","black", "ok");}
     },
 
@@ -263,26 +250,30 @@ export default {
       this.fab = false;
       this.editMode = !this.editMode;
       this.form.title = this.document_data.title;
-      this.form.document_id = this.document_data.document_id;
+      this.form.category = this.document_data.category;
+      // this.form.document_id = this.document_data.document_id;
       this.form.body = this.document_data.body;
       this.form.tags = this.document_data.tags;
       // this.form.description = this.category_info.description;
     },
 
-    async updateDocument(uuid) {
+    updateCategoryID(id) { this.form.category = id; },
+
+    async updateDoc(uuid) {
       try {
+        // "stringifying" the tags
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
-        const response = await client.categories.updateDocument(myHeaders, uuid, this.form)
+        const response = await client.documents.updateDocument(myHeaders, uuid, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) {
-          
+          this.document_data = JSON.parse(response.body);
           this.showSnackbar(["Documento guardado"], "green", true, true, "mdi-check-bold", "black", "ok");
-          
         }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
     },
 
     async getDocument() {
@@ -295,6 +286,15 @@ export default {
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) {
           this.document_data = JSON.parse(response.body);
+
+          // this.form.document_id = this.document_data.document_id;
+          this.form.title = this.document_data.title;
+          // this.form.category = this.document_data.category;
+          // this.form.body = this.document_data.body;
+          // this.form.tags = this.document_data.tags;
+
+          
+          
           this.document_categories_select.name = this.document_data.category_name;
           this.document_categories_select.id = this.document_data.category;
         }

@@ -189,13 +189,18 @@ class ApiClient extends HttpClient {
       },
 
       updateDocument: (headers, uuid, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          key === "tags" ?  urlencoded.append(key, JSON.stringify(value)) : urlencoded.append(key, value);
+        });
+
         var requestOptions = {
           method: "PATCH",
           headers: headers,
-          body: body,
+          body: urlencoded,
           redirect: "follow",
         };
-        return this.patch(`/documents/${uuid}`, requestOptions);
+        return this.patch(`/documents/${uuid}/`, requestOptions);
       },
 
     }
@@ -209,7 +214,7 @@ class ApiClient extends HttpClient {
           headers: headers,
           redirect: "follow",
         };
-        return this.get("/tags/", requestOptions);
+        return this.get("/tags/", requestOptions)
       }
     }
 
