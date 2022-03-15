@@ -187,18 +187,52 @@ class ApiClient extends HttpClient {
         };
         return this.get(`/documents/${uuid}`, requestOptions);
       },
+      
+      createDocument: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          key === "tags" ?  urlencoded.append(key, JSON.stringify(value)) : urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post(`/documents/`, requestOptions);
+      },
 
       updateDocument: (headers, uuid, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          key === "tags" ?  urlencoded.append(key, JSON.stringify(value)) : urlencoded.append(key, value);
+        });
+
         var requestOptions = {
           method: "PATCH",
           headers: headers,
-          body: body,
+          body: urlencoded,
           redirect: "follow",
         };
-        return this.patch(`/documents/${uuid}`, requestOptions);
+        return this.patch(`/documents/${uuid}/`, requestOptions);
       },
 
     }
+  }
+
+  get tags() {
+    return {
+      getAllTags: (headers) => {
+        var requestOptions = {
+          method: "GET",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.get("/tags/", requestOptions)
+      }
+    }
+
   }
 }
 

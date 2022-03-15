@@ -65,27 +65,6 @@
                   >
                   </v-text-field>
 
-                  <!-- <v-select
-                    name="doc_category"
-                    label="Categoría"
-                    filled
-                    rounded
-                    color="white"
-                    prepend-inner-icon="mdi-shape"
-                    @keydown.enter="submit"
-                    v-model="select"
-                    :hint="`${select.state}, ${select.abbr}`"
-                    :items="items"
-                    item-text="state"
-                    item-value="abbr"
-
-                    persistent-hint
-                    return-object
-                    single-line
-                  ></v-select> -->
-
-
-                  
                   <v-select
                     name="document_category"
                     label="Categoría"
@@ -98,17 +77,44 @@
                     item-text="name"
                     item-value="id"
                     @keydown.enter="submit"
+                    v-on:change="updateCategoryID(document_categories_select)"
                   >
                   </v-select>
+                
+                  <vue-editor class="grey lighten-5 pa-3 text-left border10 a-default" v-model="form.body"></vue-editor>
+
+                  <v-combobox class="mt-8"
+                    name="document_tags" label="Etiquetas"
+                    hint="Agrega un máximo de 5 etiquetas"
+                    persistent-hint
+                    filled rounded
+                    color="white"
+                    prepend-inner-icon="mdi-label"
+                    v-model="form.tags"
+                    :items="document_tags_all"
+                    :search-input.sync="search"
+                    height="100"
+                    chips deletable-chips
+                    hide-selected
+                    multiple clearable
+                    @keydown.enter="submit"
+                  >
+                    <template v-slot:no-data class="mt-3">
+                      <v-list-item class="mt-3">
+                        <v-list-item-content class="mt-3">
+                          <v-list-item-title>
+                            No hay tags que coincidan: "<strong>{{ search }}</strong>". Presiona <kbd>enter</kbd> para crear un nuevo tag
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                  </v-combobox>
+
                 </v-form>
-
-                  <vue-editor class="grey lighten-5 pa-3 text-left border10 a-default" v-model="form.body">
-
-              </vue-editor>
 
 
                 <div class="text-right mt-7">
-                  <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>cancelar</v-btn>
+                  <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn>
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded>guardar</v-btn>
                 </div>
               </div>
@@ -119,8 +125,8 @@
                     <h2 class="text-h2 font-weight-bold">{{ document_data.title }}</h2>
                   </v-col>
 
-                  <v-col cols="8" class="px-10">
-                    <h3 @click=" $router.push({name: 'CategoriesDetail', params: { data: { id: document_data.category } }, })" class="text-h4 my-3 clickable mx-12">{{ document_data.category_name }}</h3>
+                  <v-col cols="auto" class="my-5">
+                    <h3 @click=" $router.push({name: 'CategoriesDetail', params: { data: { id: document_data.category } }, })" class="text-h4 py-1 px-10 clickable mx-12 glass-white-border">{{ document_data.category_name }}</h3>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -185,13 +191,40 @@ export default {
     // Summernote,
   },
   created() {
-    this.getDocument();
+
+    if (window.location.pathname.includes("new")) {
+      this.isNew = true;
+      this.loading = false; 
+      this.editMode = true;
+      this.getCategories();
+      this.getTags();
+    }
+    else {
+      this.isNew = false;
+      this.getDocument();
+    }
+
   },
 
   data: () => ({
-    document_data: {},
+    isNew: false,
+    document_data: {
+      document_id: "",
+      title: "",
+      author: "",
+      category: "",
+      category_name: "",
+      body: "",
+      created_date: "",
+      tags: []
+    },
     document_categories_select: { name: "", id: "" },
     document_categories: [], // list of categories created by user
+    
+    
+    document_tags_all: [], // list of categories created by user
+    search: null,
+    
 
     fab: false,
     dialog: false,
@@ -200,12 +233,12 @@ export default {
     loading: true,
 
     form: {
-      document_id: "", //uuid
       title: "",
       category: "",
       body: "",
       tags: [],
     },
+
     rules: {
       required: (value) => !!value || "requerido",
       max30: (value) => (value && value.length <= 30) || "máximo 30 caracteres",
@@ -214,36 +247,70 @@ export default {
     },
   }),
 
+  watch: {
+    "form.tags": {
+      handler(val) { if (val.length > 5) { this.$nextTick(() => {  this.form.tags.pop(); } )} }, 
+    }
+  },
+
   methods: {
     submit() {
-      if (this.$refs.form.validate()) { this.loading = true; this.updateDocument(this.form.document_id); }
-      else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario","black", "ok");}
+      if (this.$refs.form.validate()) { 
+        this.loading = true; 
+        this.isNew ? this.createDoc() : this.updateDoc(this.document_data.document_id);
+      }
+      else { this.showSnackbar(["Revisa el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
     },
 
     switchEditMode() {
       this.fab = false;
       this.editMode = !this.editMode;
       this.form.title = this.document_data.title;
-      this.form.document_id = this.document_data.document_id;
+      this.form.category = this.document_data.category;
+      // this.form.document_id = this.document_data.document_id;
       this.form.body = this.document_data.body;
       this.form.tags = this.document_data.tags;
       // this.form.description = this.category_info.description;
     },
 
-    async updateDocument(uuid) {
+    updateCategoryID(id) { this.form.category = id; },
+
+    async createDoc() {
       try {
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
-        const response = await client.categories.updateDocument(myHeaders, uuid, this.form)
+        this.form["document_id"] = ""; // generado automáticamente en el modelo en el backend
+        this.form["author"] = this.$store.getters["auth/getUserID"];
+        console.log(this.form)
+        console.log("equis")
+        const response = await client.documents.createDocument(myHeaders, this.form)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
-        if (response.status == 200) {
-          
-          this.showSnackbar(["Documento guardado"], "green", true, true, "mdi-check-bold", "black", "ok");
-          
+        if (response.status == 201) {
+          this.switchEditMode();
+          this.document_data = JSON.parse(response.body);
+          this.showSnackbar(["Documento creado"], "green", true, true, "mdi-check-bold", "black", "ok");
         }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
+    },
+
+    async updateDoc(uuid) {
+      try {
+        // "stringifying" the tags
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.documents.updateDocument(myHeaders, uuid, this.form)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 200) {
+          this.document_data = JSON.parse(response.body);
+          this.showSnackbar(["Documento guardado"], "green", true, true, "mdi-check-bold", "black", "ok");
+        }
+      } 
+      catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
     },
 
     async getDocument() {
@@ -256,12 +323,21 @@ export default {
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) {
           this.document_data = JSON.parse(response.body);
+
+          // this.form.document_id = this.document_data.document_id;
+          this.form.title = this.document_data.title;
+          // this.form.category = this.document_data.category;
+          // this.form.body = this.document_data.body;
+          // this.form.tags = this.document_data.tags;
+
+          
+          
           this.document_categories_select.name = this.document_data.category_name;
           this.document_categories_select.id = this.document_data.category;
         }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al obtener el documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
-      finally { this.loading = false; this.getCategories(); }
+      finally { this.loading = false; this.getCategories(); this.getTags() }
     },
 
     async getCategories() {
@@ -277,13 +353,26 @@ export default {
             const obj = { name: data[category].name, id: data[category].id }
             this.document_categories.push(obj)
           }
-
         }
+      } 
+      catch (err) { this.showSnackbar(["Ocurrió un error al obtener información del documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
+      finally { this.loading = false; }
+    },
+
+    async getTags() {
+        try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.tags.getAllTags(myHeaders)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 200) { var data = JSON.parse(response.body); data.forEach(element => { this.document_tags_all.push(element["name"]) }); }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al obtener información documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
       finally { this.loading = false; }
 
     },
+
 
     showSnackbar(items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
       const snackOptions = {
