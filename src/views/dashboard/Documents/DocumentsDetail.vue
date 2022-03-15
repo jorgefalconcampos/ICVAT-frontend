@@ -191,10 +191,23 @@ export default {
     // Summernote,
   },
   created() {
-    this.getDocument();
+
+    if (window.location.pathname.includes("new")) {
+      this.isNew = true;
+      this.loading = false; 
+      this.editMode = true;
+      this.getCategories();
+      this.getTags();
+    }
+    else {
+      this.isNew = false;
+      this.getDocument();
+    }
+
   },
 
   data: () => ({
+    isNew: false,
     document_data: {
       document_id: "",
       title: "",
@@ -242,8 +255,11 @@ export default {
 
   methods: {
     submit() {
-      if (this.$refs.form.validate()) { this.loading = true; this.updateDoc(this.document_data.document_id); }
-      else { this.showSnackbar("red", true, true, "mdi-alert-circle", "Completa el formulario","black", "ok");}
+      if (this.$refs.form.validate()) { 
+        this.loading = true; 
+        this.isNew ? this.createDoc() : this.updateDoc(this.document_data.document_id);
+      }
+      else { this.showSnackbar(["Revisa el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
     },
 
     switchEditMode() {
@@ -258,6 +274,27 @@ export default {
     },
 
     updateCategoryID(id) { this.form.category = id; },
+
+    async createDoc() {
+      try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        this.form["document_id"] = ""; // generado automáticamente en el modelo en el backend
+        this.form["author"] = this.$store.getters["auth/getUserID"];
+        console.log(this.form)
+        console.log("equis")
+        const response = await client.documents.createDocument(myHeaders, this.form)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 201) {
+          this.switchEditMode();
+          this.document_data = JSON.parse(response.body);
+          this.showSnackbar(["Documento creado"], "green", true, true, "mdi-check-bold", "black", "ok");
+        }
+      } 
+      catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
+    },
 
     async updateDoc(uuid) {
       try {
