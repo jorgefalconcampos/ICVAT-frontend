@@ -5,7 +5,7 @@
       <v-col cols="12">
         <v-card v-if="document_data" class="py-6" elevation="7">
           
-          <v-speed-dial v-if="!editMode" v-model="fab" top right absolute direction="bottom" transition="scale-transition">
+          <v-speed-dial v-if="!editMode && !notFound" v-model="fab" top right absolute direction="bottom" transition="scale-transition">
             <template v-slot:activator>
               <v-btn v-model="fab" @click="dialog = false" color="grey darken-4" dark fab>
                 <v-icon v-if="fab">mdi-close</v-icon>
@@ -29,14 +29,22 @@
                   <v-card-actions class="py-3">
                     <v-spacer></v-spacer>
                     <v-btn @click="dialog = false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
-                    <v-btn color="px-3 red lighten-1 white--text" dense rounded>Sí, eliminar</v-btn>
+                    <v-btn @click="deleteDocument(document_data.document_id)" color="px-3 red lighten-1 white--text" dense rounded>Sí, eliminar</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </div>
           </v-speed-dial>
 
-          <div class="bgblue border15 mx-5 py-5">
+          <div v-if="notFound" class="bgblue border15 mx-5 py-5">
+             <v-row justify="center">
+               <v-col cols="8" class="mx-2 py-10">
+                 <h1>No fue encontrado este documento</h1>
+              </v-col>
+            </v-row>
+          </div>
+
+          <div v-else class="bgblue border15 mx-5 py-5">
             <v-row v-if="!editMode" no-gutters justify="center" class="text-center pb-3">
               <v-col cols="3" class="mx-2">
                 <h1 class="glass border10 text-overline">Creado: {{ document_data.created_date }}</h1>
@@ -73,6 +81,7 @@
                     color="white"
                     prepend-inner-icon="mdi-shape"
                     v-model="document_categories_select"
+                    :rules="rules.select"
                     :items="document_categories"
                     item-text="name"
                     item-value="id"
@@ -91,6 +100,7 @@
                     color="white"
                     prepend-inner-icon="mdi-label"
                     v-model="form.tags"
+                    :rules="rules.tags"
                     :items="document_tags_all"
                     :search-input.sync="search"
                     height="100"
@@ -114,6 +124,7 @@
 
 
                 <div class="text-right mt-7">
+                  <!-- <v-btn @click="$router.go('-1')" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn> -->
                   <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn>
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded>guardar</v-btn>
                 </div>
@@ -208,6 +219,7 @@ export default {
 
   data: () => ({
     isNew: false,
+    notFound: false,
     document_data: {
       document_id: "",
       title: "",
@@ -242,8 +254,9 @@ export default {
     rules: {
       required: (value) => !!value || "requerido",
       max30: (value) => (value && value.length <= 30) || "máximo 30 caracteres",
-      max150: (value) =>
-        (value && value.length <= 150) || "máximo 150 caracteres",
+      max150: (value) => (value && value.length <= 150) || "máximo 150 caracteres",
+      // select: [(value) => (value.length>0) || 'selecciona una categoría'],
+      // tags: [(value) => (value.length>0 && value.length<6) || 'elige de 1 a 5 etiquetas, o escríbela para crear una nueva'],
     },
   }),
 
@@ -263,14 +276,17 @@ export default {
     },
 
     switchEditMode() {
-      this.fab = false;
-      this.editMode = !this.editMode;
-      this.form.title = this.document_data.title;
-      this.form.category = this.document_data.category;
-      // this.form.document_id = this.document_data.document_id;
-      this.form.body = this.document_data.body;
-      this.form.tags = this.document_data.tags;
-      // this.form.description = this.category_info.description;
+      if (window.location.pathname.includes("new")) {
+         this.$router.go('-1')
+      }
+      else {
+        this.fab = false;
+        this.editMode = !this.editMode;
+        this.form.title = this.document_data.title;
+        this.form.category = this.document_data.category;
+        this.form.body = this.document_data.body;
+        this.form.tags = this.document_data.tags;
+        }
     },
 
     updateCategoryID(id) { this.form.category = id; },
@@ -298,7 +314,6 @@ export default {
 
     async updateDoc(uuid) {
       try {
-        // "stringifying" the tags
         const client = new apiClient(apiClient.urlBase);
         const token = this.$store.getters["auth/getToken"];
         const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
@@ -309,7 +324,23 @@ export default {
           this.showSnackbar(["Documento guardado"], "green", true, true, "mdi-check-bold", "black", "ok");
         }
       } 
-      catch (err) { this.showSnackbar(["Ocurrió un error al actualizar la categoría"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      catch (err) { this.showSnackbar(["Ocurrió un error al actualizar el documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
+      finally { this.loading = false; }
+    },
+
+    async deleteDocument(uuid) {
+      try {
+        const client = new apiClient(apiClient.urlBase);
+        const token = this.$store.getters["auth/getToken"];
+        const myHeaders = new Headers({ Authorization: `Bearer ${token}` });
+        const response = await client.documents.deleteDocument(myHeaders, uuid)
+        .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
+        if (response.status == 204) {
+          this.$router.go('-1')
+          this.showSnackbar(["Documento eliminado"], "green", true, true, "mdi-check-bold", "black", "ok");
+        }
+      } 
+      catch (err) { this.showSnackbar(["Ocurrió un error al eliminar el documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); }
       finally { this.loading = false; }
     },
 
@@ -322,6 +353,7 @@ export default {
         const response = await client.documents.getSingleDocument(myHeaders, uuid)
         .then((r) => r.text().then((data) => ({ status: r.status, body: data })));
         if (response.status == 200) {
+          this.notFound = false;
           this.document_data = JSON.parse(response.body);
 
           // this.form.document_id = this.document_data.document_id;
@@ -329,12 +361,11 @@ export default {
           // this.form.category = this.document_data.category;
           // this.form.body = this.document_data.body;
           // this.form.tags = this.document_data.tags;
-
-          
           
           this.document_categories_select.name = this.document_data.category_name;
           this.document_categories_select.id = this.document_data.category;
         }
+        else if (response.status == 404) { this.notFound = true; }
       } 
       catch (err) { this.showSnackbar(["Ocurrió un error al obtener el documento"], "red", true, true, "mdi-alert-circle", "black", "ok"); console.error(err); } 
       finally { this.loading = false; this.getCategories(); this.getTags() }
