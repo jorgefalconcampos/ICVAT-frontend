@@ -1,11 +1,11 @@
 <template>
-    <v-container fluid fill-height>
-        <v-row justify="center" align="center" class="text-center mx-12 py-8 bgblue border15">
-            <v-col cols="10">   
-                <div class="border10 glass-white-border pt-3 pb-3 px-8">
+    <v-container fluid fill-height class="bgblue">
+        <v-row justify="center" align="center" class="text-center pa-0 pa-sm-0 pa-md-8 pa-lg-8 py-8 border15">
+            <v-col cols="12" sm="12" md="10" lg="10" xl="10">   
+                <div class="border10 glass-white-border pt-3 pb-3 px-1 px-sm-8 px-md-8 px-lg-8 px-xl-8">
                     <p class="big-title">Crea tu cuenta</p>
-                    <v-row>
-                        <v-col cols="8" class="px-6">
+                    <v-row justify="center">
+                        <v-col cols="12" sm="10" md="8" lg="8" xl="8" class="px-6">
                             <v-form v-model="isValid" ref="form" @submit.prevent="submit">
                                 <v-stepper v-model="stepper" vertical class="glass pb-5">
                                     <v-progress-linear
@@ -21,7 +21,7 @@
                                     </v-stepper-step>
                                     <v-stepper-content step="1">
                                         <v-row no-gutters class="mt-2">
-                                            <v-col cols="6" class="pr-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pr-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_name"
@@ -33,7 +33,7 @@
                                                     @keydown.enter="submit">
                                                 </v-text-field>
                                             </v-col>
-                                            <v-col cols="6" class="pl-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pl-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_last_name"
@@ -81,7 +81,7 @@
                                                     @keydown.enter="submit">
                                                 </v-text-field>
                                             </v-col>
-                                            <v-col cols="6" class="pr-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pr-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_password"
@@ -96,7 +96,7 @@
                                                     @keydown.enter="submit">
                                                 </v-text-field>
                                             </v-col>
-                                            <v-col cols="6" class="pl-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pl-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_re_password"
@@ -120,13 +120,14 @@
                                 </v-stepper>
                             </v-form>
                         </v-col>
-                        <v-col cols="4" align-self="center" align="center">
+                        <v-col cols="12" sm="6" md="4" lg="4" xl="4" align-self="center" align="center" class="hidden-sm-and-down">
                             <v-img src="@/assets/img/register.png" max-width="310px"/>
                         </v-col>
+                        
                     </v-row>
 
-                    <v-row>
-                        <v-col cols="8" class="px-16">
+                    <v-row justify="center" justify-lg="start" justify-xl="start"> 
+                        <v-col cols="8" class="px-2 px-sm-16 px-md-16 px-lg-16 px-xl-16">
                             <v-btn @click="submit" color="accent" elevation="3" class="mb-3" x-large dense block rounded :disabled="!isValid">registrarme</v-btn> 
                              <p class="small-txt">¿Ya tienes una cuenta?                                 
                                  <router-link to="/login/"> Inicia sesión</router-link>   
