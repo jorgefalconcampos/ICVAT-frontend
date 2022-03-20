@@ -1,8 +1,8 @@
 <template>
     <v-container fluid fill-height class="bgblue">
-        <v-row justify="center" align="center" class="text-center pa-0 pa-sm-0 pa-md-8 pa-lg-8 py-8 border15">
+        <v-row justify="center" align="center" class="text-center pa-2 pa-sm-5 pa-md-8 pa-lg-8 py-8 border15">
             <v-col cols="12" sm="12" md="10" lg="10" xl="10">   
-                <div class="border10 glass-white-border pt-3 pb-3 px-1 px-sm-8 px-md-8 px-lg-8 px-xl-8">
+                <div class="border10 glass-white-border pt-3 pb-3 px-3 px-sm-5 px-md-8 px-lg-8 px-xl-8">
                     <p class="big-title">Crea tu cuenta</p>
                     <v-row justify="center">
                         <v-col cols="12" sm="10" md="8" lg="8" xl="8" class="px-6">
@@ -81,7 +81,7 @@
                                                     @keydown.enter="submit">
                                                 </v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pr-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pr-sm-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_password"
@@ -96,7 +96,7 @@
                                                     @keydown.enter="submit">
                                                 </v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pl-2">
+                                            <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pl-sm-2">
                                                 <v-text-field
                                                     dense
                                                     name="input_re_password"
