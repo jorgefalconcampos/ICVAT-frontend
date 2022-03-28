@@ -145,11 +145,10 @@
 
 <script>
 
+import apiClient from "../../middleware/requests/api-client";
 import axios from 'axios';
 
 export default {
-
-
 
     mounted() {
         // this.baseURL = `${process.env.BASE_URL}/reset-password`;
@@ -163,7 +162,7 @@ export default {
 
     data() {
         return {
-            stepper: 3,
+            stepper: 1,
 
 
             passReseted: false,
@@ -203,15 +202,8 @@ export default {
     methods: {
 
         getAndShowStep(){
-            const searchParams = window.location.search;
-            if (searchParams) {
-                const urlParams = new URLSearchParams(searchParams);
-                if (urlParams.has("t")) {
-                    const token = urlParams.get("t");
-                    this.step3.token = token
-                    this.stepper = 3;
-                }
-            }
+            const token = this.$route.params.token;
+             if ((this.$route.params.uid) && (token)) { this.step3.token = token; this.stepper = 3; }            
         },
        
         validate (step) {
@@ -219,7 +211,8 @@ export default {
         },
 
         startTimeout() {
-            let time = 5*60; // 5 minutes
+            // let time = 5*60; // 5 minutes
+            let time = 0.15*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
@@ -254,21 +247,25 @@ export default {
 
         async s2_submit(is_resend) {
             this.step1.loading = true;
-            const data = new FormData();
-            let email = this.r_email;
-            data.append("email", email);
             try {
-                const response = await axios.post("user/password-reset/", data, {});
-                if ((response.status === 200) && (response.data.status==="OK")) {
-                    this.startTimeout()
-                    this.step2.btnResendDisabled = true;
-                    is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
+                const client = new apiClient(apiClient.urlBase);
+                const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+                const response = await client.users.resetPassword(myHeaders, {email: this.r_email})
+                .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
+                if (response.status == 204){
+                    this.showSnackbar(["¡Email enviado con éxito! Revisa tu correo"], "green", true, true, "mdi-check", "black", "ok");  
+                    this.startTimeout(); this.step2.btnResendDisabled = true;
+                    is_resend ? this.showSnackbar([`Email reenviado a ${this.r_email}`], "green", true, true, "mdi-check", "black", "ok") : '';
                     this.stepper = 2;
                 }
+                else {
+                    const items_snackbar = [];
+                    Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
+                    this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
+                }
             }
-            catch { this.showSnackbar("red", true, true, "mdi-alert", `No se pudo enviar el email a ${email}`, "black", "ok" ); }
+            catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }       
             finally { this.step1.loading = false; }
-
         },
 
         async s3_submit() {
@@ -296,13 +293,15 @@ export default {
 
         
 
-        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
+        showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
+                items: items_snackbar,
+                
                 color: color,
                 right: isRight,
                 show_icon: showIcon,
                 icon: icon,
-                message: msg,
+                // message: msg,
                 closeSnackBtnColor: closeBtnColor,
                 closeSnackBtnTxt: closeBtnTxt, 
             }

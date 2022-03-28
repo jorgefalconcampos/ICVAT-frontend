@@ -95,7 +95,23 @@ class ApiClient extends HttpClient {
           redirect: "follow",
         };
         return this.get("/auth/users/me/", requestOptions);
-      }
+      },
+
+      // HTTP POST
+      resetPassword: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post("/auth/users/reset_password/", requestOptions);
+      },
 
     };
   }
