@@ -124,7 +124,6 @@
 
 
                 <div class="text-right mt-7">
-                  <!-- <v-btn @click="$router.go('-1')" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn> -->
                   <v-btn @click="switchEditMode()" color="grey lighten-2" class="mx-1" dense rounded>salir</v-btn>
                   <v-btn @click="submit" color="green" class="mx-1 white--text" dense rounded>guardar</v-btn>
                 </div>
@@ -146,41 +145,6 @@
 
               </div>
 
-              <!-- <v-speed-dial
-                v-if="!editMode"
-                v-model="fab" top
-                right absolute direction="top"
-                transition="scale-transition"
-              >
-                <template v-slot:activator>
-                  <v-btn v-model="fab" @click="dialog=false" color="grey darken-4" dark fab>
-                    <v-icon v-if="fab">mdi-close</v-icon>
-                    <v-icon v-else>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-btn @click="switchEditMode()" fab dark small color="green"><v-icon>mdi-pencil</v-icon></v-btn>
-                <div class="text-center">
-                  <v-dialog v-model="dialog" width="500">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" fab dark small color="red"><v-icon>mdi-delete</v-icon></v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-title class="text-h5 red lighten-1">¿Borrar el documento&nbsp;<span class="font-weight-bold">ssddsds</span>?</v-card-title>
-                      <v-card-text class="mt-4">Al continuar, se eliminará este documento de tus documentos guardados. Ten en cuenta que esta acción no se puede deshacer.</v-card-text>
-                      <v-divider></v-divider>
-                      <v-card-actions class="py-3">
-                        <v-spacer></v-spacer>
-                        <v-btn @click="dialog=false" color="px-3 grey lighten-2" dense rounded>Cancelar</v-btn>
-                        <v-btn color="px-3 red lighten-1 white--text" dense rounded>Sí, eliminar</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </div>
-              </v-speed-dial> -->
-
-              <!-- here -->
-
-
             
 
             </div>
@@ -194,12 +158,10 @@
 <script>
 import apiClient from "@/middleware/requests/api-client";
 import { VueEditor } from "vue2-editor"
-// import Summernote from "@/components/summernote/Summernote"
 
 export default {
   components: {
     VueEditor
-    // Summernote,
   },
   created() {
 

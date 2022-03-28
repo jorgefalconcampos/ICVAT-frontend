@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid fill-height class="px-16">
-        <v-row justify="space-around" class="text-center pa-9 bgblue border15">
+    <v-container fluid fill-height class="bgblue">
+        <v-row justify="space-around" class="text-center pa-2 pa-sm-5 pa-md-8 pa-lg-9 border15">
             <v-col cols="12">
                 <v-stepper v-model="stepper" class="glass-white-border">
                     <v-stepper-header class="glass border10-top">
@@ -23,11 +23,11 @@
                             </v-progress-linear>
 
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-11" >
                                     <p class="big-title pb-2">Recupera tu contraseña</p>
                                     <p class="pb-6">Si perdiste u olvidaste tu contraseña, escribe el email con el que te registraste y sigue las instrucciones</p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <v-form ref="s1_form" v-model="step1.valid" lazy-validation @submit.prevent="s1_submit">
                                             <v-text-field
                                                 name="input_email"
@@ -63,8 +63,8 @@
                         <v-stepper-content step="2">
                             <!-- Step 2 -->
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11">
-                                    <p class="big-title pb-2">Email enviado <span>👌</span></p>
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-10">
+                                    <p class="big-title pb-2">Email enviado <span>🚀</span></p>
                                     <p>Enviamos un email a <span class="font-weight-bold">{{r_email}}</span> con las instrucciones para restablecer tu contraseña
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on, attrs }">
@@ -74,7 +74,7 @@
                                         </v-tooltip>
                                     </p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <p class="pt-7 small-txt">Si no lo recibes en 5 minutos, puedes enviarlo de nuevo</p>
                                         <h2 id="countdown" class="display-3 py-3">5:00</h2>
                                         <v-btn @click="s2_submit(true)" color="accent" elevation="3" class="my-8" :disabled="step2.btnResendDisabled"  x-large dense block rounded>enviar de nuevo</v-btn>
@@ -91,11 +91,11 @@
                         <v-stepper-content step="3">
                             <!-- Step 3 -->
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-11">
                                     <p class="big-title pb-2">Escribe tu nueva contraseña</p>
                                     <p class="pb-6">¡Esta vez recuérdala bien!</p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <v-form ref="s3_form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
 
                                             <v-text-field 
@@ -163,7 +163,7 @@ export default {
 
     data() {
         return {
-            stepper: 1,
+            stepper: 3,
 
 
             passReseted: false,
