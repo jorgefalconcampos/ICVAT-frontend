@@ -1,10 +1,10 @@
 sd<template>
   <v-container fluid fill-height>
-    <v-row justify="center" class="text-center">
+    <v-row justify="center" class="text-center pb-6">
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
-      <v-col cols="2">
+      <v-col cols="4" lg="2">
         <v-card elevation="7">
-          <v-list flat>
+          <v-list dense>
             <v-subheader class="text-uppercase">categorias</v-subheader>
             <v-list-item-group v-model="selectedItem" color="primary">
               <v-list-item color="pink" v-for="(item, i) in letters" :key="i" @click="select(item)">
@@ -68,7 +68,7 @@ sd<template>
         </div>
       </v-col>
 
-      <v-col cols="10">
+      <v-col cols="12" lg="10">
         <v-card class="py-6" elevation="7">
            <div class="bgblue border15 mx-5 py-5">
             <h1 v-if="categories.length===0" class="glass border15 mx-10 pa-3 text-h3 text-h4 my-2">Al parecer aún no hay categorías... 🤔 </h1>
@@ -76,7 +76,7 @@ sd<template>
           </div>
           <v-container>
             <v-row justify="center" align="center" class="mx-1 pt-5">
-              <v-col cols="4" v-for="(category, i) in categories_listing" :key="i">
+              <v-col cols="6" sm="4" v-for="(category, i) in categories_listing" :key="i">
                 <v-card elevation="4" class="text-left pa-1 overflow-hidden">
                   <v-container>
                     <v-row>

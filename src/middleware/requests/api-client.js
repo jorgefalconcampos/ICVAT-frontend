@@ -95,7 +95,41 @@ class ApiClient extends HttpClient {
           redirect: "follow",
         };
         return this.get("/auth/users/me/", requestOptions);
-      }
+      },
+
+      // HTTP POST
+      resetPassword: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post("/auth/users/reset_password/", requestOptions);
+      },
+
+      resetPasswordConfirm: (headers, body) => {
+        var urlencoded = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          urlencoded.append(key, value);
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: urlencoded,
+          redirect: "follow",
+        };
+        return this.post("/auth/users/reset_password_confirm/", requestOptions);
+      },
+
+
+
 
     };
   }
@@ -162,7 +196,7 @@ class ApiClient extends HttpClient {
           headers: headers,
           redirect: "follow",
         };
-        return this.get(`/categories/${id}/`, requestOptions);
+        return this.delete(`/categories/${id}/`, requestOptions);
       },
 
     }
@@ -216,6 +250,15 @@ class ApiClient extends HttpClient {
           redirect: "follow",
         };
         return this.patch(`/documents/${uuid}/`, requestOptions);
+      },
+
+      deleteDocument: (headers, uuid) => {
+        var requestOptions = {
+          method: "DELETE",
+          headers: headers,
+          redirect: "follow",
+        };
+        return this.delete(`/documents/${uuid}/`, requestOptions);
       },
 
     }

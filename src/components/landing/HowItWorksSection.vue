@@ -4,7 +4,7 @@
             <v-row align="center" justify="center">
                 <v-col cols="10">
                     <v-row justify="center">
-                        <v-col cols="12" class="">
+                        <v-col cols="12">
                             <h1 class="font-weight-bold display-2 mb-5">Cómo funciona</h1>
                             <h1 class="font-weight-light display-1">Descubre la lógica detrás de VAT</h1>   
                             <div class="py-10 mx-1">

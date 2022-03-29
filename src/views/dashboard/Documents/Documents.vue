@@ -1,18 +1,18 @@
 <template>
   <v-container fluid fill-height>
-    <v-row justify="center" class="text-center pt-6">
+    <v-row justify="center" class="text-center py-6">
       <v-progress-linear v-if="loading" indeterminate absolute top color="accent"></v-progress-linear>
      
-      <v-col cols="10">
+      <v-col cols="12" md="10">
         <v-card class="py-6" elevation="7">
           <div class="bgblue border15 mx-5 py-5">
             <h1 v-if="documents_listing.length===0" class="glass border15 mx-10 pa-3 text-h3 text-h4 my-2">Al parecer aún no hay documentos... 🤔 </h1>
-            <h1 v-else class="glass border15 mx-10 pa-3 text-h3 text-h4 my-2">Todos mis documentos</h1>
+            <h1 v-else class="glass border15 mx-5 mx-sm-10 pa-3 text-h3 text-h4 my-2">Todos mis documentos</h1>
             <v-btn @click="handleClick()" color="accent" elevation="3" class="mt-3" large dense rounded>nuevo</v-btn>
           </div>
           <v-container>
             <v-row justify="center" align="center" class="mx-1 pt-5">
-              <v-col cols="4" v-for="(document, i) in documents_listing" :key="i">
+              <v-col cols="6" md="4" v-for="(document, i) in documents_listing" :key="i">
 
               <!-- <router-link :to="`/documents/${document.document_id}`"> -->
                    
@@ -23,7 +23,7 @@
                     <v-row>
                       <v-col cols="11">
                         <h3 class="text-overline">Creado: {{document.created_date}}</h3>
-                        <div class="mt-3">
+                        <div v-if="document.tags.length" class="mt-3">
                           <v-icon left>mdi-label</v-icon>
                           <v-chip small v-for="(tag, i) in document.tags" :key="`tag_${i}`" text-color="light-blue darken-3" class="mr-1 my-1">{{tag}}</v-chip>
                         </div>

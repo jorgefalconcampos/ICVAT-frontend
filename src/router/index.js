@@ -29,7 +29,7 @@ const routes = [
         meta: { guest: true }    
     },
     {
-        path: '/reset-password',
+        path: '/reset-password/:uid?/:token?',
         name: 'ResetPass',
         component: ResetPass,
         meta: { guest: true }    

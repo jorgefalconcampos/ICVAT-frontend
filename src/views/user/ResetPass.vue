@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid fill-height class="px-16">
-        <v-row justify="space-around" class="text-center pa-9 bgblue border15">
+    <v-container fluid fill-height class="bgblue">
+        <v-row justify="space-around" class="text-center pa-2 pa-sm-5 pa-md-8 pa-lg-9 border15">
             <v-col cols="12">
                 <v-stepper v-model="stepper" class="glass-white-border">
                     <v-stepper-header class="glass border10-top">
@@ -23,11 +23,11 @@
                             </v-progress-linear>
 
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-11" >
                                     <p class="big-title pb-2">Recupera tu contraseña</p>
                                     <p class="pb-6">Si perdiste u olvidaste tu contraseña, escribe el email con el que te registraste y sigue las instrucciones</p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <v-form ref="s1_form" v-model="step1.valid" lazy-validation @submit.prevent="s1_submit">
                                             <v-text-field
                                                 name="input_email"
@@ -63,8 +63,8 @@
                         <v-stepper-content step="2">
                             <!-- Step 2 -->
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11">
-                                    <p class="big-title pb-2">Email enviado <span>👌</span></p>
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-10">
+                                    <p class="big-title pb-2">Email enviado <span>🚀</span></p>
                                     <p>Enviamos un email a <span class="font-weight-bold">{{r_email}}</span> con las instrucciones para restablecer tu contraseña
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on, attrs }">
@@ -74,7 +74,7 @@
                                         </v-tooltip>
                                     </p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <p class="pt-7 small-txt">Si no lo recibes en 5 minutos, puedes enviarlo de nuevo</p>
                                         <h2 id="countdown" class="display-3 py-3">5:00</h2>
                                         <v-btn @click="s2_submit(true)" color="accent" elevation="3" class="my-8" :disabled="step2.btnResendDisabled"  x-large dense block rounded>enviar de nuevo</v-btn>
@@ -91,11 +91,11 @@
                         <v-stepper-content step="3">
                             <!-- Step 3 -->
                             <v-row no-gutters class="d-flex justify-center">
-                                <v-col align-self="center" cols="8" class="pt-6 px-11" >
+                                <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-11">
                                     <p class="big-title pb-2">Escribe tu nueva contraseña</p>
                                     <p class="pb-6">¡Esta vez recuérdala bien!</p>
 
-                                    <div class="px-16 mx-10">
+                                    <div class="px-md-8 mx-sm-5 px-md-16 mx-md-10">
                                         <v-form ref="s3_form" v-model="step3.valid" lazy-validation @submit.prevent="s3_submit">
 
                                             <v-text-field 
@@ -145,11 +145,10 @@
 
 <script>
 
-import axios from 'axios';
+import apiClient from "../../middleware/requests/api-client";
+// import axios from 'axios';
 
 export default {
-
-
 
     mounted() {
         // this.baseURL = `${process.env.BASE_URL}/reset-password`;
@@ -185,7 +184,8 @@ export default {
                 password2: "",
                 show_pass_1: false,
                 show_pass_2: false,
-                token: null
+                uid: null,
+                token: null,
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -203,15 +203,9 @@ export default {
     methods: {
 
         getAndShowStep(){
-            const searchParams = window.location.search;
-            if (searchParams) {
-                const urlParams = new URLSearchParams(searchParams);
-                if (urlParams.has("t")) {
-                    const token = urlParams.get("t");
-                    this.step3.token = token
-                    this.stepper = 3;
-                }
-            }
+            const uid = this.$route.params.uid;
+            const token = this.$route.params.token;
+             if ((uid) && (token)) { this.step3.token = token; this.step3.uid = uid; this.stepper = 3; }            
         },
        
         validate (step) {
@@ -219,7 +213,8 @@ export default {
         },
 
         startTimeout() {
-            let time = 5*60; // 5 minutes
+            // let time = 5*60; // 5 minutes
+            let time = 0.15*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
@@ -246,63 +241,73 @@ export default {
                     // localStorage.setItem('resetPwdEmail', this.step1.email);
                     this.s2_submit(false); // call s2_submit here
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo enviar el email", "black", "ok" ); }
+                catch { this.showSnackbar(["No se pudo enviar el email"], "red", true, true, "mdi-alert", "black", "ok"); }
             }
-            else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
+            else { this.showSnackbar(["Corrige el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
         },
 
         async s2_submit(is_resend) {
             this.step1.loading = true;
-            const data = new FormData();
-            let email = this.r_email;
-            data.append("email", email);
             try {
-                const response = await axios.post("user/password-reset/", data, {});
-                if ((response.status === 200) && (response.data.status==="OK")) {
-                    this.startTimeout()
-                    this.step2.btnResendDisabled = true;
-                    is_resend ? this.showSnackbar("green", true, true, "mdi-check", `Email reenviado a ${email}`, "black", "ok" ) : ''
+                const client = new apiClient(apiClient.urlBase);
+                const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+                const response = await client.users.resetPassword(myHeaders, {email: this.r_email})
+                .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
+                if (response.status == 204){
+                    this.showSnackbar(["¡Email enviado con éxito! Revisa tu correo"], "green", true, true, "mdi-check", "black", "ok");  
+                    this.startTimeout(); this.step2.btnResendDisabled = true;
+                    is_resend ? this.showSnackbar([`Email reenviado a ${this.r_email}`], "green", true, true, "mdi-check", "black", "ok") : '';
                     this.stepper = 2;
                 }
+                else {
+                    const items_snackbar = [];
+                    Object.entries(JSON.parse(response.body)).forEach(([key, value]) => {items_snackbar.push(`${key}: ${value}`)});
+                    this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
+                }
             }
-            catch { this.showSnackbar("red", true, true, "mdi-alert", `No se pudo enviar el email a ${email}`, "black", "ok" ); }
+            catch(err){ console.error(err); this.showSnackbar(["Ocurrió un error desconocido"], "red", true, true, "mdi-alert-circle", "black", "ok");  }       
             finally { this.step1.loading = false; }
-
         },
 
         async s3_submit() {
             if(this.$refs.s3_form.validate("s3_form")) {
-                alert(this.step3.password1)
-                alert(this.step3.token)
                 if (this.step3.password1 === this.step3.password2) {
                     try {
-                        const pwdResetData = new FormData();
-                        pwdResetData.append("password", this.step3.password1);
-                        pwdResetData.append("token", this.step3.token);
-                        const response = await axios.post("user/password-reset/confirm/", pwdResetData, {});
-                        if ((response.status === 200) && (response.data.status==="OK")) {
-                            this.step3.password1 = null; this.step3.password2 = null; this.step3.token = null;
-                            this.showSnackbar("green", true, true, "mdi-check", "Contraseña actualizada... redireccionando al inicio de sesión", "black", "ok" ) 
+                        const client = new apiClient(apiClient.urlBase);
+                        const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+                        const form = { new_password: this.step3.password1, uid: this.step3.uid, token: this.step3.token, }
+                        const response = await client.users.resetPasswordConfirm(myHeaders, form)
+                        .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
+                        if (response.status == 204){
+                            this.showSnackbar(["¡Contraseña actualizada! Redireccionando al inicio de sesión..."], "green", true, true, "mdi-check", "black", "ok");  
+                            this.step3.password1 = ""; this.step3.password2 = ""; 
+                            this.step3.token = null; this.step3.uid = null;
                             setTimeout(() => { this.$router.push('/login') }, 3000);
                         }
+                        else {
+                            const items_snackbar = [];
+                            Object.values(JSON.parse(response.body)).forEach(([val]) =>  {items_snackbar.push(val) });
+                            this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
+                        }
                     }
-                    catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo restablecer la contraseña", "black", "ok" ); }
+                    catch { this.showSnackbar(["No se pudo restablecer la contraseña"], "red", true, true, "mdi-alert", "black", "ok"); }
                 }
-                else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Las contraseñas no coinciden", "black", "ok"); }
+                else{ this.showSnackbar(["Las contraseñas no coinciden"], "red", true, true, "mdi-alert", "black", "ok"); }
             }
-            else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
+            else{ this.showSnackbar(["Corrige el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
         },
 
         
 
-        showSnackbar (color, isRight, showIcon, icon, msg, closeBtnColor, closeBtnTxt) {
+        showSnackbar (items_snackbar, color, isRight, showIcon, icon, closeBtnColor, closeBtnTxt) {
             const snackOptions = {
+                items: items_snackbar,
+                
                 color: color,
                 right: isRight,
                 show_icon: showIcon,
                 icon: icon,
-                message: msg,
+                // message: msg,
                 closeSnackBtnColor: closeBtnColor,
                 closeSnackBtnTxt: closeBtnTxt, 
             }

@@ -1,13 +1,13 @@
 <template>
-    <v-container fluid fill-height>
-        <v-row justify="center" align="center" class="text-center ma-12 pa-8 bgblue border15">
-            <v-col cols="9">
+    <v-container fluid fill-height class="bgblue">
+        <v-row justify="center" align="center" class="text-center pa-2 pa-sm-5 pa-md-8 pa-lg-8 border15">
+            <v-col cols="12" sm="12" md="11" lg="9" xl="9">
                 <div class="border10 glass-white-border">
-                    <v-row no-gutters>
-                        <v-col align-self="center" cols="6">
-                            <v-img src="@/assets/img/login.png" max-width="440px"/>
+                    <v-row no-gutters justify="center">
+                        <v-col cols="7" sm="6" md="6" lg="6" xl="6" align-self="center" class="pa-3">
+                            <v-img src="@/assets/img/login.png" class="ml-4"/>
                         </v-col>
-                        <v-col cols="6" class="pa-12" >
+                        <v-col cols="12" sm="6" md="6" lg="6" xl="6" class="pa-7 pa-md-8 pa-lg-12 pa-xl-12" >
                             <p class="big-title pb-6">Inicia sesión</p>
                             <v-form ref="form" v-model="isValid" lazy-validation @submit.prevent="submit">
 

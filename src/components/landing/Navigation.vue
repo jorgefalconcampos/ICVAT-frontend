@@ -40,7 +40,7 @@
         <v-app-bar
             app :color="color"
             :flat="flat"
-            dark class="px-15 grey darken-4"
+            dark class="px-10 grey darken-4"
             :class="{ expand: flat }">
             
             <v-toolbar-title>
@@ -71,14 +71,6 @@
                     <span class="mr-2">Cómo funciona</span>
                 </v-btn>                 
                 
-                <router-link to="/documents/" class="red">
-                    <v-btn rounded outlined text>Documents</v-btn>
-                </router-link>   
-                
-                <router-link to="/register/" class="red">
-                    <v-btn rounded outlined text>Registrar</v-btn>
-                </router-link> 
-
                 <router-link to="/login/" class="mainNav">
                     <v-btn class="blue darken-1" rounded outlined text large>Iniciar</v-btn>
                 </router-link>   
