@@ -146,7 +146,7 @@
 <script>
 
 import apiClient from "../../middleware/requests/api-client";
-import axios from 'axios';
+// import axios from 'axios';
 
 export default {
 
@@ -184,7 +184,8 @@ export default {
                 password2: "",
                 show_pass_1: false,
                 show_pass_2: false,
-                token: null
+                uid: null,
+                token: null,
             },
             rules: {
                 required: value => !!value || 'requerido',
@@ -202,8 +203,9 @@ export default {
     methods: {
 
         getAndShowStep(){
+            const uid = this.$route.params.uid;
             const token = this.$route.params.token;
-             if ((this.$route.params.uid) && (token)) { this.step3.token = token; this.stepper = 3; }            
+             if ((uid) && (token)) { this.step3.token = token; this.step3.uid = uid; this.stepper = 3; }            
         },
        
         validate (step) {
@@ -239,10 +241,9 @@ export default {
                     // localStorage.setItem('resetPwdEmail', this.step1.email);
                     this.s2_submit(false); // call s2_submit here
                 }
-                catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo enviar el email", "black", "ok" ); }
+                catch { this.showSnackbar(["No se pudo enviar el email"], "red", true, true, "mdi-alert", "black", "ok"); }
             }
-            else 
-            { this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
+            else { this.showSnackbar(["Corrige el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
         },
 
         async s2_submit(is_resend) {
@@ -270,25 +271,30 @@ export default {
 
         async s3_submit() {
             if(this.$refs.s3_form.validate("s3_form")) {
-                alert(this.step3.password1)
-                alert(this.step3.token)
                 if (this.step3.password1 === this.step3.password2) {
                     try {
-                        const pwdResetData = new FormData();
-                        pwdResetData.append("password", this.step3.password1);
-                        pwdResetData.append("token", this.step3.token);
-                        const response = await axios.post("user/password-reset/confirm/", pwdResetData, {});
-                        if ((response.status === 200) && (response.data.status==="OK")) {
-                            this.step3.password1 = null; this.step3.password2 = null; this.step3.token = null;
-                            this.showSnackbar("green", true, true, "mdi-check", "Contraseña actualizada... redireccionando al inicio de sesión", "black", "ok" ) 
+                        const client = new apiClient(apiClient.urlBase);
+                        const myHeaders = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
+                        const form = { new_password: this.step3.password1, uid: this.step3.uid, token: this.step3.token, }
+                        const response = await client.users.resetPasswordConfirm(myHeaders, form)
+                        .then(r => r.text().then(data => ({status: r.status, ok: r.ok, body: data})))
+                        if (response.status == 204){
+                            this.showSnackbar(["¡Contraseña actualizada! Redireccionando al inicio de sesión..."], "green", true, true, "mdi-check", "black", "ok");  
+                            this.step3.password1 = ""; this.step3.password2 = ""; 
+                            this.step3.token = null; this.step3.uid = null;
                             setTimeout(() => { this.$router.push('/login') }, 3000);
                         }
+                        else {
+                            const items_snackbar = [];
+                            Object.values(JSON.parse(response.body)).forEach(([val]) =>  {items_snackbar.push(val) });
+                            this.showSnackbar(items_snackbar, "red", true, true, "mdi-alert-circle", "black", "ok"); 
+                        }
                     }
-                    catch { this.showSnackbar("red", true, true, "mdi-alert", "No se pudo restablecer la contraseña", "black", "ok" ); }
+                    catch { this.showSnackbar(["No se pudo restablecer la contraseña"], "red", true, true, "mdi-alert", "black", "ok"); }
                 }
-                else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Las contraseñas no coinciden", "black", "ok"); }
+                else{ this.showSnackbar(["Las contraseñas no coinciden"], "red", true, true, "mdi-alert", "black", "ok"); }
             }
-            else{ this.showSnackbar("red", true, true, "mdi-alert-circle", "Corrige el formulario", "black", "ok"); }
+            else{ this.showSnackbar(["Corrige el formulario"], "red", true, true, "mdi-alert-circle", "black", "ok"); }
         },
 
         

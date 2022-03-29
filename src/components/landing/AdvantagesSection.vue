@@ -20,13 +20,14 @@
                             <h2 class="font-weight-light display-1">Estudiando sin VAT vs estudiando con VAT</h2>
                             
                             <v-row justify="center mt-8">
-                                <v-col cols="6" >
+                                <v-col cols="12" md="6">
                                     <v-card
                                         class="mx text-center"
                                         color="red lighten-"
                                         dark
                                         max-width="1000">
                                         <v-card-text>
+                                        <p>Calificaciones semestrales</p>
                                         <v-sheet color="rgba(0, 0, 0, .12)">
                                             <p class="pt-2 overline">{{this.without.values}}</p>
                                             <v-sparkline
@@ -44,17 +45,21 @@
                                         </v-sheet>
                                         </v-card-text>
 
-                                        <v-card-text><div class="text-h4 font-weight-thin">Estudiando sin VAT</div></v-card-text>
+                                        <v-card-text>
+                                            <div class="text-h4 font-weight-thin">Estudiando sin VAT</div>
+                                            <div class="text-h6 font-weight-bold">Promedio general: {{avg_without}} </div>
+                                        </v-card-text>
                                         <v-divider></v-divider>
                                     </v-card>
                                 </v-col>
-                                <v-col cols="6" >
+                                <v-col cols="12" md="6">
                                     <v-card
                                         class="mx-auto text-center"
                                         color="green"
                                         dark
                                         max-width="1000">
                                         <v-card-text>
+                                        <p>Calificaciones semestrales</p>
                                         <v-sheet color="rgba(0, 0, 0, .12)">
                                             <p class="pt-2 overline">{{this.with.values}}</p>
                                             <v-sparkline
@@ -69,17 +74,16 @@
                                         </v-sheet>
                                         </v-card-text>
 
-                                        <v-card-text><div class="text-h4 font-weight-thin">Estudiando con VAT</div></v-card-text>
+                                        <v-card-text>
+                                            <div class="text-h4 font-weight-thin">Estudiando con VAT</div>
+                                            <div class="text-h6 font-weight-bold">Promedio general: {{avg_with}} </div>
+                                        </v-card-text>
                                         <v-divider></v-divider>
                                     </v-card>
                                 </v-col>
                             </v-row>
 
-
- 
-
                         </v-col>
-                       
                     </v-row>
                 </v-col>
             </v-row>
@@ -105,6 +109,19 @@
 <script>
 
 export default {
+
+    computed: {
+        avg_without: function() {
+            const sum = this.without.values.reduce(function (acum, next) { return acum + next; }, 0)
+            return (sum / this.without.values.length).toFixed(2);
+        },
+
+        avg_with: function() {
+            const sum = this.with.values.reduce(function (acum, next) { return acum + next; }, 0)
+            return (sum / this.with.values.length).toFixed(2);
+        },
+    },
+
     data: () => ({
         with: {
             labels: [
@@ -118,12 +135,12 @@ export default {
                 "8vo",
             ],
             values: [
-                8.50,
+                8.80,
                 9.30,
                 9.20,
                 9.40,
                 9.70,  
-                9.20,  
+                9.40,  
                 9.60,
                 9.30, 
             ],
@@ -143,12 +160,12 @@ export default {
             values: [
                 7.00,
                 7.30,
-                7.00,
-                6.60,
-                6.80,  
-                6.10,  
-                6.60,
-                6.30, 
+                7.40,
+                6.80,
+                7.00,  
+                6.70,  
+                6.90,
+                6.60, 
             ],
         },
     }),
