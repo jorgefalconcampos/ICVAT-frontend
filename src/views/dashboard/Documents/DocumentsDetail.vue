@@ -54,7 +54,7 @@
               </v-col>
             </v-row>
 
-            <div class="border15 mx-10 pa-5 px-15">
+            <div class="border15 mx-2 mx-sm-10 pa-5 px-2 px-sm-15">
               <div v-if="editMode">
                 <v-form ref="form" v-model="isValid" @submit.prevent="submit">
                   <v-text-field
