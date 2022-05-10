@@ -16,6 +16,7 @@
 
               <!-- <router-link :to="`/documents/${document.document_id}`"> -->
                    
+                
                 <v-card @click="handleClick(document.document_id)" elevation="4" class="text-left pa-1 overflow-hidden">
                   <v-card-title><h1 class="text-h5 font-weight-bold mb-2">{{document.title}}</h1></v-card-title>
                   <v-card-subtitle><h2>{{document.category_name}}</h2></v-card-subtitle>
