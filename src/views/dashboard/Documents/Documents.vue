@@ -12,11 +12,7 @@
           </div>
           <v-container>
             <v-row justify="center" align="center" class="mx-1 pt-5">
-              <v-col cols="6" md="4" v-for="(document, i) in documents_listing" :key="i">
-
-              <!-- <router-link :to="`/documents/${document.document_id}`"> -->
-                   
-                
+              <v-col cols="6" md="4" v-for="(document, i) in documents_listing" :key="i">               
                 <v-card @click="handleClick(document.document_id)" elevation="4" class="text-left pa-1 overflow-hidden">
                   <v-card-title><h1 class="text-h5 font-weight-bold mb-2">{{document.title}}</h1></v-card-title>
                   <v-card-subtitle><h2>{{document.category_name}}</h2></v-card-subtitle>
@@ -36,10 +32,6 @@
                     <v-btn color="primary" outlined>ver/editar</v-btn>
                   </v-card-actions> -->
                 </v-card>
-                <!-- </router-link>  -->
-
-
-
               </v-col>
             </v-row>
           </v-container>
