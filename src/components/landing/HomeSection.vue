@@ -12,7 +12,7 @@
                             rounded outlined
                             large dark
                             @click="$vuetify.goTo('#benefits')">
-                            Saber más
+                            Saber más ESTO FUE ENVIADO DESDE PROD
                             <v-icon class="ml-2">mdi-arrow-down</v-icon>
                             </v-btn>
                         </v-col>

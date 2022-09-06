@@ -1,7 +1,9 @@
 let baseUrl = "";
 
-process.env.CURRENT_ENV === "production" 
-    ? baseUrl = "http://localhost:8000/api" 
-    : baseUrl = "http://localhost:8000/api"
+if (process.env.CURRENT_ENV === "prod") {
+  baseUrl = "https://icvat-iqy65.ondigitalocean.app/api";
+} else {
+  baseUrl = "http://localhost:8000/api";
+}
 
 export const apiHost = baseUrl;
