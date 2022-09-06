@@ -1,10 +1,9 @@
 import HttpClient from "./http-client";
-import { apiHost } from "../../config";
+import { apiHost as baseURL } from "../../config";
 
 class ApiClient extends HttpClient {
-  static urlBase = apiHost;
 
-  constructor(baseURL, options) {
+  constructor(options) {
     alert(baseURL)
     console.log(baseURL);
     super({
