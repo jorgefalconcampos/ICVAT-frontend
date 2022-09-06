@@ -4,8 +4,6 @@ import { apiHost as baseURL } from "../../config";
 class ApiClient extends HttpClient {
 
   constructor(options) {
-    alert(baseURL)
-    console.log(baseURL);
     super({
       baseURL,
       options,
