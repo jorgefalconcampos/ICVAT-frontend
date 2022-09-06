@@ -5,7 +5,7 @@ class ApiClient extends HttpClient {
   static urlBase = apiHost;
 
   constructor(baseURL, options) {
-    // console.log(baseURL);
+    console.log(baseURL);
     super({
       baseURL,
       options,
