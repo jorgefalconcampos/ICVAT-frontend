@@ -5,10 +5,15 @@
     justify="center"
   >
     <v-switch
+      :value="checkActiveListenMode"
+      v-model="checkActiveListenMode"
+      id="activeModeSwitch"
       class="text-center px-3"
-      v-model="activeListen"
+      @change="setActiveListen()"
       color="white"
-      :label="`Escucha activa: ${activeListen ? 'activada' : 'desactivada'} `"
+      :label="`Escucha activa: ${
+        checkActiveListenMode ? 'activada' : 'desactivada'
+      } `"
     ></v-switch>
 
     <v-dialog v-model="dialog" width="500">
@@ -24,13 +29,13 @@
         >
         <v-card-text class="mt-4"
           >La escucha activa permite que VAT te escuche por largos periodos de
-          tiempo. Pasarán 15 segundos desde que dejas de hablar hasta que VAT
-          deje de escucharte. Cuando la escucha activa está desactivada, VAT te
-          deja de escuchar casi inmediatamente. Esta opción es ideal para ideas
-          largas, resúmenes o síntesis. Ten en cuenta que, al detenerse el
-          servicio de voz cuando la escucha activa está encendida, podría
-          demorar unos segundos en detenerse y la aplicación podría dejar de
-          responder mientras tanto.</v-card-text
+          tiempo. Con la escucha activa ENCENDIDA, pasarán cerca 15 segundos desde que dejas de hablar hasta que VAT
+          deje de escucharte. Cuando la escucha activa está DESACTIVADA, VAT te
+          deja de escuchar casi al instante que dejas de hablar. Activa esta
+          opción para ideas largas, resúmenes o síntesis. Ten en cuenta que
+          cuando la escucha activa está encendida y se detiene el servicio de
+          voz, podría tomar unos segundos en detenerse y la aplicación podría
+          dejar de responder mientras tanto.</v-card-text
         >
         <v-divider></v-divider>
         <v-card-actions class="py-3">
@@ -95,38 +100,55 @@
 </template>
 
 <script>
+// import { mapActions } from 'vuex';
+
 export default {
   props: ["value"],
 
   data: () => ({
     dialog: false,
-    // isContinuous: false,
     showStopping: false,
     isRecording: false,
-    activeListen: false,
     runtimeTranscription: "",
     transcription: [],
   }),
+
+  computed: {
+    checkActiveListenMode() {
+      let mode = this.$store.getters["uiux/isActiveListenMode"];
+      return mode;
+    },
+  },
 
   methods: {
     updateValue(value) {
       this.$emit("input", value);
     },
+
+    setActiveListen() {
+      this.$store.commit(
+        "uiux/SET_ACTIVE_LISTEN_MODE",
+        !this.checkActiveListenMode
+      );
+    },
+
     startSpeechToTxt(isRecording) {
       window.SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new window.SpeechRecognition();
 
       recognition.lang = "es-MX";
-      recognition.continuous = this.activeListen;
-      this.activeListen ? recognition.interimResults = false : recognition.interimResults = true;
+      recognition.continuous = this.checkActiveListenMode;
+      this.checkActiveListenMode
+        ? (recognition.interimResults = false)
+        : (recognition.interimResults = true);
 
       recognition.start();
       this.isRecording = true;
 
       // event current voice reco word
       recognition.addEventListener("result", (event) => {
-        if (this.activeListen === true) {
+        if (this.checkActiveListenMode === true) {
           let results = event.results;
           let text = results[results.length - 1][0].transcript;
           this.updateText(text);
@@ -137,15 +159,6 @@ export default {
             .join("");
           this.runtimeTranscription = text;
         }
-
-        // let results = event.results;
-        // let text = results[results.length - 1][0].transcript;
-        // console.log(text);
-        // let input = document.getElementById("target_input");
-        // input.value = input.value += text;
-        // // simulamos evento input para que actualice cambios
-        // let evt = new window.Event("input");
-        // input.dispatchEvent(evt);
       });
 
       if (!isRecording) {
@@ -155,8 +168,7 @@ export default {
       }
 
       recognition.addEventListener("end", () => {
-        if (!this.activeListen) {
-          console.log("esto se muestra solo en escucha rápida");
+        if (!this.checkActiveListenMode) {
           this.transcription.push(this.runtimeTranscription);
           this.runtimeTranscription = "";
           this.updateText(this.transcription[this.transcription.length - 1]);

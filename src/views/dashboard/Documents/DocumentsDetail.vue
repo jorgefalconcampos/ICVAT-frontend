@@ -246,8 +246,8 @@
 
 <script>
 import apiClient from "@/middleware/requests/api-client";
-import { VueEditor } from "vue2-editor";
 import AudioInput from "../../../components/audio_recorder/AudioInput.vue";
+import { VueEditor } from "vue2-editor";
 
 export default {
   components: {
@@ -292,7 +292,7 @@ export default {
     editMode: false,
     isValid: false,
     loading: true,
-    
+
     form: {
       title: "",
       category: "",
@@ -323,10 +323,6 @@ export default {
   },
 
   methods: {
-    doSth(data) {
-      this.input_two = data;
-    },
-
     submit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
