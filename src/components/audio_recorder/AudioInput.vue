@@ -107,39 +107,6 @@ export default {
       this.isRecording = false;
       this.showStopping = false;
     }
-
-    // startOrStopRecording(isRecording) {
-    // this.isRecording = !this.isRecording;
-
-    // let recognition = new window.webkitSpeechRecognition();
-
-    // if (isRecording == true) {
-    //   recognition.lang = "es-MX";
-    //   recognition.continuous = true;
-    //   recognition.interimResults = false;
-    //   recognition.start();
-
-    //   recognition.onresult = (event) => {
-    //     let results = event.results;
-    //     let text = results[results.length - 1][0].transcript;
-    //     console.log(text);
-    //     let input = document.getElementById("target_input");
-    //     input.value = input.value += text;
-    //     let evt = new window.Event("input");
-    //     input.dispatchEvent(evt);
-    //   }
-
-    // } else {
-    //   this.showStopping = true;
-    //   //  recognition.addEventListener("end", () => {
-    //      recognition.stop();
-    //   recognition.abort();
-    //   //  }
-
-    //   this.showStopping = false;
-
-    // }
-    // },
   },
 };
 </script>
