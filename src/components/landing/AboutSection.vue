@@ -18,7 +18,7 @@
                 </v-col>
                 <v-col cols="12" class="d-flex align-center">
                   <v-img src="@/assets/img/icon3.svg" max-width="60px" class="mr-4"/>
-                  <p class="text-justify">Al estudiar de esta manera, incrementan las posibilidades de aprobar exámenes o mejorar exposiciones al hablar tus ideas en voz. No más notitas de apuntes o acordeones, con VAT, seguro que te sacas un diez.</p>
+                  <p class="text-justify">Al estudiar de esta manera, incrementan las posibilidades de aprobar exámenes o mejorar exposiciones al hablar tus ideas en voz alta. No más notas, apuntes o acordeones, con VAT, seguro que te sacas un diez.</p>
                 </v-col>
               </v-row>
             </v-col>

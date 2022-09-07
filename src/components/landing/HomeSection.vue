@@ -82,7 +82,7 @@ export default {
                 {
                     img: require("@/assets/img/icon1.png"),
                     title: "Datos seguros",
-                    text: "Tu voz se envía a través de API's robustas a un servicio en la nube y es procesada en tiempo real. Nunca se almacenan copias de tu voz.",
+                    text: "Tu voz se procesa en el navegador en tiempo real mientras hablas. No se usan servicio de terceros o en la nube, ni se almacenan copias de tu voz.",
                 },
             ],
         };

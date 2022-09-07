@@ -26,9 +26,6 @@
                                     </v-timeline-item>
                                 </v-timeline>
                             </div>
-                            <h1 class="font-weight-light text-center display-1 mt-10">Los cuatro pasos anteriores los puedes ver más a detalle en este diagrama</h1>   
-
-                            <v-img src="@/assets/img/ill1.svg" class="d-block ml-auto mr-auto my-10" max-width="900px"/>
                         </v-col>
                     </v-row>
                 </v-col>

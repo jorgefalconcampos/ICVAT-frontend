@@ -104,13 +104,7 @@
 
             <div class="border15 mx-2 mx-sm-10 pa-5 px-2 px-sm-15">
               <div v-if="editMode">
-                <!-- <vue-editor
-                    class=""
-                    v-model="content"
-                  ></vue-editor> -->
-
                 <AudioInput v-model="form.body" />
-
                 <v-form ref="form" v-model="isValid" @submit.prevent="submit">
                   <v-text-field
                     name="document_name"
@@ -298,7 +292,7 @@ export default {
     editMode: false,
     isValid: false,
     loading: true,
-
+    
     form: {
       title: "",
       category: "",

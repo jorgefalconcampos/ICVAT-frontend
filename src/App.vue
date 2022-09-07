@@ -71,8 +71,10 @@ p {
   border-radius: 5px;
 }
 
-
-
+.switch-center {
+  display: flex !important;
+  justify-content: center !important;
+}
 
 .bgblue {
   background: #3494E6;  /* fallback for old browsers */
