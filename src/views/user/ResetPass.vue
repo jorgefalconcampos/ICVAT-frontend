@@ -65,7 +65,7 @@
                             <v-row no-gutters class="d-flex justify-center">
                                 <v-col align-self="center" cols="12" sm="10" md="9" lg="8" xl="8" class="pt-6 px-10">
                                     <p class="big-title pb-2">Email enviado <span>🚀</span></p>
-                                    <p>Enviamos un email a <span class="font-weight-bold">{{r_email}}</span> con las instrucciones para restablecer tu contraseña
+                                    <p>Si hay una cuenta asociada a <span class="font-weight-bold">{{r_email}}</span>, recibirás en breve un mail con las instrucciones para restablecer tu contraseña
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-icon aria-hidden="false" v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
@@ -214,7 +214,7 @@ export default {
 
         startTimeout() {
             // let time = 5*60; // 5 minutes
-            let time = 0.15*60; // 5 minutes
+            let time = 5*60; // 5 minutes
             const elem = document.getElementById('countdown');
             var timerCount = window.setInterval(updateCountdown, 1000);
             var _this = this;
