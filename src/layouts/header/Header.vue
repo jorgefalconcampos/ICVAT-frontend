@@ -7,23 +7,17 @@
       <span class="logo-text ml-2"> ICVAT </span>
     </v-toolbar-title>
 
-    <v-app-bar-nav-icon 
+    <v-app-bar-nav-icon
       class="d-block d-md-none"
-      @click="$vuetify.breakpoint.smAndDown ? setSidebarDrawer(!Sidebar_drawer) : $emit('input', !value)"/><v-spacer />
-      
-    
+      @click="
+        $vuetify.breakpoint.smAndDown
+          ? setSidebarDrawer(!Sidebar_drawer)
+          : $emit('input', !value)
+      "
+    /><v-spacer />
+
     <!---right part -->
 
-    <div class="mr-5">
-      <h1>habla ahora</h1>
-    </div>
-
-    <v-btn
-      class="pink my-5" rounded
-      outlined dark fab small
-    >
-      <v-icon>mdi-microphone</v-icon>
-    </v-btn>
 
     <!-- <v-menu bottom left transition="scale-transition">
       <template v-slot:activator="{ on }">
@@ -41,13 +35,13 @@
   </v-app-bar>
 </template>
 <script>
-
 import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Header",
 
-  components: {},
+  components: {
+  },
 
   props: {
     value: {
@@ -69,13 +63,13 @@ export default {
   }),
 
   computed: {
-    ...mapState("uiux", ["Sidebar_drawer"])
+    ...mapState("uiux", ["Sidebar_drawer"]),
   },
 
   methods: {
     ...mapMutations("uiux", {
-    setSidebarDrawer: "SET_SIDEBAR_DRAWER"
-    })
+      setSidebarDrawer: "SET_SIDEBAR_DRAWER",
+    }),
   },
 };
 </script>
